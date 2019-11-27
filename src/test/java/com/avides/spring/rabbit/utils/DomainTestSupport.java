@@ -116,7 +116,7 @@ public interface DomainTestSupport
         connectionFactoryProperties.setUsername("guest");
         connectionFactoryProperties.setPassword("guest");
         connectionFactoryProperties.setVirtualHost("/IT");
-        connectionFactoryProperties.setBeanName("gromitConnectionFactory");
+        connectionFactoryProperties.setBeanName("customConnectionFactory");
         connectionFactoryProperties.setApiPort(17562);
         return connectionFactoryProperties;
     }
