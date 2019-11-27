@@ -2,8 +2,6 @@ package com.avides.spring.rabbit.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.awaitility.Duration.ONE_HUNDRED_MILLISECONDS;
-import static org.awaitility.Duration.TEN_SECONDS;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +35,7 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnr
     {
         testSendRabbitTemplate.convertAndSend(TestClass.buildBase());
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).untilAsserted(() ->
+        await().untilAsserted(() ->
         {
             assertThat(testListener.getInbounds()).hasSize(1);
             assertThat(testListener.getInbounds().get(0).getMessageProperties().getAppId()).isEqualTo("test123");

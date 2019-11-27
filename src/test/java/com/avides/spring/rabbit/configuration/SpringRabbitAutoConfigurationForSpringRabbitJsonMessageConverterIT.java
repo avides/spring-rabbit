@@ -4,8 +4,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.awaitility.Duration.ONE_HUNDRED_MILLISECONDS;
-import static org.awaitility.Duration.TEN_SECONDS;
 
 import org.junit.After;
 import org.junit.Test;
@@ -58,7 +56,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
         testClassRabbitTemplate.convertAndSend(TestClass.buildBase());
         testClassRabbitTemplate.convertAndSend(TestClass.buildComplete());
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).until(() ->
+        await().until(() ->
         {
             if (2 == testClassListener.getInbounds().size())
             {
@@ -79,7 +77,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
 
         otherTestClassRabbitTemplate.convertAndSend(OtherTestClass.buildComplete());
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).until(() ->
+        await().until(() ->
         {
             if (2 == testClassListener.getInbounds().size() && !otherTestClassListener.getInbounds().isEmpty())
             {
@@ -104,7 +102,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     {
         testClassRabbitTemplate.convertAndSend(OtherTestClass.buildBase());
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).until(() ->
+        await().until(() ->
         {
             if (!testClassListener.getInbounds().isEmpty())
             {
@@ -122,7 +120,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     {
         testClassRabbitTemplate.convertAndSend("<test>");
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).until(() ->
+        await().until(() ->
         {
             receiveRabbitTemplate.setDefaultReceiveQueue("com.avides.spring.rabbit.othertestclass.dlx");
             assertThat(receiveRabbitTemplate.receive()).isNull();
@@ -145,7 +143,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
             return message;
         });
 
-        await().atMost(TEN_SECONDS).pollInterval(ONE_HUNDRED_MILLISECONDS).until(() ->
+        await().until(() ->
         {
             if (!testClassListener.getInbounds().isEmpty())
             {
