@@ -40,7 +40,7 @@ public class SpringRabbitJsonMessageConverterTest
     {
         Message message = MESSAGE_CONVERTER_DEFAULT_MESSAGE_CONVERTER.toMessage(TestClass.buildBase(), new MessageProperties());
 
-        assertThat(message).isEqualToComparingFieldByFieldRecursively(MESSAGE);
+        assertThat(message).isEqualTo(MESSAGE);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class SpringRabbitJsonMessageConverterTest
     {
         Message message = MESSAGE_CONVERTER_CUSTOM_OBJECT_MAPPER.toMessage(TestClass.buildBase(), new MessageProperties());
 
-        assertThat(message).isEqualToComparingFieldByFieldRecursively(MESSAGE_WITH_CUSTOM);
+        assertThat(message).isEqualTo(MESSAGE_WITH_CUSTOM);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class SpringRabbitJsonMessageConverterTest
     {
         TestClass testClass = MESSAGE_CONVERTER_DEFAULT_MESSAGE_CONVERTER.fromMessage(MESSAGE, TestClass.class);
 
-        assertThat(testClass).isEqualToComparingFieldByFieldRecursively(TestClass.buildBase());
+        assertThat(testClass).isEqualTo(TestClass.buildBase());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class SpringRabbitJsonMessageConverterTest
     {
         TestClass testClass = MESSAGE_CONVERTER_CUSTOM_OBJECT_MAPPER.fromMessage(MESSAGE_WITH_CUSTOM, TestClass.class);
 
-        assertThat(testClass).isEqualToComparingFieldByFieldRecursively(TestClass.buildBase());
+        assertThat(testClass).isEqualTo(TestClass.buildBase());
     }
 
     @Test

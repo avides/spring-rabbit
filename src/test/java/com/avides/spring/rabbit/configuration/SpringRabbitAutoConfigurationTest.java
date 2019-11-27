@@ -35,7 +35,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
+            assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
         });
     }
 
@@ -48,7 +48,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("test")));
+            assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("test")));
         });
     }
 
@@ -61,7 +61,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
+            assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
         });
     }
 
@@ -74,7 +74,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("spring-rabbit")));
+            assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("spring-rabbit")));
         });
     }
 
@@ -87,7 +87,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
+            assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("UNKNOWN")));
         });
     }
 
@@ -102,7 +102,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
                     Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-                    assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage(m -> m.getMessageProperties().setAppId("test")));
+                    assertThat(processed).isEqualTo(getDummyMessage(m -> m.getMessageProperties().setAppId("test")));
                 });
     }
 
@@ -115,7 +115,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 
             Message processed = context.getBean(MessagePostProcessor.class).postProcessMessage(getDummyMessage());
 
-            assertThat(processed).isEqualToComparingFieldByFieldRecursively(getDummyMessage());
+            assertThat(processed).isEqualTo(getDummyMessage());
         });
     }
 

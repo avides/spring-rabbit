@@ -1,6 +1,7 @@
 package com.avides.spring.rabbit.test.support;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @ToString
 public class OtherTestClass
 {
@@ -23,6 +25,7 @@ public class OtherTestClass
     @AllArgsConstructor
     @Getter
     @Setter
+    @EqualsAndHashCode
     @ToString
     static class OtherSubTestClass
     {

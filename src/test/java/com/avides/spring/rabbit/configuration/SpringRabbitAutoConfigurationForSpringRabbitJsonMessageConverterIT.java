@@ -61,8 +61,8 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
             if (2 == testClassListener.getInbounds().size())
             {
                 assertThat(testClassListener.getInbounds()).hasSize(2);
-                assertThat(testClassListener.getInbounds().get(0)).isEqualToComparingFieldByFieldRecursively(TestClass.buildBase());
-                assertThat(testClassListener.getInbounds().get(1)).isEqualToComparingFieldByFieldRecursively(TestClass.buildComplete());
+                assertThat(testClassListener.getInbounds().get(0)).isEqualTo(TestClass.buildBase());
+                assertThat(testClassListener.getInbounds().get(1)).isEqualTo(TestClass.buildComplete());
                 return TRUE;
             }
             return FALSE;
@@ -82,12 +82,10 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
             if (2 == testClassListener.getInbounds().size() && !otherTestClassListener.getInbounds().isEmpty())
             {
                 assertThat(testClassListener.getInbounds()).hasSize(2);
-                assertThat(testClassListener.getInbounds().get(0)).isEqualToComparingFieldByFieldRecursively(TestClass.buildBase());
-                assertThat(testClassListener.getInbounds().get(1)).isEqualToComparingFieldByFieldRecursively(TestClass.buildComplete());
+                assertThat(testClassListener.getInbounds().get(0)).isEqualTo(TestClass.buildBase());
+                assertThat(testClassListener.getInbounds().get(1)).isEqualTo(TestClass.buildComplete());
 
-                assertThat(otherTestClassListener.getInbounds()).hasSize(1)
-                        .element(0)
-                        .isEqualToComparingFieldByFieldRecursively(OtherTestClass.buildComplete());
+                assertThat(otherTestClassListener.getInbounds()).hasSize(1).element(0).isEqualTo(OtherTestClass.buildComplete());
                 return TRUE;
             }
             return FALSE;
@@ -106,9 +104,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
         {
             if (!testClassListener.getInbounds().isEmpty())
             {
-                assertThat(testClassListener.getInbounds()).hasSize(1)
-                        .element(0)
-                        .isEqualToComparingFieldByFieldRecursively(new TestClass());
+                assertThat(testClassListener.getInbounds()).hasSize(1).element(0).isEqualTo(new TestClass());
                 return TRUE;
             }
             return FALSE;
@@ -147,7 +143,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
         {
             if (!testClassListener.getInbounds().isEmpty())
             {
-                assertThat(testClassListener.getInbounds()).hasSize(1).element(0).isEqualToComparingFieldByFieldRecursively(TestClass.buildBase());
+                assertThat(testClassListener.getInbounds()).hasSize(1).element(0).isEqualTo(TestClass.buildBase());
                 return TRUE;
             }
             return FALSE;
