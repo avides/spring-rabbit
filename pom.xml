@@ -70,7 +70,7 @@
     <easymock.version>4.1</easymock.version>
     <spring-xom-unmarshaller.version>1.3.0</spring-xom-unmarshaller.version>
     <javax.el.version>3.0.0</javax.el.version>
-    <springboot-testcontainer-rabbitmq.version>1.0.0-RC1</springboot-testcontainer-rabbitmq.version>
+    <springboot-testcontainer-rabbitmq.version>1.0.0-RC2</springboot-testcontainer-rabbitmq.version>
     <logback-classic.version>1.2.3</logback-classic.version>
     <awaitility.version>3.1.6</awaitility.version>
   </properties>
