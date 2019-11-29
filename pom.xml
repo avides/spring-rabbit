@@ -6,7 +6,7 @@
   <version>2.0.0-RC1</version>
 
   <name>spring-rabbit</name>
-  <description>Pleasant RabbitMQ configuration for Spring Boot applications</description>
+  <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
   <url>https://github.com/avides/spring-rabbit</url>
   <organization>
     <name>AVIDES Media AG</name>
