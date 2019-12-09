@@ -4,16 +4,40 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.util.Assert;
 
-// TODO RequestResponseSpringRabbitListener???
-public abstract class RequestResponseRabbitListener<T> extends CountingContextAwareRabbitListener<T>
+/**
+ * Abstract implementation of {@link SpringRabbitListener} with metrics to handle request messages and produce corresponding response messages.
+ *
+ * @param <T> expected type of the incoming object
+ */
+public abstract class RequestResponseRabbitListener<T> extends AbstractSpringRabbitListener<T>
 {
     private RabbitTemplate responseRabbitTemplate;
 
+    /**
+     * Constructs a new {@link RequestResponseRabbitListener} with the given {@link RabbitTemplate} for responses.
+     *
+     * @param responseRabbitTemplate used for response messages
+     */
     public RequestResponseRabbitListener(RabbitTemplate responseRabbitTemplate)
     {
         this.responseRabbitTemplate = responseRabbitTemplate;
     }
 
+    /**
+     * Processes unmarshaled request message and returns the (not yet marshaled) response message.
+     *
+     * @param requestObject unmarshaled request message
+     * @return response message (not yet marshaled)
+     */
+    protected abstract Object processRequest(T requestObject);
+
+    /**
+     * Handles given unmarshaled message with its properties and sends a response message. Called by {@link #handle(Object, MessageProperties)} which also
+     * collects some metrics. Calls {@link #processRequest(Object)} by default which must be overridden.
+     *
+     * @param requestObject the unmarshaled object
+     * @param messageProperties the message properties
+     */
     @Override
     protected void handleEvent(T requestObject, MessageProperties messageProperties)
     {
@@ -34,6 +58,4 @@ public abstract class RequestResponseRabbitListener<T> extends CountingContextAw
             });
         }
     }
-
-    protected abstract Object processRequest(T requestObject);
 }

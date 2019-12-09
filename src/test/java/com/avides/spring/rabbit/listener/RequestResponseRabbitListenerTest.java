@@ -1,7 +1,7 @@
 package com.avides.spring.rabbit.listener;
 
 import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -22,6 +22,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("javax.management.*")
@@ -82,11 +84,27 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponse()
     {
-        meterRegistry.counter("rabbit.listener.event", "listener", "FailureRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseRabbitListener"), Tag.of("from", "sender-app"));
 
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "FailureRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+
+        replayAll();
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setAppId("sender-app");
+        messageProperties.setCorrelationId("request1");
+        messageProperties.setReplyTo("response-queue");
+        failureRabbitListener.handle("", messageProperties);
+        verifyAll();
+    }
+
+    @Test
+    public void testHandleEventWithoutResponseAndAppId()
+    {
+        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseRabbitListener"));
+
+        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
         MessageProperties messageProperties = new MessageProperties();
@@ -99,17 +117,15 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEvent()
     {
+        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseRabbitListener"), Tag.of("from", "sender-app"));
+
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expectLastCall();
-
-        meterRegistry.counter("rabbit.listener.event", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
         MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
@@ -117,51 +133,19 @@ public class RequestResponseRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithObjectSupplierAndMessageProperties()
+    public void testHandleEventWithoutAppId()
     {
+        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseRabbitListener"));
+
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expectLastCall();
-
-        meterRegistry.counter("rabbit.listener.event", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
-        successRabbitListener.handle(() ->
-        {
-            return "";
-        }, messageProperties);
-        verifyAll();
-    }
-
-    @Test
-    public void testHandleEventWithObjectSupplierAndMessagePropertiesSupplier()
-    {
-        responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expectLastCall();
-
-        meterRegistry.counter("rabbit.listener.event", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "SuccessRequestResponseRabbitListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        replayAll();
-        successRabbitListener.handle(() ->
-        {
-            return "";
-        }, () ->
-        {
-            MessageProperties messageProperties = new MessageProperties();
-            messageProperties.setCorrelationId("request1");
-            messageProperties.setReplyTo("response-queue");
-            return messageProperties;
-        });
+        successRabbitListener.handle("", messageProperties);
         verifyAll();
     }
 

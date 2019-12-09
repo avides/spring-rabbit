@@ -13,6 +13,8 @@ import io.micrometer.core.instrument.Tags;
  * Abstract implementation of {@link SpringRabbitListener} with metrics.
  * <p>
  * Implementing classes shall either override {@link #handleEvent(Object)} or {@link #handleEvent(Object, MessageProperties)}.
+ *
+ * @param <T> expected type of the incoming object
  */
 public abstract class AbstractSpringRabbitListener<T> implements SpringRabbitListener<T>
 {
