@@ -3,6 +3,7 @@ package com.avides.spring.rabbit.listener;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.util.StringUtils;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
@@ -68,7 +69,7 @@ public abstract class AbstractSpringRabbitListener<T> implements SpringRabbitLis
         if (meterRegistry != null)
         {
             var tags = Tags.of(Tag.of("listener", getClass().getSimpleName()));
-            if (messageProperties != null)
+            if (messageProperties != null && StringUtils.hasText(messageProperties.getAppId()))
             {
                 tags = tags.and(Tag.of("from", messageProperties.getAppId()));
             }
