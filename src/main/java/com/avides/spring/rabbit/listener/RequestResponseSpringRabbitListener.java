@@ -9,16 +9,16 @@ import org.springframework.util.Assert;
  *
  * @param <T> expected type of the incoming object
  */
-public abstract class RequestResponseRabbitListener<T> extends AbstractSpringRabbitListener<T>
+public abstract class RequestResponseSpringRabbitListener<T> extends AbstractSpringRabbitListener<T>
 {
     private RabbitTemplate responseRabbitTemplate;
 
     /**
-     * Constructs a new {@link RequestResponseRabbitListener} with the given {@link RabbitTemplate} for responses.
+     * Constructs a new {@link RequestResponseSpringRabbitListener} with the given {@link RabbitTemplate} for responses.
      *
      * @param responseRabbitTemplate used for response messages
      */
-    public RequestResponseRabbitListener(RabbitTemplate responseRabbitTemplate)
+    public RequestResponseSpringRabbitListener(RabbitTemplate responseRabbitTemplate)
     {
         this.responseRabbitTemplate = responseRabbitTemplate;
     }

@@ -27,11 +27,11 @@ import io.micrometer.core.instrument.Tags;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("javax.management.*")
-public class RequestResponseRabbitListenerTest
+public class RequestResponseSpringRabbitListenerTest
 {
-    private RequestResponseRabbitListener<Object> successRabbitListener;
+    private RequestResponseSpringRabbitListener<Object> successRabbitListener;
 
-    private RequestResponseRabbitListener<Object> failureRabbitListener;
+    private RequestResponseSpringRabbitListener<Object> failureRabbitListener;
 
     @MockStrict
     private RabbitTemplate responseRabbitTemplate;
@@ -42,10 +42,10 @@ public class RequestResponseRabbitListenerTest
     @Before
     public void setup()
     {
-        successRabbitListener = new SuccessRequestResponseRabbitListener();
+        successRabbitListener = new SuccessRequestResponseSpringRabbitListener();
         Whitebox.setInternalState(successRabbitListener, meterRegistry);
 
-        failureRabbitListener = new FailureRequestResponseRabbitListener();
+        failureRabbitListener = new FailureRequestResponseSpringRabbitListener();
         Whitebox.setInternalState(failureRabbitListener, meterRegistry);
     }
 
@@ -84,7 +84,7 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponse()
     {
-        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseRabbitListener"), Tag.of("from", "sender-app"));
+        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
@@ -101,7 +101,7 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponseAndAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseRabbitListener"));
+        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"));
 
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
@@ -117,7 +117,7 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEvent()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseRabbitListener"), Tag.of("from", "sender-app"));
+        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
@@ -135,7 +135,7 @@ public class RequestResponseRabbitListenerTest
     @Test
     public void testHandleEventWithoutAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseRabbitListener"));
+        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
@@ -149,9 +149,9 @@ public class RequestResponseRabbitListenerTest
         verifyAll();
     }
 
-    private class SuccessRequestResponseRabbitListener extends RequestResponseRabbitListener<Object>
+    private class SuccessRequestResponseSpringRabbitListener extends RequestResponseSpringRabbitListener<Object>
     {
-        public SuccessRequestResponseRabbitListener()
+        public SuccessRequestResponseSpringRabbitListener()
         {
             super(responseRabbitTemplate);
         }
@@ -163,9 +163,9 @@ public class RequestResponseRabbitListenerTest
         }
     }
 
-    private class FailureRequestResponseRabbitListener extends RequestResponseRabbitListener<Object>
+    private class FailureRequestResponseSpringRabbitListener extends RequestResponseSpringRabbitListener<Object>
     {
-        public FailureRequestResponseRabbitListener()
+        public FailureRequestResponseSpringRabbitListener()
         {
             super(responseRabbitTemplate);
         }
