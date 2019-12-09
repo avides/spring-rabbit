@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 
 /**
  * Abstract implementation of {@link SpringRabbitListener} with metrics.
@@ -57,17 +59,22 @@ public abstract class AbstractSpringRabbitListener<T> implements SpringRabbitLis
     {
         long started = System.currentTimeMillis();
         handleEvent(object, messageProperties);
-        count(started);
+        count(started, messageProperties);
     }
 
-    private void count(long started)
+    private void count(long started, MessageProperties messageProperties)
     {
         // avoid the annoying mock of the meterRegistry for unit tests
         if (meterRegistry != null)
         {
-            meterRegistry.counter("rabbit.listener.event", "listener", getClass().getSimpleName()).increment();
+            var tags = Tags.of(Tag.of("listener", getClass().getSimpleName()));
+            if (messageProperties != null)
+            {
+                tags = tags.and(Tag.of("from", messageProperties.getAppId()));
+            }
+            meterRegistry.counter("rabbit.listener.event", tags).increment();
             long duration = System.currentTimeMillis() - started;
-            meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", getClass().getSimpleName()).increment(duration);
+            meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags).increment(duration);
         }
     }
 }
