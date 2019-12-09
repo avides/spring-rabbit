@@ -175,11 +175,11 @@ spring.rabbitmq.outbounds[1].routing-key=another.routingkey.one
 spring.rabbitmq.outbounds[1].connection-factory.bean-name=myConnectionFactoryOne
 ```
 
-Example for an implementation of a rabbitListener
+Example for an implementation of a SpringRabbitListener
 
 ```java
 @Component
-public class MyListener extends CountingRabbitListener<CoreData>
+public class MyListener extends AbstractSpringRabbitListener<CoreData>
 {
     @Autowired
     private MyService myService;
@@ -441,7 +441,7 @@ spring.rabbitmq.queues[0].listener.creation-enabled=false
 
 @NotBlank
 
-The name of the AbstractRabbitListener.
+The name of the SpringRabbitListener.
 
 ``` ini
 spring.rabbitmq.queues[0].listener.bean-name=myListener
