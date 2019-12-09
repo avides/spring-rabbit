@@ -12,7 +12,7 @@
 <dependency>
 	<groupId>com.avides.spring</groupId>
 	<artifactId>spring-rabbit</artifactId>
-	<version>2.0.0-RC1</version>
+	<version>2.0.0-RC2</version>
 </dependency>
 ```
 

@@ -4,10 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-import javax.validation.Valid;
-
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.validation.annotation.Validated;
 
 import com.avides.spring.rabbit.converter.SpringRabbitMessageConverter;
@@ -17,18 +14,12 @@ import com.avides.spring.rabbit.converter.SpringRabbitMessageConverter;
  *
  * @see RabbitListener
  * @param <T> expected type of the incoming object
+ * @deprecated use {@link SpringRabbitListener}, will be deleted soon
  */
 @Validated
-public interface ContextAwareRabbitListener<T>
+@Deprecated(forRemoval = true)
+public interface ContextAwareRabbitListener<T> extends SpringRabbitListener<T>
 {
-    /**
-     * Called by an incoming message after the message got unmarshaled by a {@link MessageConverter}
-     *
-     * @param object the incoming object
-     * @param messageProperties the message properties of the message
-     */
-    void handle(@Valid T object, MessageProperties messageProperties);
-
     /**
      * Helper method to simplify the tests
      * <p>
@@ -64,6 +55,7 @@ public interface ContextAwareRabbitListener<T>
      *
      * @return the class of the generic type
      */
+    @Override
     @SuppressWarnings("unchecked")
     default Class<T> getGenericTypeClass()
     {

@@ -4,6 +4,7 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.util.Assert;
 
+// TODO RequestResponseSpringRabbitListener???
 public abstract class RequestResponseRabbitListener<T> extends CountingContextAwareRabbitListener<T>
 {
     private RabbitTemplate responseRabbitTemplate;

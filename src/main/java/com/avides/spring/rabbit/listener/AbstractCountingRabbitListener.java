@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Lazy;
 
 import io.micrometer.core.instrument.MeterRegistry;
 
+/**
+ * @deprecated use {@link AbstractSpringRabbitListener}, will be removed soon
+ */
+@Deprecated(forRemoval = true)
 public abstract class AbstractCountingRabbitListener
 {
     @Lazy

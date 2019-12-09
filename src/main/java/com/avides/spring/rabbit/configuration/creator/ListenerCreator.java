@@ -3,8 +3,8 @@ package com.avides.spring.rabbit.configuration.creator;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
 import com.avides.spring.rabbit.listener.RabbitListener;
+import com.avides.spring.rabbit.listener.SpringRabbitListener;
 import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContainer;
 
 import lombok.AllArgsConstructor;
@@ -35,9 +35,9 @@ public class ListenerCreator implements Creator<DefaultMessageListenerContainer<
     @SuppressWarnings("unchecked")
     private void apppendListenerToContainer(DefaultMessageListenerContainer<Object> container, MessageConverter converter)
     {
-        if (listener instanceof ContextAwareRabbitListener<?>)
+        if (listener instanceof SpringRabbitListener<?>)
         {
-            container.setContextAwareListener((ContextAwareRabbitListener<Object>) listener, converter);
+            container.setSpringRabbitListener((SpringRabbitListener<Object>) listener, converter);
         }
         else if (listener instanceof RabbitListener<?>)
         {

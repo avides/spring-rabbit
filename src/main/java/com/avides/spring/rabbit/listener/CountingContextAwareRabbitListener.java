@@ -2,6 +2,11 @@ package com.avides.spring.rabbit.listener;
 
 import org.springframework.amqp.core.MessageProperties;
 
+/**
+ * @deprecated use {@link AbstractSpringRabbitListener}, will be removed soon
+ * @param <T> type of unmarshaled object
+ */
+@Deprecated(forRemoval = true)
 public abstract class CountingContextAwareRabbitListener<T> extends AbstractCountingRabbitListener implements ContextAwareRabbitListener<T>
 {
     @Override
