@@ -101,7 +101,7 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponseAndAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"));
+        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", ""));
 
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
@@ -135,7 +135,7 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"));
+        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", ""));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));

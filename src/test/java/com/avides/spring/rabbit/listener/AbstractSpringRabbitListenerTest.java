@@ -41,21 +41,9 @@ public class AbstractSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleWithMessagePropertiesIsNull()
-    {
-        Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"));
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
-
-        replayAll();
-        rabbitListener.handle("hello", null);
-        verifyAll();
-    }
-
-    @Test
     public void testHandleWithAppIdIsNull()
     {
-        Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"));
+        Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"), Tag.of("from", ""));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
