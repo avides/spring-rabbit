@@ -70,7 +70,7 @@ public abstract class AbstractSpringRabbitListener<T> implements SpringRabbitLis
         // avoid the annoying mock of the meterRegistry for unit tests
         if (meterRegistry != null)
         {
-            var appId = StringUtils.hasText(messageProperties.getAppId()) ? messageProperties.getAppId() : "";
+            var appId = StringUtils.hasText(messageProperties.getAppId()) ? messageProperties.getAppId() : "UNKNOWN";
             var tags = Tags.of(Tag.of("listener", getClass().getSimpleName()), Tag.of("from", appId));
             meterRegistry.counter("rabbit.listener.event", tags).increment();
             long duration = System.currentTimeMillis() - started;

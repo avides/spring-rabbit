@@ -43,7 +43,7 @@ public class AbstractSpringRabbitListenerTest
     @Test
     public void testHandleWithAppIdIsNull()
     {
-        Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"), Tag.of("from", ""));
+        Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
