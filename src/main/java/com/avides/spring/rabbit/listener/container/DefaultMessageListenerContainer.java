@@ -13,6 +13,7 @@ import com.avides.spring.rabbit.configuration.ValidationErrorHandler;
 import com.avides.spring.rabbit.converter.SpringRabbitMessageConverter;
 import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
 import com.avides.spring.rabbit.listener.RabbitListener;
+import com.avides.spring.rabbit.listener.SpringRabbitListener;
 
 /**
  * Extension of the {@link SimpleMessageListenerContainer} to avoid the Spring implementation of RabbitListeners via annotations
@@ -39,11 +40,24 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
     }
 
     /**
+     * Sets the {@link SpringRabbitListener} and the {@link MessageConverter}
+     *
+     * @param sprinRbbitListener the {@link SpringRabbitListener} to be added
+     * @param messageConverter the {@link MessageConverter} to be added to unmarshal the incoming {@link Message#getBody()}
+     */
+    public void setSpringRabbitListener(SpringRabbitListener<T> sprinRbbitListener, MessageConverter messageConverter)
+    {
+        setMessageListener(resolveMessageListenerAdapter(sprinRbbitListener, messageConverter));
+    }
+
+    /**
      * Sets the {@link RabbitListener} and the {@link MessageConverter}
      *
      * @param rabbitListener the {@link RabbitListener} to be added
      * @param messageConverter the {@link MessageConverter} to be added to unmarshal the incoming {@link Message#getBody()}
+     * @deprecated replaced with {@link #setSpringRabbitListener(SpringRabbitListener, MessageConverter)}
      */
+    @Deprecated(forRemoval = true)
     public void setListener(RabbitListener<T> rabbitListener, MessageConverter messageConverter)
     {
         setMessageListener(resolveMessageListenerAdapter(rabbitListener, messageConverter));
@@ -54,7 +68,9 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
      *
      * @param rabbitListener the {@link ContextAwareRabbitListener} to be added
      * @param messageConverter the {@link MessageConverter} to be added to unmarshal the incoming {@link Message#getBody()}
+     * @deprecated replaced with {@link #setSpringRabbitListener(SpringRabbitListener, MessageConverter)}
      */
+    @Deprecated(forRemoval = true)
     public void setContextAwareListener(ContextAwareRabbitListener<T> rabbitListener, MessageConverter messageConverter)
     {
         setMessageListener(resolveMessageListenerAdapter(rabbitListener, messageConverter));
@@ -82,25 +98,25 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
         });
     }
 
-    private MessageListenerAdapter resolveMessageListenerAdapter(ContextAwareRabbitListener<T> rabbitListener, MessageConverter messageConverter)
+    private MessageListenerAdapter resolveMessageListenerAdapter(SpringRabbitListener<T> springRabbitListener, MessageConverter messageConverter)
     {
-        Assert.notNull(rabbitListener, "rabbitListener must not be null");
+        Assert.notNull(springRabbitListener, "springRabbitListener must not be null");
         Assert.notNull(messageConverter, "messageConverter must not be null");
 
         if (messageConverter instanceof SpringRabbitMessageConverter)
         {
-            Class<T> listenerClassType = rabbitListener.getGenericTypeClass();
+            Class<T> listenerClassType = springRabbitListener.getGenericTypeClass();
             return new MessageListenerAdapter((MessageListener) message ->
             {
                 T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType);
-                rabbitListener.handle(object, message.getMessageProperties());
+                springRabbitListener.handle(object, message.getMessageProperties());
             });
         }
         return new MessageListenerAdapter((MessageListener) message ->
         {
             @SuppressWarnings("unchecked")
             T object = (T) messageConverter.fromMessage(message);
-            rabbitListener.handle(object, message.getMessageProperties());
+            springRabbitListener.handle(object, message.getMessageProperties());
         });
     }
 }

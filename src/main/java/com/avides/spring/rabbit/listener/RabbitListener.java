@@ -17,8 +17,10 @@ import com.avides.spring.rabbit.converter.SpringRabbitMessageConverter;
  * After the message got unmarshaled, the object will be validated
  *
  * @param <T> expected type of the incoming object
+ * @deprecated use {@link SpringRabbitListener}, will be deleted soon
  */
 @Validated
+@Deprecated(forRemoval = true)
 public interface RabbitListener<T>
 {
     /**
