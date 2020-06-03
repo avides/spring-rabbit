@@ -1,6 +1,6 @@
 # Spring-Rabbit
 
-[![Maven Central](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/com/avides/spring/spring-rabbit/maven-metadata.xml.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.avides.spring%22%20AND%20a%3A%22spring-rabbit%22)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.avides.spring/spring-rabbit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.avides.spring/spring-rabbit)
 [![Build](https://github.com/avides/spring-rabbit/workflows/release/badge.svg)](https://github.com/avides/spring-rabbit/actions)
 [![Nightly build](https://github.com/avides/spring-rabbit/workflows/nightly/badge.svg)](https://github.com/avides/spring-rabbit/actions)
 [![Coverage report](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=coverage)](https://sonarcloud.io/dashboard?id=avides_spring-rabbit)
@@ -12,7 +12,7 @@
 <dependency>
 	<groupId>com.avides.spring</groupId>
 	<artifactId>spring-rabbit</artifactId>
-	<version>2.0.0</version>
+	<version>2.1.0</version>
 </dependency>
 ```
 
@@ -38,8 +38,8 @@
 ``` ini
 docker run \
 -d \
---name rabbitmq-3.6.X \
---hostname rabbitmq-3.6.X \
+--name rabbitmq \
+--hostname rabbitmq \
 --restart=always \
 --memory=500MB \
 -v PATH:/var/lib/rabbitmq \

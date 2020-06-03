@@ -10,12 +10,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.annotation.MockStrict;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore({ "javax.xml.*", "com.sun.org.apache.xalan.*" })
 public class QueueMasterLocatorConnectionFactoryTest implements DomainTestSupport
 {
     private QueueMasterLocatorConnectionFactory queueMasterLocatorConnectionFactory;
