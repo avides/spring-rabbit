@@ -3,14 +3,14 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
   <url>https://github.com/avides/spring-rabbit</url>
   <organization>
     <name>AVIDES Media AG</name>
-    <url>http://www.avides.com</url>
+    <url>https://www.avides.com</url>
   </organization>
   <licenses>
     <license>
@@ -32,6 +32,13 @@
     <developerConnection>scm:git:https://github.com/avides/spring-rabbit.git</developerConnection>
   </scm>
 
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <!-- System -->
     <timestamp>${maven.build.timestamp}</timestamp>
@@ -40,41 +47,41 @@
     <java.version>11</java.version>
     <!-- Build -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
-    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
+    <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+    <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     <maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
-    <exists-maven-plugin.version>0.0.6</exists-maven-plugin.version>
+    <exists-maven-plugin.version>0.3.0</exists-maven-plugin.version>
     <github-release-plugin.version>1.4.0</github-release-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     <!-- Spring -->
-    <spring.version>5.2.2.RELEASE</spring.version>
-    <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
-    <http-client.version>3.5.0.RELEASE</http-client.version>
-    <httpclient.version>4.5.10</httpclient.version>
-    <micrometer-core.version>1.3.1</micrometer-core.version>
+    <spring.version>5.2.6.RELEASE</spring.version>
+    <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+    <http-client.version>3.7.0.RELEASE</http-client.version>
+    <httpclient.version>4.5.12</httpclient.version>
+    <micrometer-core.version>1.5.1</micrometer-core.version>
     <!-- Validation -->
-    <hibernate-validator.version>6.0.18.Final</hibernate-validator.version>
+    <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
     <!-- Other -->
-    <lombok.version>1.18.10</lombok.version>
+    <lombok.version>1.18.12</lombok.version>
     <!-- Testing -->
     <jaxb-api.version>2.3.0</jaxb-api.version>
     <jaxb-core.version>2.3.0.1</jaxb-core.version>
     <jaxb-impl.version>2.3.0</jaxb-impl.version>
-    <junit.version>4.12</junit.version>
-    <assertj-core.version>3.14.0</assertj-core.version>
-    <jacoco.version>0.8.3</jacoco.version>
-    <powermock.version>2.0.4</powermock.version>
-    <easymock.version>4.1</easymock.version>
+    <junit.version>4.13</junit.version>
+    <assertj-core.version>3.16.1</assertj-core.version>
+    <jacoco.version>0.8.5</jacoco.version>
+    <powermock.version>2.0.7</powermock.version>
+    <easymock.version>4.2</easymock.version>
     <spring-xom-unmarshaller.version>1.3.0</spring-xom-unmarshaller.version>
     <javax.el.version>3.0.0</javax.el.version>
     <springtainer-rabbitmq.version>1.0.0</springtainer-rabbitmq.version>
     <logback-classic.version>1.2.3</logback-classic.version>
-    <awaitility.version>4.0.1</awaitility.version>
+    <awaitility.version>4.0.3</awaitility.version>
   </properties>
 
   <dependencies>
