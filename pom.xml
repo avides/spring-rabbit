@@ -65,7 +65,7 @@
     <httpclient.version>4.5.12</httpclient.version>
     <micrometer-core.version>1.5.1</micrometer-core.version>
     <!-- Validation -->
-    <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+    <hibernate-validator.version>6.0.20.Final</hibernate-validator.version>
     <!-- Other -->
     <lombok.version>1.18.12</lombok.version>
     <!-- Testing -->
