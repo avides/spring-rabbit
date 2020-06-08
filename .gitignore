@@ -3,4 +3,5 @@
 /.project
 /target/
 /.factorypath
-.idea/
+/.idea/
+/*.iml
