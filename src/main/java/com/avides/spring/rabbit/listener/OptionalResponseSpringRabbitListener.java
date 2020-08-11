@@ -40,9 +40,9 @@ public abstract class OptionalResponseSpringRabbitListener<T> extends AbstractSp
     @Override
     protected void handleEvent(T requestObject, MessageProperties messageProperties)
     {
-        String replyQueueName = messageProperties.getReplyTo();
+        var replyQueueName = messageProperties.getReplyTo();
 
-        Object responseObject = processRequest(requestObject);
+        var responseObject = processRequest(requestObject);
 
         if (responseObject != null && replyQueueName != null)
         {
