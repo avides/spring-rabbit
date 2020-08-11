@@ -48,6 +48,22 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
+    public void testHandleEventWithoutReplyTo()
+    {
+        Tags tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
+
+        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
+        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+
+        replayAll();
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setAppId("sender-app");
+        messageProperties.setCorrelationId("request1");
+        failureRabbitListener.handle("", messageProperties);
+        verifyAll();
+    }
+
+    @Test
     public void testHandleEventWithoutResponse()
     {
         Tags tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
