@@ -18,6 +18,33 @@ jobs:
 
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GPR_TOKEN }}
+          fetch-depth: ''
+
+      - name: post-checkout
+        run: git fetch --prune --unshallow
+
+      - name: action-configuration-autoupdate
+        id: actions_action_configuration_autoupdate
+        uses: avides/actions-action-configuration-autoupdate@v1
+        with:
+          token: ${{ secrets.GPR_TOKEN }}
+          actions-configuration-files: os-java-library/nightly.yml,os-java-library/release.yml,os-java-library/review.yml
+          source-repository: ${{ secrets.ACTIONS_CONFIG_AUTOUPDATE_REPO }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: .github/workflows/*.yml
+          commit_user_name: ${{ secrets.ACTIONS_CONFIG_AUTOUPDATE_USER }}
+          commit_user_email: ${{ secrets.ACTIONS_CONFIG_AUTOUPDATE_EMAIL }}
+          commit_author: ${{ secrets.ACTIONS_CONFIG_AUTOUPDATE_AUTHOR }}
+          commit_message: Update GitHub Action configuration
+
+      - name: action-configuration-updated
+        if: ${{ steps.actions_action_configuration_autoupdate.outputs.updated }}
+        run: exit 1;
 
       - name: project-version-check
         uses: avides/actions-project-version-check@v1

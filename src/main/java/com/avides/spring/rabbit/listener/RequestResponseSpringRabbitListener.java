@@ -44,7 +44,6 @@ public abstract class RequestResponseSpringRabbitListener<T> extends AbstractSpr
         String correlationId = messageProperties.getCorrelationId();
         String replyQueueName = messageProperties.getReplyTo();
 
-        Assert.notNull(correlationId, "correlation_id must not be null");
         Assert.notNull(replyQueueName, "reply_to must not be null");
 
         Object responseObject = processRequest(requestObject);
