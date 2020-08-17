@@ -52,14 +52,14 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutCorrelationId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
+        var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
-        MessageProperties messageProperties = new MessageProperties();
+        var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
@@ -71,7 +71,7 @@ public class RequestResponseSpringRabbitListenerTest
     {
         try
         {
-            MessageProperties messageProperties = new MessageProperties();
+            var messageProperties = new MessageProperties();
             messageProperties.setCorrelationId("request1");
             successRabbitListener.handleEvent("", messageProperties);
             fail("Exception expected");
@@ -85,13 +85,13 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponse()
     {
-        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
+        var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
-        MessageProperties messageProperties = new MessageProperties();
+        var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
@@ -102,13 +102,13 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutResponseAndAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
+        var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
-        MessageProperties messageProperties = new MessageProperties();
+        var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         failureRabbitListener.handle("", messageProperties);
@@ -118,14 +118,14 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEvent()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
+        var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
-        MessageProperties messageProperties = new MessageProperties();
+        var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
@@ -136,14 +136,14 @@ public class RequestResponseSpringRabbitListenerTest
     @Test
     public void testHandleEventWithoutAppId()
     {
-        Tags tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
+        var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
         responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
         expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
         expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
 
         replayAll();
-        MessageProperties messageProperties = new MessageProperties();
+        var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
