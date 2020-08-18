@@ -35,19 +35,21 @@ public abstract class RequestResponseSpringRabbitListener<T> extends AbstractSpr
      * Handles given unmarshaled message with its properties and sends a response message. Called by {@link #handle(Object, MessageProperties)} which also
      * collects some metrics. Calls {@link #processRequest(Object)} by default which must be overridden.
      *
+     * You have to set "reply_to" in your {@link MessageProperties}. Additionally you can optional set a "correlation_id". These parameters are used for the
+     * response message for better identification on request side.
+     *
      * @param requestObject the unmarshaled object
      * @param messageProperties the message properties
      */
     @Override
     protected void handleEvent(T requestObject, MessageProperties messageProperties)
     {
-        String correlationId = messageProperties.getCorrelationId();
-        String replyQueueName = messageProperties.getReplyTo();
+        var correlationId = messageProperties.getCorrelationId();
+        var replyQueueName = messageProperties.getReplyTo();
 
-        Assert.notNull(correlationId, "correlation_id must not be null");
         Assert.notNull(replyQueueName, "reply_to must not be null");
 
-        Object responseObject = processRequest(requestObject);
+        var responseObject = processRequest(requestObject);
 
         if (responseObject != null)
         {
