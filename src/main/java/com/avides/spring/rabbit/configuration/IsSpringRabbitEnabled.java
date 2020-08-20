@@ -20,10 +20,12 @@ public class IsSpringRabbitEnabled extends AnyNestedCondition
     @ConditionalOnProperty("spring.rabbitmq.addresses")
     static class HasSingleConnection
     {
+        // not necessary
     }
 
     @ConditionalOnProperty("spring.rabbitmq.connections[0].addresses")
     static class HasMultipleConnections
     {
+        // not necessary
     }
 }
