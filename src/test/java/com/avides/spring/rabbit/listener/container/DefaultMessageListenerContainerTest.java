@@ -10,7 +10,9 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import com.avides.spring.rabbit.configuration.ValidationErrorHandler;
 import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
 import com.avides.spring.rabbit.listener.RabbitListener;
 import com.avides.spring.rabbit.listener.SpringRabbitListener;
@@ -41,6 +43,10 @@ public class DefaultMessageListenerContainerTest
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThat(listenerContainer.getConnectionFactory()).isSameAs(connectionFactory);
+        assertThat(ReflectionTestUtils.getField(listenerContainer, "errorHandler")).isInstanceOf(ValidationErrorHandler.class);
+        assertThat(ReflectionTestUtils.getField(listenerContainer, "defaultRequeueRejected")).isEqualTo(Boolean.FALSE);
+        assertThat(ReflectionTestUtils.getField(listenerContainer, "prefetchCount")).isEqualTo(Integer.valueOf(500));
+        assertThat(ReflectionTestUtils.getField(listenerContainer, "missingQueuesFatal")).isEqualTo(Boolean.FALSE);
     }
 
     @Test
