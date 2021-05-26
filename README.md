@@ -12,7 +12,7 @@
 <dependency>
 	<groupId>com.avides.spring</groupId>
 	<artifactId>spring-rabbit</artifactId>
-	<version>2.4.0</version>
+	<version>2.5.0</version>
 </dependency>
 ```
 
@@ -49,13 +49,13 @@ docker run \
 rabbitmq:VERSION
 ```
 
-The ´RABBITMQ_NODENAME´ environment variable is necessary!
+The `RABBITMQ_NODENAME` environment variable is necessary!
 
-The rabbit user needs at least ´MONITORING´ as tag!
+The rabbit user needs at least `MONITORING` as tag!
 
 ## Known issues
 
-The rabbit template needs to be autowired with ´@Lazy´!
+The rabbit template needs to be autowired with `@Lazy`!
 
 If one property needs to be overridden in other profiles the complete prefix/collection needs to be copied!
 
@@ -84,7 +84,7 @@ Using MeterRegistry will increment a counter with the bean name of the template 
 
 ## Configuration
 
-## Example
+### Example
 
 Example for one connection factory
 
@@ -179,7 +179,7 @@ Example for an implementation of a SpringRabbitListener
 
 ```java
 @Component
-public class MyListener extends AbstractSpringRabbitListener<CoreData>
+public class MyListener extends AbstractSpringRabbitListener<MyData>
 {
     @Autowired
     private MyService myService;
