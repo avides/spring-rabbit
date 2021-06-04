@@ -62,7 +62,7 @@
     <spring.version>5.2.8.RELEASE</spring.version>
     <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
     <http-client.version>3.7.0.RELEASE</http-client.version>
-    <httpclient.version>4.5.12</httpclient.version>
+    <httpclient.version>4.5.13</httpclient.version>
     <micrometer-core.version>1.5.3</micrometer-core.version>
     <!-- Validation -->
     <hibernate-validator.version>6.0.20.Final</hibernate-validator.version>
