@@ -36,25 +36,29 @@ public class ListenerCreatorTest implements DomainTestSupport
     private RabbitListener<Object> rabbitListener;
 
     @Test
-    public void testCreateInstanceWithContextAwareRabbitListener()
+    public void testCreateInstanceWithContextAwareRabbitListener() throws Exception
     {
         replayAll();
-        creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, contextAwareRabbitListener);
-        DefaultMessageListenerContainer<Object> container = creator.createInstance();
+        creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, contextAwareRabbitListener);
+        var container = creator.createInstance();
         verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
+        assertEquals(50, getPrefetchCount(container));
+        assertEquals(2, getMaxConcurrentConsumers(container));
     }
 
     @Test
     public void testCreateInstanceWithRabbitListener()
     {
         replayAll();
-        creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, rabbitListener);
-        DefaultMessageListenerContainer<Object> container = creator.createInstance();
+        creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, rabbitListener);
+        var container = creator.createInstance();
         verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
+        assertEquals(50, getPrefetchCount(container));
+        assertEquals(2, getMaxConcurrentConsumers(container));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class ListenerCreatorTest implements DomainTestSupport
         try
         {
             replayAll();
-            creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, Integer.valueOf(12));
+            creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
             creator.createInstance();
             verifyAll();
         }

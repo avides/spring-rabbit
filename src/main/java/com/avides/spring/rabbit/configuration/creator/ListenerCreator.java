@@ -16,6 +16,8 @@ public class ListenerCreator implements Creator<DefaultMessageListenerContainer<
 
     private final String queueName;
 
+    private final int prefetchCount;
+
     private final int maxConcurrentConsumers;
 
     private final MessageConverter messageConverter;
@@ -27,6 +29,7 @@ public class ListenerCreator implements Creator<DefaultMessageListenerContainer<
     {
         DefaultMessageListenerContainer<Object> container = new DefaultMessageListenerContainer<>(connectionFactory);
         container.setQueueNames(queueName);
+        container.setPrefetchCount(prefetchCount);
         container.setMaxConcurrentConsumers(maxConcurrentConsumers);
         apppendListenerToContainer(container, messageConverter);
         return container;

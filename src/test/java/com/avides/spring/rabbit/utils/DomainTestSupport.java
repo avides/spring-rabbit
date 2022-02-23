@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.util.ReflectionUtils;
 
 import com.avides.spring.rabbit.configuration.SpringRabbitAutoConfiguration;
 import com.avides.spring.rabbit.configuration.domain.BeanReferenceConnectionFactoryProperties;
@@ -19,10 +20,33 @@ import com.avides.spring.rabbit.configuration.domain.MessageConverterProperties;
 import com.avides.spring.rabbit.configuration.domain.QueueProperties;
 import com.avides.spring.rabbit.configuration.domain.RabbitAdminProperties;
 import com.avides.spring.rabbit.configuration.domain.RabbitTemplateProperties;
+import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContainer;
 import com.rabbitmq.http.client.domain.QueueInfo;
+
+import lombok.SneakyThrows;
 
 public interface DomainTestSupport
 {
+    // TODO remove if getter is accessible
+    @SuppressWarnings("boxing")
+    @SneakyThrows
+    default int getPrefetchCount(DefaultMessageListenerContainer<?> container)
+    {
+        var method = ReflectionUtils.findMethod(DefaultMessageListenerContainer.class, "getPrefetchCount");
+        method.setAccessible(true);
+        return (int) method.invoke(container);
+    }
+
+    // TODO remove if getter is accessible
+    @SuppressWarnings("boxing")
+    @SneakyThrows
+    default int getMaxConcurrentConsumers(DefaultMessageListenerContainer<?> container)
+    {
+        var field = ReflectionUtils.findField(DefaultMessageListenerContainer.class, "maxConcurrentConsumers");
+        field.setAccessible(true);
+        return (int) field.get(container);
+    }
+
     default SpringRabbitAutoConfiguration getCompleteSpringRabbitAutoConfiguration()
     {
         SpringRabbitAutoConfiguration springRabbitAutoConfiguration = new SpringRabbitAutoConfiguration();
@@ -93,11 +117,19 @@ public interface DomainTestSupport
 
     default ListenerProperties getCompleteListenerProperties()
     {
-        ListenerProperties listenerProperties = new ListenerProperties();
+        var listenerProperties = new ListenerProperties();
         listenerProperties.setBeanName("testListener");
         listenerProperties.setCreationEnabled(true);
         listenerProperties.setMessageConverter(getCompleteMessageConverterProperties());
+        listenerProperties.setPrefetchCount(Integer.valueOf(50));
         listenerProperties.setMaxConcurrentConsumers(Integer.valueOf(2));
+        return listenerProperties;
+    }
+
+    default ListenerProperties getCompleteListenerProperties(Consumer<ListenerProperties> consumer)
+    {
+        var listenerProperties = getCompleteListenerProperties();
+        consumer.accept(listenerProperties);
         return listenerProperties;
     }
 
