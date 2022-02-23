@@ -1,5 +1,7 @@
 package com.avides.spring.rabbit.utils;
 
+import static lombok.AccessLevel.PRIVATE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,12 +9,12 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
-import lombok.experimental.UtilityClass;
+import lombok.NoArgsConstructor;
 
-@UtilityClass
+@NoArgsConstructor(access = PRIVATE)
 public class BeanValidationTestSupport
 {
-    public void expectNoError(Object object)
+    public static void expectNoError(Object object)
     {
         Set<ConstraintViolation<Object>> violations = ValidationUtil.validateAndReturn(object);
 
@@ -22,7 +24,7 @@ public class BeanValidationTestSupport
         }
     }
 
-    public void expectNoErrorOnProperty(Object object, String property)
+    public static void expectNoErrorOnProperty(Object object, String property)
     {
         Set<ConstraintViolation<Object>> violations = ValidationUtil.validateAndReturn(object);
 
@@ -32,7 +34,7 @@ public class BeanValidationTestSupport
         }
     }
 
-    public void expectErrorOnlyOnProperty(Object object, String property)
+    public static void expectErrorOnlyOnProperty(Object object, String property)
     {
         Set<ConstraintViolation<Object>> violations = ValidationUtil.validateAndReturn(object);
 
@@ -57,7 +59,7 @@ public class BeanValidationTestSupport
         return violation.getPropertyPath().iterator().next().getName();
     }
 
-    public void expectErrorOnProperty(Object object, String property)
+    public static void expectErrorOnProperty(Object object, String property)
     {
         Set<ConstraintViolation<Object>> violations = ValidationUtil.validateAndReturn(object);
 
