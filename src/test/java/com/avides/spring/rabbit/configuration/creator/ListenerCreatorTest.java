@@ -13,8 +13,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
-import com.avides.spring.rabbit.listener.RabbitListener;
+import com.avides.spring.rabbit.listener.SpringRabbitListener;
 import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContainer;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
@@ -30,13 +29,13 @@ public class ListenerCreatorTest implements DomainTestSupport
     private MessageConverter messageConverter;
 
     @MockStrict
-    private ContextAwareRabbitListener<Object> contextAwareRabbitListener;
+    private SpringRabbitListener<Object> contextAwareRabbitListener;
 
     @MockStrict
-    private RabbitListener<Object> rabbitListener;
+    private SpringRabbitListener<Object> rabbitListener;
 
     @Test
-    public void testCreateInstanceWithContextAwareRabbitListener() throws Exception
+    public void testCreateInstanceWithContextAwareRabbitListener()
     {
         replayAll();
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, contextAwareRabbitListener);
