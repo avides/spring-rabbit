@@ -34,7 +34,7 @@ public class SpringRabbitAutoConfigurationForDifferentPrefetchCountIT extends Ab
     private DefaultMessageListenerContainer<Object> dummyListenerOneContainer;
 
     @Test
-    public void test()
+    public void testPrefetchCount()
     {
         assertEquals(2, listenerContainer.size());
         assertEquals(20, getPrefetchCount(dummyListenerZeroContainer));
