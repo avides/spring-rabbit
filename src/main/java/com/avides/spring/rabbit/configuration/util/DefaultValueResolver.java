@@ -80,12 +80,7 @@ public class DefaultValueResolver
      */
     public String resolveConnectionFactoryBeanName(BeanReferenceConnectionFactoryProperties customProperties, String defaultBeanName)
     {
-        if (customProperties != null)
-        {
-            return customProperties.getBeanName();
-        }
-
-        return defaultBeanName;
+        return customProperties != null ? customProperties.getBeanName() : defaultBeanName;
     }
 
     /**
@@ -111,12 +106,7 @@ public class DefaultValueResolver
      */
     public int resolveValue(Integer customValue, Integer defaultValue)
     {
-        if (customValue != null)
-        {
-            return customValue.intValue();
-        }
-
-        return defaultValue.intValue();
+        return customValue != null ? customValue.intValue() : defaultValue.intValue();
     }
 
     /**
