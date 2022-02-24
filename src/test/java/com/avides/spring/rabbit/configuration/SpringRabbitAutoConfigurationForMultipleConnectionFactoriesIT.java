@@ -92,7 +92,8 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT exten
         assertEquals("guest", dummyListenerZeroContainer.getConnectionFactory().getUsername());
         assertEquals("/", dummyListenerZeroContainer.getConnectionFactory().getVirtualHost());
         assertEquals(host, dummyListenerZeroContainer.getConnectionFactory().getHost());
-        assertTrue(dummyListenerOneContainer.isActive());
+        assertTrue(dummyListenerZeroContainer.isActive());
+        assertEquals(500, getPrefetchCount(dummyListenerZeroContainer));
 
         assertEquals(AcknowledgeMode.AUTO, dummyListenerOneContainer.getAcknowledgeMode());
         assertEquals(1, dummyListenerOneContainer.getQueueNames().length);
@@ -101,6 +102,7 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT exten
         assertEquals("/", dummyListenerOneContainer.getConnectionFactory().getVirtualHost());
         assertEquals(host, dummyListenerOneContainer.getConnectionFactory().getHost());
         assertTrue(dummyListenerOneContainer.isActive());
+        assertEquals(500, getPrefetchCount(dummyListenerOneContainer));
     }
 
     private void checkQueues()

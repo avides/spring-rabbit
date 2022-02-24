@@ -28,5 +28,8 @@ public class ListenerProperties
     private MessageConverterProperties messageConverter;
 
     @Min(1)
+    private Integer prefetchCount;
+
+    @Min(1)
     private Integer maxConcurrentConsumers;
 }

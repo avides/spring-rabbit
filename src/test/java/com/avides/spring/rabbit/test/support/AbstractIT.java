@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.avides.spring.rabbit.converter.SpringRabbitJsonMessageConverter;
+import com.avides.spring.rabbit.utils.DomainTestSupport;
 import com.itelg.spring.xom.unmarshaller.XomUnmarshaller;
 import com.itelg.spring.xom.unmarshaller.configuration.EnableXomUnmarshaller;
 import com.itelg.spring.xom.unmarshaller.parser.Parser;
@@ -31,7 +32,7 @@ import nu.xom.Element;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { AbstractIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class, TestClassListener.class, OtherTestClassListener.class, TestClassContextAwareListener.class })
-public abstract class AbstractIT
+public abstract class AbstractIT implements DomainTestSupport
 {
     @Autowired
     protected GenericApplicationContext applicationContext;

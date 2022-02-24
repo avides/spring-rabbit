@@ -13,8 +13,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
-import com.avides.spring.rabbit.listener.RabbitListener;
+import com.avides.spring.rabbit.listener.SpringRabbitListener;
 import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContainer;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
@@ -30,31 +29,35 @@ public class ListenerCreatorTest implements DomainTestSupport
     private MessageConverter messageConverter;
 
     @MockStrict
-    private ContextAwareRabbitListener<Object> contextAwareRabbitListener;
+    private SpringRabbitListener<Object> contextAwareRabbitListener;
 
     @MockStrict
-    private RabbitListener<Object> rabbitListener;
+    private SpringRabbitListener<Object> rabbitListener;
 
     @Test
     public void testCreateInstanceWithContextAwareRabbitListener()
     {
         replayAll();
-        creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, contextAwareRabbitListener);
-        DefaultMessageListenerContainer<Object> container = creator.createInstance();
+        creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, contextAwareRabbitListener);
+        var container = creator.createInstance();
         verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
+        assertEquals(50, getPrefetchCount(container));
+        assertEquals(2, getMaxConcurrentConsumers(container));
     }
 
     @Test
     public void testCreateInstanceWithRabbitListener()
     {
         replayAll();
-        creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, rabbitListener);
-        DefaultMessageListenerContainer<Object> container = creator.createInstance();
+        creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, rabbitListener);
+        var container = creator.createInstance();
         verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
+        assertEquals(50, getPrefetchCount(container));
+        assertEquals(2, getMaxConcurrentConsumers(container));
     }
 
     @Test
@@ -63,7 +66,7 @@ public class ListenerCreatorTest implements DomainTestSupport
         try
         {
             replayAll();
-            creator = new ListenerCreator(connectionFactory, "testQueueName", 2, messageConverter, Integer.valueOf(12));
+            creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
             creator.createInstance();
             verifyAll();
         }
