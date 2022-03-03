@@ -48,42 +48,43 @@
     <!-- Build -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
-    <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+    <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
     <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     <maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
     <exists-maven-plugin.version>0.3.0</exists-maven-plugin.version>
     <github-release-plugin.version>1.4.0</github-release-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     <!-- Spring -->
-    <spring-framework.version>5.3.15</spring-framework.version>
-    <spring.version>${spring-framework.version}</spring.version><!-- deprecated: use spring-framework.version instead -->
+    <spring-framework.version>${spring.version}</spring-framework.version>
+    <spring.version>5.3.15</spring.version><!-- deprecated: use spring-framework.version instead -->
     <spring-boot.version>2.6.3</spring-boot.version>
     <http-client.version>4.0.0</http-client.version>
     <httpclient.version>4.5.13</httpclient.version>
-    <micrometer-core.version>1.8.2</micrometer-core.version>
+    <micrometer.version>${micrometer-core.version}</micrometer.version>
+    <micrometer-core.version>1.8.2</micrometer-core.version><!-- deprecated: use micrometer.version instead -->
     <!-- Validation -->
     <hibernate-validator.version>6.0.20.Final</hibernate-validator.version>
     <!-- Other -->
     <lombok.version>1.18.22</lombok.version>
     <!-- Testing -->
-    <jaxb-api.version>2.3.0</jaxb-api.version>
+    <javax-jaxb.version>${jaxb-api.version}</javax-jaxb.version>
+    <jaxb-api.version>2.3.1</jaxb-api.version><!-- deprecated: use javax-jaxb.version instead -->
     <jaxb-core.version>2.3.0.1</jaxb-core.version>
-    <jaxb-impl.version>2.3.0</jaxb-impl.version>
-    <junit.version>4.13.2</junit.version>
-    <assertj.version>3.22.0</assertj.version>
-    <assertj-core.version>${assertj.version}</assertj-core.version> <!-- deprecated: use assertj.version instead -->
+    <jaxb-impl.version>2.3.3</jaxb-impl.version>
+    <junit-jupiter.version>5.8.2</junit-jupiter.version>
+    <assertj.version>3.21.0</assertj.version>
     <jacoco.version>0.8.7</jacoco.version>
     <powermock.version>2.0.9</powermock.version>
     <easymock.version>4.3</easymock.version>
     <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
     <javax.el.version>3.0.0</javax.el.version>
-    <springtainer-rabbitmq.version>1.3.0</springtainer-rabbitmq.version>
-    <logback.version>1.2.3</logback.version>
-    <logback-classic.version>${logback.version}</logback-classic.version> <!-- deprecated: use logback-classic.version instead -->
+    <springtainer-rabbitmq.version>1.1.0</springtainer-rabbitmq.version>
+    <logback.version>${logback-classic.version}</logback.version>
+    <logback-classic.version>1.2.3</logback-classic.version> <!-- deprecated: use logback-classic.version instead -->
     <awaitility.version>4.1.1</awaitility.version>
   </properties>
 
@@ -119,7 +120,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${spring.version}</version>
+      <version>${spring-framework.version}</version>
     </dependency>
 
     <!-- Validation -->
@@ -142,7 +143,7 @@
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>${jaxb-api.version}</version>
+      <version>${javax-jaxb.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -158,15 +159,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj-core.version}</version>
+      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -197,7 +204,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-oxm</artifactId>
-      <version>${spring.version}</version>
+      <version>${spring-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -221,7 +228,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
+      <version>${spring-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -233,7 +240,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback-classic.version}</version>
+      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
