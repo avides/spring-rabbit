@@ -5,6 +5,7 @@ import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.r
 import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.resolveExchange;
 import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.resolveMaxConcurrentConsumers;
 import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.resolveMessageConverter;
+import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.resolveValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -194,6 +195,27 @@ public class DefaultValueResolverTest implements DomainTestSupport
     public void testResolveMaxConcurrentConsumersWithDefaultMax()
     {
         int resolved = resolveMaxConcurrentConsumers(null, Integer.valueOf(1));
+        assertEquals(1, resolved);
+    }
+
+    @Test
+    public void testResolveValueWithCustomMax()
+    {
+        int resolved = resolveValue(Integer.valueOf(2), null);
+        assertEquals(2, resolved);
+    }
+
+    @Test
+    public void testResolveValueWithCustomMaxAndDefaultMax()
+    {
+        int resolved = resolveValue(Integer.valueOf(2), Integer.valueOf(1));
+        assertEquals(2, resolved);
+    }
+
+    @Test
+    public void testResolveValueWithDefaultMax()
+    {
+        int resolved = resolveValue(null, Integer.valueOf(1));
         assertEquals(1, resolved);
     }
 

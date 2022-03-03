@@ -143,6 +143,7 @@ spring.rabbitmq.queues[0].exchange.name=com.example.exchange.zero
 spring.rabbitmq.queues[0].exchange.type=DIRECT
 spring.rabbitmq.queues[0].limit=500000
 spring.rabbitmq.queues[0].listener.bean-name=myListenerZero
+spring.rabbitmq.queues[0].listener.prefetch-count=55
 spring.rabbitmq.queues[0].listener.max-concurrent-consumers=2
 spring.rabbitmq.queues[0].rabbit-admin.bean-name=myRabbitAdminZero
 spring.rabbitmq.queues[0].rabbit-admin.connection-factory.bean-name=myConnectionFactoryZero
@@ -202,6 +203,17 @@ See [ExchangeProperties](#exchangeproperties)
 ### spring.rabbitmq.message-converter.(MessageConverterProperties)
 
 See [MessageConverterProperties](#messageconverterproperties)
+
+### spring.rabbitmq.prefetch-count
+
+@Min(1)
+
+Default 500. Could be overridden by each listener.
+
+``` ini
+spring.rabbitmq.prefetch-count=50
+```
+
 
 ### spring.rabbitmq.max-concurrent-consumers
 
@@ -452,6 +464,15 @@ spring.rabbitmq.queues[0].listener.bean-name=myListener
 @Valid
 
 See [MessageConverterProperties](#messageconverterproperties)
+
+#### .prefetch-count
+
+Could be null or @Min(1)
+
+
+``` ini
+spring.rabbitmq.queues[0].listener.prefetch-count=30
+```
 
 #### .max-concurrent-consumers
 

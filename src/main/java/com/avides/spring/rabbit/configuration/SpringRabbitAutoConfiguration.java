@@ -46,7 +46,6 @@ import com.avides.spring.rabbit.configuration.domain.ExchangeProperties;
 import com.avides.spring.rabbit.configuration.domain.ListenerProperties;
 import com.avides.spring.rabbit.configuration.domain.MessageConverterProperties;
 import com.avides.spring.rabbit.configuration.domain.QueueProperties;
-import com.avides.spring.rabbit.configuration.domain.RabbitAdminProperties;
 import com.avides.spring.rabbit.configuration.domain.RabbitTemplateProperties;
 import com.avides.spring.rabbit.configuration.provider.ConnectionFactoryProvider;
 import com.avides.spring.rabbit.configuration.util.DefaultValueResolver;
@@ -118,6 +117,10 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
     @Valid
     @NestedConfigurationProperty
     private MessageConverterProperties messageConverter;
+
+    @NotNull
+    @Min(1)
+    private Integer prefetchCount = Integer.valueOf(500);
 
     @NotNull
     @Min(1)
@@ -227,15 +230,15 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
         {
             if (queueProperties.isCreationEnabled())
             {
-                String queueName = queueProperties.getName();
-                RabbitAdminProperties rabbitAdminProperties = queueProperties.getRabbitAdmin();
-                String rabbitAdminBeanName = rabbitAdminProperties.getBeanName();
-                BeanReferenceConnectionFactoryProperties customConnectionFactoryProperties = rabbitAdminProperties.getConnectionFactory();
+                var queueName = queueProperties.getName();
+                var rabbitAdminProperties = queueProperties.getRabbitAdmin();
+                var rabbitAdminBeanName = rabbitAdminProperties.getBeanName();
+                var customConnectionFactoryProperties = rabbitAdminProperties.getConnectionFactory();
 
-                ConnectionFactory resolvedConnectionFactory = DefaultValueResolver
+                var resolvedConnectionFactory = DefaultValueResolver
                         .resolveConnectionFactory(customConnectionFactoryProperties, CONNECTION_FACTORY_BEAN_NAME, applicationContext);
 
-                RabbitAdmin rabbitAdmin = new RabbitAdminCreator(resolvedConnectionFactory).createInstance();
+                var rabbitAdmin = new RabbitAdminCreator(resolvedConnectionFactory).createInstance();
                 if (!applicationContext.containsBean(rabbitAdminBeanName))
                 {
                     applicationContext.registerBean(rabbitAdminBeanName, RabbitAdmin.class, () -> rabbitAdmin, beanDefinition -> beanDefinition
@@ -243,29 +246,30 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
                     log.info("RabbitAdmin build with bean-name '{}'", rabbitAdminBeanName);
                 }
 
-                Creator<Queue> queueCreator = new QueueCreator(queueProperties, rabbitAdmin, DefaultValueResolver
+                var queueCreator = new QueueCreator(queueProperties, rabbitAdmin, DefaultValueResolver
                         .resolveExchange(queueProperties.getExchange(), exchange));
                 addToContext(queueName, resolvedConnectionFactory, queueCreator.createInstance());
 
-                Creator<Queue> dlxQueueCreator = new DlxQueueCreator(rabbitAdmin, queueProperties);
+                var dlxQueueCreator = new DlxQueueCreator(rabbitAdmin, queueProperties);
                 addToContext(queueName + ".dlx", resolvedConnectionFactory, dlxQueueCreator.createInstance());
 
                 if (queueProperties.getListener() != null)
                 {
-                    ListenerProperties listenerProperties = queueProperties.getListener();
+                    var listenerProperties = queueProperties.getListener();
 
                     if (listenerProperties.isCreationEnabled())
                     {
-                        String listenerBeanName = listenerProperties.getBeanName();
-                        int resolvedMaxConcurrentConsumers = DefaultValueResolver
-                                .resolveMaxConcurrentConsumers(listenerProperties.getMaxConcurrentConsumers(), maxConcurrentConsumers);
-                        MessageConverter resolvedMessageConverter = DefaultValueResolver.resolveMessageConverter(listenerProperties
+                        var listenerBeanName = listenerProperties.getBeanName();
+                        var resolvedPrefetchCount = DefaultValueResolver.resolveValue(listenerProperties.getPrefetchCount(), prefetchCount);
+                        var resolvedMaxConcurrentConsumers = DefaultValueResolver
+                                .resolveValue(listenerProperties.getMaxConcurrentConsumers(), maxConcurrentConsumers);
+                        var resolvedMessageConverter = DefaultValueResolver.resolveMessageConverter(listenerProperties
                                 .getMessageConverter(), messageConverter, applicationContext, existingMessageConverterList);
-                        Object listener = applicationContext.getBean(listenerBeanName);
+                        var listener = applicationContext.getBean(listenerBeanName);
 
-                        Creator<DefaultMessageListenerContainer<Object>> listenerCreator = new ListenerCreator(resolvedConnectionFactory, queueName, resolvedMaxConcurrentConsumers, resolvedMessageConverter, listener);
+                        var listenerCreator = new ListenerCreator(resolvedConnectionFactory, queueName, resolvedPrefetchCount, resolvedMaxConcurrentConsumers, resolvedMessageConverter, listener);
 
-                        String beanName = createListenerContainerBeanName(listenerProperties, queueName, customConnectionFactoryProperties);
+                        var beanName = createListenerContainerBeanName(listenerProperties, queueName, customConnectionFactoryProperties);
 
                         applicationContext
                                 .registerBean(beanName, DefaultMessageListenerContainer.class, listenerCreator::createInstance, beanDefinition -> beanDefinition

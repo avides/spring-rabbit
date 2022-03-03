@@ -23,10 +23,8 @@ public class DefaultValueResolver
     /**
      * Resolves and creates a {@link Exchange} for a custom and a default exchange configuration considering the override of a possible custom configuration.
      *
-     * @param customProperties
-     *            custom exchange configuration that overrides the default
-     * @param defaultProperties
-     *            default exchange configuration that is used if no custom configuration exists
+     * @param customProperties custom exchange configuration that overrides the default
+     * @param defaultProperties default exchange configuration that is used if no custom configuration exists
      * @return resolved {@link Exchange}
      */
     public Exchange resolveExchange(ExchangeProperties customProperties, ExchangeProperties defaultProperties)
@@ -46,12 +44,10 @@ public class DefaultValueResolver
     /**
      * Resolves a {@link ConnectionFactory} for multiple connection factories considering the override of a possible custom connection factory.
      *
-     * @param customProperties
-     *            {@link BeanReferenceConnectionFactoryProperties} containing the configuration for a custom connection factory that overrides the default
-     * @param defaultBeanName
-     *            bean name for the default connection factory (created by spring and renamed by the configuration)
-     * @param applicationContext
-     *            context containing all spring beans
+     * @param customProperties {@link BeanReferenceConnectionFactoryProperties} containing the configuration for a custom connection factory that overrides the
+     *        default
+     * @param defaultBeanName bean name for the default connection factory (created by spring and renamed by the configuration)
+     * @param applicationContext context containing all spring beans
      * @return resolved {@link ConnectionFactory}
      */
     public ConnectionFactory resolveConnectionFactory(BeanReferenceConnectionFactoryProperties customProperties, String defaultBeanName,
@@ -77,39 +73,40 @@ public class DefaultValueResolver
     /**
      * Resolves a bean name for multiple connection factories considering the override of a possible custom connection factory.
      *
-     * @param customProperties
-     *            {@link BeanReferenceConnectionFactoryProperties} containing the bean name for a custom connection factory that overrides the default
-     * @param defaultBeanName
-     *            bean name for the default connection factory (created by spring and renamed by the configuration) that is used if no custom
+     * @param customProperties {@link BeanReferenceConnectionFactoryProperties} containing the bean name for a custom connection factory that overrides the
+     *        default
+     * @param defaultBeanName bean name for the default connection factory (created by spring and renamed by the configuration) that is used if no custom
      * @return beanName for the resolved connectionFactory
      */
     public String resolveConnectionFactoryBeanName(BeanReferenceConnectionFactoryProperties customProperties, String defaultBeanName)
     {
-        if (customProperties != null)
-        {
-            return customProperties.getBeanName();
-        }
-
-        return defaultBeanName;
+        return customProperties != null ? customProperties.getBeanName() : defaultBeanName;
     }
 
     /**
      * Resolves the max concurrent consumers for a {@link DefaultMessageListenerContainer} considering the override of a possible custom configuration.
      *
-     * @param customMax
-     *            custom quantity to override the default
-     * @param defaultMax
-     *            quantity which is used if no custom configuration exists
+     * @deprecated Please use {@link #resolveValue(Integer, Integer)} instead
+     * @param customMax custom quantity to override the default
+     * @param defaultMax quantity which is used if no custom configuration exists
      * @return resolved max concurrent consumers for a {@link DefaultMessageListenerContainer}
      */
+    @Deprecated(forRemoval = true, since = "2.6.0")
     public int resolveMaxConcurrentConsumers(Integer customMax, Integer defaultMax)
     {
-        if (customMax != null)
-        {
-            return customMax.intValue();
-        }
+        return resolveValue(customMax, defaultMax);
+    }
 
-        return defaultMax.intValue();
+    /**
+     * Resolves the value between a custom and a default value
+     *
+     * @param customValue custom value to override the default
+     * @param defaultValue value which is used if no custom configuration exists
+     * @return resolved max
+     */
+    public int resolveValue(Integer customValue, Integer defaultValue)
+    {
+        return customValue != null ? customValue.intValue() : defaultValue.intValue();
     }
 
     /**
@@ -122,14 +119,10 @@ public class DefaultValueResolver
      * <li>existing if only one {@link MessageConverter} exists</li>
      * </ol>
      *
-     * @param customProperties
-     *            custom configuration to override the default
-     * @param defaultProperties
-     *            default configuration which is used if no custom configuration exists
-     * @param applicationContext
-     *            context containing all spring beans
-     * @param existingMessageConverters
-     *            list of existing {@link MessageConverter}
+     * @param customProperties custom configuration to override the default
+     * @param defaultProperties default configuration which is used if no custom configuration exists
+     * @param applicationContext context containing all spring beans
+     * @param existingMessageConverters list of existing {@link MessageConverter}
      * @return resolved {@link MessageConverter}
      */
     public MessageConverter resolveMessageConverter(MessageConverterProperties customProperties, MessageConverterProperties defaultProperties,

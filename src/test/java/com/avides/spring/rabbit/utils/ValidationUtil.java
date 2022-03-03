@@ -1,5 +1,7 @@
 package com.avides.spring.rabbit.utils;
 
+import static lombok.AccessLevel.PRIVATE;
+
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -8,22 +10,22 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
+@NoArgsConstructor(access = PRIVATE)
 public class ValidationUtil
 {
     @Getter
     @Setter
     private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    public boolean isValid(Object object)
+    public static boolean isValid(Object object)
     {
         return validateAndReturn(object).isEmpty();
     }
 
-    public void validate(Object object)
+    public static void validate(Object object)
     {
         Set<ConstraintViolation<Object>> violations = validateAndReturn(object);
 
@@ -33,7 +35,7 @@ public class ValidationUtil
         }
     }
 
-    public Set<ConstraintViolation<Object>> validateAndReturn(Object object)
+    public static Set<ConstraintViolation<Object>> validateAndReturn(Object object)
     {
         return validator.validate(object);
     }

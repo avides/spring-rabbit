@@ -1,11 +1,12 @@
 package com.avides.spring.rabbit.configuration.domain;
 
+import static com.avides.spring.rabbit.utils.BeanValidationTestSupport.expectErrorOnlyOnProperty;
+import static com.avides.spring.rabbit.utils.BeanValidationTestSupport.expectNoError;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 public class ListenerPropertiesTest implements DomainTestSupport
@@ -13,92 +14,28 @@ public class ListenerPropertiesTest implements DomainTestSupport
     @Test
     public void testBeanValidation()
     {
-        BeanValidationTestSupport.expectNoError(getCompleteListenerProperties());
-    }
+        expectNoError(getCompleteListenerProperties());
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setBeanName(null)), "beanName");
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setBeanName("")), "beanName");
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setBeanName(" ")), "beanName");
 
-    // beanName
-    @Test
-    public void testBeanValidationOnBeanNameWithNull()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setBeanName(null);
-        BeanValidationTestSupport.expectErrorOnlyOnProperty(listenerProperties, "beanName");
-    }
+        expectNoError(getCompleteListenerProperties(p -> p.setMessageConverter(null)));
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.getMessageConverter().setBeanName(null)), "messageConverter");
 
-    @Test
-    public void testBeanValidationOnBeanNameWithEmpty()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setBeanName("");
-        BeanValidationTestSupport.expectErrorOnlyOnProperty(listenerProperties, "beanName");
+        expectNoError(getCompleteListenerProperties(p -> p.setPrefetchCount(null)));
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setPrefetchCount(Integer.valueOf(0))), "prefetchCount");
+
+        expectNoError(getCompleteListenerProperties(p -> p.setMaxConcurrentConsumers(null)));
+        expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setMaxConcurrentConsumers(Integer.valueOf(0))), "maxConcurrentConsumers");
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithBlank()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setBeanName(" ");
-        BeanValidationTestSupport.expectErrorOnlyOnProperty(listenerProperties, "beanName");
-    }
-
-    // messageConverter
-    @Test
-    public void testBeanValidationOnMessageConverterWithNull()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setMessageConverter(null);
-        BeanValidationTestSupport.expectNoError(listenerProperties);
-    }
-
-    @Test
-    public void testBeanValidationOnMessageConverterWithInvalid()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.getMessageConverter().setBeanName(null);
-        BeanValidationTestSupport.expectErrorOnlyOnProperty(listenerProperties, "messageConverter");
-    }
-
-    // maxConcurrentConsumers
-    @Test
-    public void testBeanValidationOnMaxConcurrentConsumersWithNull()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setMaxConcurrentConsumers(null);
-        BeanValidationTestSupport.expectNoError(listenerProperties);
-    }
-
-    @Test
-    public void testBeanValidationOnMaxConcurrentConsumersWithLessThanOne()
-    {
-        ListenerProperties listenerProperties = getCompleteListenerProperties();
-        listenerProperties.setMaxConcurrentConsumers(Integer.valueOf(0));
-        BeanValidationTestSupport.expectErrorOnlyOnProperty(listenerProperties, "maxConcurrentConsumers");
-    }
-
-    /**
-     * test default values
-     */
-    @Test
-    public void testDefaultValueOnCreationEnabled()
+    public void testDefaultValues()
     {
         assertTrue(new ListenerProperties().isCreationEnabled());
-    }
-
-    @Test
-    public void testDefaultValueOnBeanName()
-    {
         assertNull(new ListenerProperties().getBeanName());
-    }
-
-    @Test
-    public void testDefaultValueOnMessageConverter()
-    {
         assertNull(new ListenerProperties().getMessageConverter());
-    }
-
-    @Test
-    public void testDefaultValueOnMaxConcurrentConsumers()
-    {
+        assertNull(new ListenerProperties().getPrefetchCount());
         assertNull(new ListenerProperties().getMaxConcurrentConsumers());
     }
 }
