@@ -80,4 +80,4 @@ jobs:
             -Dsonar.projectVersion=${PROJECT_VERSION} \
             -Dsonar.branch.name=master \
             -Dsonar.organization=${SONAR_ORGANIZATION} \
-            -Dsonar.projectKey=${GITHUB_REPOSITORY//\//_} \
+            -Dsonar.projectKey=${GITHUB_REPOSITORY//\//_}
