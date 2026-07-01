@@ -165,7 +165,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithOverridenQueueType()
+    public void testCreateInstanceWithOverriddenQueueType()
     {
         rabbitAdmin.declareQueue(anyObject(Queue.class));
         expectLastCall().andAnswer(() ->
