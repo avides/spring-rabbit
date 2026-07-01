@@ -131,8 +131,8 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT exten
         assertEquals(1, queueZeroDlx.getDeclaringAdmins().size());
         assertEquals(firstRabbitAdmin, queueZeroDlx.getDeclaringAdmins().iterator().next());
         assertEquals(2, queueZeroDlx.getArguments().size());
-        assertEquals(Long.valueOf(50), queueZeroDlx.getArguments().get("x-max-length"));
         assertEquals("quorum", queueZeroDlx.getArguments().get(X_QUEUE_TYPE));
+        assertEquals(Long.valueOf(50), queueZeroDlx.getArguments().get("x-max-length"));
 
         // queueOne
         assertEquals("com.avides.spring.rabbit.queue.one", queueOne.getName());
