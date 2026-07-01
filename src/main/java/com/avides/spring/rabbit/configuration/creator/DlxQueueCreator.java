@@ -1,5 +1,8 @@
 package com.avides.spring.rabbit.configuration.creator;
 
+import static com.avides.spring.rabbit.configuration.creator.QueueCreator.DEFAULT_X_QUEUE_TYPE;
+import static com.avides.spring.rabbit.configuration.creator.QueueCreator.X_QUEUE_TYPE;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +25,21 @@ public class DlxQueueCreator implements Creator<Queue>
     {
         Map<String, Object> dlxArguments = new HashMap<>();
         dlxArguments.put("x-max-length", Long.valueOf(queueProperties.getLimit()));
-        dlxArguments.put("x-queue-mode", "lazy");
+        dlxArguments.put(X_QUEUE_TYPE, resolveQueueType());
 
         Queue dlxQueue = new Queue(queueProperties.getName() + ".dlx", queueProperties.isDurable(), queueProperties.isExclusive(), false, dlxArguments);
         dlxQueue.setAdminsThatShouldDeclare(rabbitAdmin);
         rabbitAdmin.declareQueue(dlxQueue);
         return dlxQueue;
+    }
+
+    private String resolveQueueType()
+    {
+        if (queueProperties.getArguments() != null && queueProperties.getArguments().get(X_QUEUE_TYPE) != null)
+        {
+            return (String) queueProperties.getArguments().get(X_QUEUE_TYPE);
+        }
+        return DEFAULT_X_QUEUE_TYPE;
     }
 
 }

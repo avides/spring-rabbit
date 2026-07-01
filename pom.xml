@@ -3,7 +3,7 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>2.7.0</version>
+  <version>3.0.0-RC1</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -23,6 +23,10 @@
     <developer>
       <name>Julian Eggers</name>
       <email>eggers.julian@gmail.com</email>
+    </developer>
+    <developer>
+      <name>Finn Egbers</name>
+      <email>finn.egbers@gmail.com</email>
     </developer>
   </developers>
 
@@ -82,7 +86,7 @@
     <easymock.version>4.3</easymock.version>
     <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
     <javax.el.version>3.0.0</javax.el.version>
-    <springtainer-rabbitmq.version>1.3.0</springtainer-rabbitmq.version>
+    <springtainer-rabbitmq.version>1.4.0</springtainer-rabbitmq.version>
     <logback.version>${logback-classic.version}</logback.version>
     <logback-classic.version>1.2.10</logback-classic.version> <!-- deprecated: use logback.version instead -->
     <awaitility.version>4.1.1</awaitility.version>
