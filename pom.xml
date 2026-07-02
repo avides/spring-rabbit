@@ -60,7 +60,6 @@
     <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     <maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
     <exists-maven-plugin.version>0.3.0</exists-maven-plugin.version>
-    <github-release-plugin.version>1.4.0</github-release-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.12</nexus-staging-maven-plugin.version>
     <!-- Spring -->
     <spring-framework.version>${spring.version}</spring-framework.version>
@@ -464,25 +463,6 @@
             <goals>
               <goal>remote</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>de.jutzig</groupId>
-        <artifactId>github-release-plugin</artifactId>
-        <version>${github-release-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>github-upload</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>release</goal>
-            </goals>
-            <configuration>
-              <releaseName>${project.version}</releaseName>
-              <tag>${project.version}</tag>
-              <artifact>${project.build.directory}/${project.artifactId}-${project.version}.jar</artifact>
-            </configuration>
           </execution>
         </executions>
       </plugin>
