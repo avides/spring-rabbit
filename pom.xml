@@ -3,7 +3,7 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>3.0.0-RC1</version>
+  <version>3.0.0-RC2</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -61,7 +61,7 @@
     <maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
     <exists-maven-plugin.version>0.6.0</exists-maven-plugin.version>
     <github-release-plugin.version>1.4.0</github-release-plugin.version>
-    <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
+    <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
     <spring-framework.version>${spring.version}</spring-framework.version>
     <spring.version>5.3.15</spring.version><!-- deprecated: use spring-framework.version instead -->
