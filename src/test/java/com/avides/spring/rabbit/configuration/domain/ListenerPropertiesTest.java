@@ -2,10 +2,10 @@ package com.avides.spring.rabbit.configuration.domain;
 
 import static com.avides.spring.rabbit.utils.BeanValidationTestSupport.expectErrorOnlyOnProperty;
 import static com.avides.spring.rabbit.utils.BeanValidationTestSupport.expectNoError;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 

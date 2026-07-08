@@ -1,39 +1,36 @@
 package com.avides.spring.rabbit.configuration.creator;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.getCurrentArguments;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 
 import com.avides.spring.rabbit.configuration.domain.QueueProperties;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DlxQueueCreatorTest implements DomainTestSupport
 {
     private Creator<Queue> creator;
 
-    @MockStrict
+    @Mock
     private RabbitAdmin rabbitAdmin;
 
     @Test
     public void testCreateInstanceWithDurable()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName.dlx", queue.getName());
             assertEquals(2, queue.getArguments().size());
             assertEquals("100", queue.getArguments().get("x-max-length").toString());
@@ -44,13 +41,12 @@ public class DlxQueueCreatorTest implements DomainTestSupport
             return "testQueueName.dlx";
         });
 
-        replayAll();
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setDurable(true);
         creator = new DlxQueueCreator(rabbitAdmin, queueProperties);
 
         Queue dlxQueue = creator.createInstance();
-        verifyAll();
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
 
         assertEquals("testQueueName.dlx", dlxQueue.getName());
         assertEquals(2, dlxQueue.getArguments().size());
@@ -64,10 +60,9 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithNotDurable()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName.dlx", queue.getName());
             assertEquals(2, queue.getArguments().size());
             assertEquals("100", queue.getArguments().get("x-max-length").toString());
@@ -78,13 +73,12 @@ public class DlxQueueCreatorTest implements DomainTestSupport
             return "testQueueName.dlx";
         });
 
-        replayAll();
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setDurable(false);
         creator = new DlxQueueCreator(rabbitAdmin, queueProperties);
 
         Queue dlxQueue = creator.createInstance();
-        verifyAll();
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
 
         assertEquals("testQueueName.dlx", dlxQueue.getName());
         assertEquals(2, dlxQueue.getArguments().size());
@@ -98,10 +92,9 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithExclusive()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName.dlx", queue.getName());
             assertEquals(2, queue.getArguments().size());
             assertEquals("100", queue.getArguments().get("x-max-length").toString());
@@ -112,13 +105,12 @@ public class DlxQueueCreatorTest implements DomainTestSupport
             return "testQueueName.dlx";
         });
 
-        replayAll();
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setExclusive(true);
         creator = new DlxQueueCreator(rabbitAdmin, queueProperties);
 
         Queue dlxQueue = creator.createInstance();
-        verifyAll();
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
 
         assertEquals("testQueueName.dlx", dlxQueue.getName());
         assertEquals(2, dlxQueue.getArguments().size());
@@ -132,10 +124,9 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithNotExclusive()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName.dlx", queue.getName());
             assertEquals(2, queue.getArguments().size());
             assertEquals("100", queue.getArguments().get("x-max-length").toString());
@@ -146,13 +137,12 @@ public class DlxQueueCreatorTest implements DomainTestSupport
             return "testQueueName.dlx";
         });
 
-        replayAll();
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setExclusive(false);
         creator = new DlxQueueCreator(rabbitAdmin, queueProperties);
 
         Queue dlxQueue = creator.createInstance();
-        verifyAll();
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
 
         assertEquals("testQueueName.dlx", dlxQueue.getName());
         assertEquals(2, dlxQueue.getArguments().size());

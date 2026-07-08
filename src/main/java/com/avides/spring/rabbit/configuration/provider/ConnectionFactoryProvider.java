@@ -34,7 +34,9 @@ public class ConnectionFactoryProvider
         String host = rabbitProperties.determineHost();
 
         // avoid multiple IP's for IPv6 enabled OS
-        if (!"localhost".equals(host) && !rabbitProperties.determineAddresses().contains(","))
+        // Note: RabbitProperties#determineAddresses() returns a comma-separated String on Spring Boot 2.x but a List<String> since Spring Boot 3.x;
+        // a single configured address therefore now yields a one-element list instead of a comma-free String.
+        if (!"localhost".equals(host) && rabbitProperties.determineAddresses().size() <= 1)
         {
             try
             {

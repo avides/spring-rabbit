@@ -1,22 +1,22 @@
 package com.avides.spring.rabbit.configuration.creator;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.getCurrentArguments;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.Queue;
@@ -25,24 +25,23 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import com.avides.spring.rabbit.configuration.domain.QueueProperties;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class QueueCreatorTest implements DomainTestSupport
 {
     private Creator<Queue> creator;
 
-    @MockStrict
+    @Mock
     private RabbitAdmin rabbitAdmin;
 
-    @MockStrict
+    @Mock
     private Exchange exchange;
 
     @Test
     public void testCreateInstance()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName", queue.getName());
             assertTrue(queue.isDurable());
             assertFalse(queue.isExclusive());
@@ -58,22 +57,17 @@ public class QueueCreatorTest implements DomainTestSupport
             return "testQueueName";
         });
 
-        rabbitAdmin.declareExchange(exchange);
+        lenient().when(exchange.getName()).thenReturn("springExchange");
 
-        exchange.getName();
-        expectLastCall().andReturn("springExchange");
-
-        rabbitAdmin.declareBinding(anyObject(Binding.class));
-        expectLastCall().andAnswer(() ->
+        doAnswer(invocation ->
         {
-            Binding binding = (Binding) getCurrentArguments()[0];
+            Binding binding = invocation.getArgument(0);
             assertTrue(binding.getArguments().isEmpty());
             assertEquals("product", binding.getRoutingKey());
             assertEquals("springExchange", binding.getExchange());
             return null;
-        });
+        }).when(rabbitAdmin).declareBinding(any(Binding.class));
 
-        replayAll();
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange", "toOverride");
         arguments.put("x-dead-letter-routing-key", "toOverride");
@@ -84,16 +78,18 @@ public class QueueCreatorTest implements DomainTestSupport
         completeQueueProperties.setArguments(arguments);
         creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
         creator.createInstance();
-        verifyAll();
+
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
+        verify(rabbitAdmin).declareExchange(exchange);
+        verify(rabbitAdmin).declareBinding(any(Binding.class));
     }
 
     @Test
     public void testCreateInstanceWithMultipleRoutingKeys()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName", queue.getName());
             assertTrue(queue.isDurable());
             assertFalse(queue.isExclusive());
@@ -109,35 +105,24 @@ public class QueueCreatorTest implements DomainTestSupport
             return "testQueueName";
         });
 
-        rabbitAdmin.declareExchange(exchange);
+        lenient().when(exchange.getName()).thenReturn("springExchange");
 
-        exchange.getName();
-        expectLastCall().andReturn("springExchange");
-
-        rabbitAdmin.declareBinding(anyObject(Binding.class));
-        expectLastCall().andAnswer(() ->
+        doAnswer(invocation ->
         {
-            Binding binding = (Binding) getCurrentArguments()[0];
+            Binding binding = invocation.getArgument(0);
             assertTrue(binding.getArguments().isEmpty());
             assertEquals("product", binding.getRoutingKey());
             assertEquals("springExchange", binding.getExchange());
             return null;
-        });
-
-        exchange.getName();
-        expectLastCall().andReturn("springExchange");
-
-        rabbitAdmin.declareBinding(anyObject(Binding.class));
-        expectLastCall().andAnswer(() ->
+        }).doAnswer(invocation ->
         {
-            Binding binding = (Binding) getCurrentArguments()[0];
+            Binding binding = invocation.getArgument(0);
             assertTrue(binding.getArguments().isEmpty());
             assertEquals("orders", binding.getRoutingKey());
             assertEquals("springExchange", binding.getExchange());
             return null;
-        });
+        }).when(rabbitAdmin).declareBinding(any(Binding.class));
 
-        replayAll();
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange", "toOverride");
         arguments.put("x-dead-letter-routing-key", "toOverride");
@@ -150,8 +135,9 @@ public class QueueCreatorTest implements DomainTestSupport
         completeQueueProperties.setArguments(arguments);
         creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
         creator.createInstance();
-        verifyAll();
 
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
+        verify(rabbitAdmin).declareExchange(exchange);
     }
 
     @Test
@@ -159,12 +145,10 @@ public class QueueCreatorTest implements DomainTestSupport
     {
         try
         {
-            replayAll();
             QueueProperties completeQueueProperties = getCompleteQueueProperties();
             completeQueueProperties.setRoutingkey("");
             creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
             creator.createInstance();
-            verifyAll();
         }
         catch (IllegalArgumentException e)
         {
@@ -177,13 +161,11 @@ public class QueueCreatorTest implements DomainTestSupport
     {
         try
         {
-            replayAll();
             QueueProperties completeQueueProperties = getCompleteQueueProperties();
             completeQueueProperties.setRoutingkey(null);
             completeQueueProperties.setRoutingkeys(Arrays.asList(""));
             creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
             creator.createInstance();
-            verifyAll();
         }
         catch (IllegalArgumentException e)
         {
@@ -194,10 +176,9 @@ public class QueueCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithExclusive()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName", queue.getName());
             assertTrue(queue.isDurable());
             assertTrue(queue.isExclusive());
@@ -213,22 +194,17 @@ public class QueueCreatorTest implements DomainTestSupport
             return "testQueueName";
         });
 
-        rabbitAdmin.declareExchange(exchange);
+        lenient().when(exchange.getName()).thenReturn("springExchange");
 
-        exchange.getName();
-        expectLastCall().andReturn("springExchange");
-
-        rabbitAdmin.declareBinding(anyObject(Binding.class));
-        expectLastCall().andAnswer(() ->
+        doAnswer(invocation ->
         {
-            Binding binding = (Binding) getCurrentArguments()[0];
+            Binding binding = invocation.getArgument(0);
             assertTrue(binding.getArguments().isEmpty());
             assertEquals("product", binding.getRoutingKey());
             assertEquals("springExchange", binding.getExchange());
             return null;
-        });
+        }).when(rabbitAdmin).declareBinding(any(Binding.class));
 
-        replayAll();
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange", "toOverride");
         arguments.put("x-dead-letter-routing-key", "toOverride");
@@ -241,16 +217,18 @@ public class QueueCreatorTest implements DomainTestSupport
         completeQueueProperties.setArguments(arguments);
         creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
         creator.createInstance();
-        verifyAll();
+
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
+        verify(rabbitAdmin).declareExchange(exchange);
+        verify(rabbitAdmin).declareBinding(any(Binding.class));
     }
 
     @Test
     public void testCreateInstanceWithNotExclusive()
     {
-        rabbitAdmin.declareQueue(anyObject(Queue.class));
-        expectLastCall().andAnswer(() ->
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
-            Queue queue = (Queue) getCurrentArguments()[0];
+            Queue queue = invocation.getArgument(0);
             assertEquals("testQueueName", queue.getName());
             assertTrue(queue.isDurable());
             assertFalse(queue.isExclusive());
@@ -266,22 +244,17 @@ public class QueueCreatorTest implements DomainTestSupport
             return "testQueueName";
         });
 
-        rabbitAdmin.declareExchange(exchange);
+        lenient().when(exchange.getName()).thenReturn("springExchange");
 
-        exchange.getName();
-        expectLastCall().andReturn("springExchange");
-
-        rabbitAdmin.declareBinding(anyObject(Binding.class));
-        expectLastCall().andAnswer(() ->
+        doAnswer(invocation ->
         {
-            Binding binding = (Binding) getCurrentArguments()[0];
+            Binding binding = invocation.getArgument(0);
             assertTrue(binding.getArguments().isEmpty());
             assertEquals("product", binding.getRoutingKey());
             assertEquals("springExchange", binding.getExchange());
             return null;
-        });
+        }).when(rabbitAdmin).declareBinding(any(Binding.class));
 
-        replayAll();
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange", "toOverride");
         arguments.put("x-dead-letter-routing-key", "toOverride");
@@ -294,6 +267,9 @@ public class QueueCreatorTest implements DomainTestSupport
         completeQueueProperties.setArguments(arguments);
         creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
         creator.createInstance();
-        verifyAll();
+
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
+        verify(rabbitAdmin).declareExchange(exchange);
+        verify(rabbitAdmin).declareBinding(any(Binding.class));
     }
 }

@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,8 +29,8 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCounting
     @Autowired
     private MeterRegistry meterRegistry;
 
-    @Before
-    @After
+    @BeforeEach
+    @AfterEach
     public void clearInbounds()
     {
         meterRegistry.getMeters().forEach(m -> meterRegistry.remove(m));

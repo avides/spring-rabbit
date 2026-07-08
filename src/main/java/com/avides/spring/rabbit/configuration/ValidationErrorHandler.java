@@ -1,7 +1,7 @@
 package com.avides.spring.rabbit.configuration;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ErrorHandler;

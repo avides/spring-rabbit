@@ -4,7 +4,6 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.BlockingQueueConsumer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -39,14 +38,11 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
         setDefaultRequeueRejected(false);
         setPrefetchCount(500);
         setMissingQueuesFatal(false);
-    }
-
-    @Override
-    protected BlockingQueueConsumer createBlockingQueueConsumer()
-    {
-        var consumer = super.createBlockingQueueConsumer();
-        consumer.setDeclarationRetries(1000000); // infinity
-        return consumer;
+        // Previously this required overriding the internal extension point createBlockingQueueConsumer() and calling
+        // BlockingQueueConsumer.setDeclarationRetries(...) directly on the created consumer. SimpleMessageListenerContainer
+        // exposes the same behaviour as a public, stable API since Spring AMQP 1.3.9: the configured value is applied to
+        // every BlockingQueueConsumer created internally (including on restarts), so the public setter here is equivalent.
+        setDeclarationRetries(1000000); // infinity
     }
 
     /**

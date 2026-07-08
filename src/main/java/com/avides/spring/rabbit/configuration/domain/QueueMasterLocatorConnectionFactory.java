@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.rabbitmq.http.client.Client;
+import com.rabbitmq.http.client.ClientParameters;
 import com.rabbitmq.http.client.domain.QueueInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +91,14 @@ public class QueueMasterLocatorConnectionFactory implements ConnectionFactory, R
     {
         try
         {
-            Client client = new Client("http://" + getHost() + ":" + apiPort + "/api/", getUsername(), rabbitProperties.getPassword());
+            // Built via ClientParameters (rather than the deprecated Client(String, String, String) constructor) so the client uses the
+            // JDK-native java.net.http.HttpClient transport (JdkHttpClientHttpLayer) instead of HttpComponentsRestTemplateConfigurator.
+            // The latter builds an Apache HttpClient 4.x instance and hands it to Spring's HttpComponentsClientHttpRequestFactory, which since
+            // Spring Framework 6 only accepts an Apache HttpClient 5.x (org.apache.hc.client5...) instance, causing a NoClassDefFoundError.
+            Client client = new Client(new ClientParameters()
+                    .url("http://" + getHost() + ":" + apiPort + "/api/")
+                    .username(getUsername())
+                    .password(rabbitProperties.getPassword()));
             return client.getQueue(getVirtualHost(), queueName);
 
         }

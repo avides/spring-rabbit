@@ -1,7 +1,7 @@
 package com.avides.spring.rabbit.configuration.domain;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.validation.annotation.Validated;
 

@@ -1,31 +1,24 @@
 package com.avides.spring.rabbit.configuration.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore({ "javax.xml.*", "com.sun.org.apache.xalan.*" })
 public class QueueMasterLocatorConnectionFactoryTest implements DomainTestSupport
 {
     private QueueMasterLocatorConnectionFactory queueMasterLocatorConnectionFactory;
 
-    @MockStrict
-    private ConnectionFactory defaultConnectionFactory;
+    private final ConnectionFactory defaultConnectionFactory = mock(ConnectionFactory.class);
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         queueMasterLocatorConnectionFactory = new QueueMasterLocatorConnectionFactory(defaultConnectionFactory, getCompleteRabbitProperties(), 15672);
@@ -47,16 +40,13 @@ public class QueueMasterLocatorConnectionFactoryTest implements DomainTestSuppor
     @Test
     public void testGetTargetConnectionFactoryWithConnectException()
     {
-        defaultConnectionFactory.getHost();
-        expectLastCall().andReturn("localhost");
+        when(defaultConnectionFactory.getHost()).thenReturn("localhost");
+        when(defaultConnectionFactory.getUsername()).thenReturn("guest");
 
-        defaultConnectionFactory.getUsername();
-        expectLastCall().andReturn("guest");
-
-        replayAll();
         ConnectionFactory resolved = queueMasterLocatorConnectionFactory.getTargetConnectionFactory("testQueue");
-        verifyAll();
 
+        verify(defaultConnectionFactory).getHost();
+        verify(defaultConnectionFactory).getUsername();
         assertEquals(defaultConnectionFactory, resolved);
     }
 

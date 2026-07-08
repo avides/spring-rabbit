@@ -5,8 +5,8 @@ import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,7 +36,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     @Autowired
     private RabbitTemplate receiveRabbitTemplate;
 
-    @After
+    @AfterEach
     public void clearInbounds()
     {
         testClassListener.getInbounds().clear();

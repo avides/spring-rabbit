@@ -2,9 +2,7 @@ package com.avides.spring.rabbit.test.support;
 
 import java.util.Collections;
 
-import javax.ws.rs.core.Application;
-
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.amqp.support.converter.MarshallingMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,7 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avides.spring.rabbit.converter.SpringRabbitJsonMessageConverter;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
@@ -30,7 +28,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import nu.xom.Element;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { AbstractIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class, TestClassListener.class, OtherTestClassListener.class, TestClassContextAwareListener.class })
 public abstract class AbstractIT implements DomainTestSupport
 {
@@ -55,8 +53,8 @@ public abstract class AbstractIT implements DomainTestSupport
         public Marshaller jaxbMarshaller()
         {
             Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-            marshaller.setPackagesToScan(Application.class.getPackage().getName());
-            marshaller.setMarshallerProperties(Collections.singletonMap(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE));
+            marshaller.setPackagesToScan(getClass().getPackage().getName());
+            marshaller.setMarshallerProperties(Collections.singletonMap(jakarta.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE));
             return marshaller;
         }
 

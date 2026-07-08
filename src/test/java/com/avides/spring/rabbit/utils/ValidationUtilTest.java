@@ -1,14 +1,15 @@
 package com.avides.spring.rabbit.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,11 @@ public class ValidationUtilTest
         ValidationUtil.validate(testObject);
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void testValidateWithInvalid()
     {
         TestObject testObject = new TestObject("");
-        ValidationUtil.validate(testObject);
+        assertThrows(ConstraintViolationException.class, () -> ValidationUtil.validate(testObject));
     }
 
     @Test

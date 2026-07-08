@@ -1,15 +1,13 @@
 package com.avides.spring.rabbit.configuration.creator;
 
-import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 
@@ -17,30 +15,28 @@ import com.avides.spring.rabbit.listener.SpringRabbitListener;
 import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContainer;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ListenerCreatorTest implements DomainTestSupport
 {
     private Creator<DefaultMessageListenerContainer<Object>> creator;
 
-    @MockStrict
+    @Mock
     private ConnectionFactory connectionFactory;
 
-    @MockStrict
+    @Mock
     private MessageConverter messageConverter;
 
-    @MockStrict
+    @Mock
     private SpringRabbitListener<Object> contextAwareRabbitListener;
 
-    @MockStrict
+    @Mock
     private SpringRabbitListener<Object> rabbitListener;
 
     @Test
     public void testCreateInstanceWithContextAwareRabbitListener()
     {
-        replayAll();
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, contextAwareRabbitListener);
         var container = creator.createInstance();
-        verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
         assertEquals(50, getPrefetchCount(container));
@@ -50,10 +46,8 @@ public class ListenerCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithRabbitListener()
     {
-        replayAll();
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, rabbitListener);
         var container = creator.createInstance();
-        verifyAll();
 
         assertEquals(Arrays.asList("testQueueName"), Arrays.asList(container.getQueueNames()));
         assertEquals(50, getPrefetchCount(container));
@@ -65,10 +59,8 @@ public class ListenerCreatorTest implements DomainTestSupport
     {
         try
         {
-            replayAll();
             creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
             creator.createInstance();
-            verifyAll();
         }
         catch (IllegalArgumentException e)
         {
