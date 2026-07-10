@@ -76,7 +76,7 @@ jobs:
         id: find_reminder_comment
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: "Confluence/GitHub documentation added or updated?"
+          body-includes: "Documentation added or updated?"
 
       # Add reminder comment if not given
       - name: reminder-comment
