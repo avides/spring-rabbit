@@ -32,13 +32,6 @@
     <developerConnection>scm:git:https://github.com/avides/spring-rabbit.git</developerConnection>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <properties>
     <!-- System -->
     <maven.build.timestamp.format>dd.MM.yyyy HH:mm</maven.build.timestamp.format>
@@ -48,15 +41,14 @@
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+    <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
     <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.5.6</maven-failsafe-plugin.version>
     <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
-    <maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
+    <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
     <maven-scm-provider-gitexe.version>1.11.3</maven-scm-provider-gitexe.version>
-    <exists-maven-plugin.version>0.6.0</exists-maven-plugin.version>
-    <github-release-plugin.version>1.4.0</github-release-plugin.version>
-    <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+    <exists-maven-plugin.version>0.15.2</exists-maven-plugin.version>
+    <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
     <spring-framework.version>${spring.version}</spring-framework.version>
     <spring.version>6.2.19</spring.version><!-- deprecated: use spring-framework.version instead -->
@@ -265,13 +257,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>sonatype-oss</id>
-      <url>https://oss.sonatype.org/content/repositories/releases</url>
-    </repository>
-  </repositories>
-
   <build>
     <plugins>
       <!-- BUILD AND FILES -->
@@ -280,6 +265,7 @@
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <release>${java.version}</release>
+          <parameters>true</parameters>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -327,7 +313,7 @@
               <goal>sign</goal>
             </goals>
             <configuration>
-              <!-- Hopefully fixed in version 1.7 ? (https://issues.apache.org/jira/browse/MGPG-59) -->
+              <!-- Needed for non-interactive signing; gpg would otherwise try an interactive pinentry prompt and fail in headless build environments -->
               <gpgArguments>
                 <arg>--pinentry-mode</arg>
                 <arg>loopback</arg>
@@ -486,34 +472,14 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>de.jutzig</groupId>
-        <artifactId>github-release-plugin</artifactId>
-        <version>${github-release-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>github-upload</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>release</goal>
-            </goals>
-            <configuration>
-              <releaseName>${project.version}</releaseName>
-              <tag>${project.version}</tag>
-              <artifact>${project.build.directory}/${project.artifactId}-${project.version}.jar</artifact>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>${nexus-staging-maven-plugin.version}</version>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>${central-publishing-maven-plugin.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-          <skipRemoteStaging>${skip-deploy-to-central}</skipRemoteStaging>
+          <autoPublish>true</autoPublish>
+          <waitUntil>published</waitUntil>
+          <skipPublishing>${skip-deploy-to-central}</skipPublishing>
         </configuration>
       </plugin>
     </plugins>
