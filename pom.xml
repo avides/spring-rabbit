@@ -50,14 +50,13 @@
     <exists-maven-plugin.version>0.15.2</exists-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
-    <spring-framework.version>${spring.version}</spring-framework.version>
-    <spring.version>6.2.19</spring.version><!-- deprecated: use spring-framework.version instead -->
     <spring-boot.version>3.5.16</spring-boot.version>
     <http-client.version>4.0.0</http-client.version>
-    <httpclient.version>4.5.14</httpclient.version>
     <jackson.version>2.20.1</jackson.version>
     <jackson-annotations.version>2.20</jackson-annotations.version>
+    <httpclient.version>4.5.14</httpclient.version>
     <micrometer-core.version>1.15.12</micrometer-core.version>
+    <spring-framework.version>6.2.19</spring-framework.version>
     <!-- Validation -->
     <hibernate-validator.version>8.0.3.Final</hibernate-validator.version>
     <!-- Other -->
