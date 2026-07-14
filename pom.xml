@@ -56,7 +56,6 @@
     <!-- Other -->
     <lombok.version>1.18.46</lombok.version>
     <!-- Testing (not managed by the Spring Boot BOM) -->
-    <jaxb-runtime.version>4.0.9</jaxb-runtime.version>
     <jacoco.version>0.8.15</jacoco.version>
     <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
     <jakarta.el.version>4.0.2</jakarta.el.version>
@@ -136,7 +135,6 @@
     <dependency>
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
-      <version>${jaxb-runtime.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
