@@ -29,7 +29,6 @@ public class CustomConnectionFactoryCreator implements Creator<ConnectionFactory
     private RabbitProperties createRabbitProperties()
     {
         RabbitProperties rabbitProperties = new RabbitProperties();
-        // RabbitProperties.setAddresses(..) takes a List<String> since Spring Boot 3 (previously a comma-separated String)
         rabbitProperties.setAddresses(splitAddresses(customConnectionFactoryProperties.getAddresses()));
         rabbitProperties.setUsername(customConnectionFactoryProperties.getUsername());
         rabbitProperties.setPassword(customConnectionFactoryProperties.getPassword());

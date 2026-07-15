@@ -2,6 +2,8 @@ package com.avides.spring.rabbit.test.support;
 
 import java.util.Collections;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.amqp.support.converter.MarshallingMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -53,9 +55,14 @@ public abstract class AbstractIT implements DomainTestSupport
         public Marshaller jaxbMarshaller()
         {
             Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-            marshaller.setPackagesToScan(getClass().getPackage().getName());
+            marshaller.setClassesToBeBound(JaxbMarshallerTestElement.class);
             marshaller.setMarshallerProperties(Collections.singletonMap(jakarta.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE));
             return marshaller;
+        }
+
+        @XmlRootElement
+        static class JaxbMarshallerTestElement
+        {
         }
 
         @ConditionalOnBean(Parser.class)

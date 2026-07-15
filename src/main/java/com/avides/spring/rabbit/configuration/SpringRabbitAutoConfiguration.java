@@ -276,11 +276,6 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
                         applicationContext.registerBean(beanName, DefaultMessageListenerContainer.class, listenerCreator::createInstance, beanDefinition ->
                         {
                             beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
-                            // ListenerCreator#createInstance() always returns a DefaultMessageListenerContainer<Object> (see ListenerCreator implements
-                            // Creator<DefaultMessageListenerContainer<Object>>), but Class<T> literals cannot carry generic arguments, so
-                            // DefaultMessageListenerContainer.class above is inherently raw. Spring Framework 6 is stricter than 5.x about matching the
-                            // generic type of @Autowired @Qualifier(...) injection points (e.g. DefaultMessageListenerContainer<Object> fields) against a
-                            // bean's resolvable type, so the target type has to be set explicitly here or such injections fail with NoSuchBeanDefinitionException.
                             if (beanDefinition instanceof RootBeanDefinition rootBeanDefinition)
                             {
                                 rootBeanDefinition.setTargetType(ResolvableType.forClassWithGenerics(DefaultMessageListenerContainer.class, Object.class));

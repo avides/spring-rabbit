@@ -45,8 +45,6 @@ public class DefaultMessageListenerContainerTest
         assertThat(ReflectionTestUtils.getField(listenerContainer, "defaultRequeueRejected")).isEqualTo(Boolean.FALSE);
         assertThat(ReflectionTestUtils.getField(listenerContainer, "prefetchCount")).isEqualTo(Integer.valueOf(500));
         assertThat(ReflectionTestUtils.getField(listenerContainer, "missingQueuesFatal")).isEqualTo(Boolean.FALSE);
-        // declarationRetries is set to "infinity" via the public SimpleMessageListenerContainer#setDeclarationRetries(int) API
-        // (previously required overriding the internal createBlockingQueueConsumer() extension point)
         assertThat(ReflectionTestUtils.getField(listenerContainer, "declarationRetries")).isEqualTo(Integer.valueOf(1000000));
     }
 
