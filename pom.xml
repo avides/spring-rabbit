@@ -52,7 +52,6 @@
     <spring-boot.version>3.5.16</spring-boot.version>
     <!-- Not managed by the Spring Boot BOM -->
     <http-client.version>4.0.0</http-client.version>
-    <httpclient.version>4.5.14</httpclient.version>
     <!-- Other -->
     <lombok.version>1.18.46</lombok.version>
     <!-- Testing (not managed by the Spring Boot BOM) -->
@@ -94,11 +93,6 @@
     <!-- com.rabbitmq:http-client:4.0.0 pulls an old Jackson 2.13.1 transitively; the imported Spring Boot BOM
          forces the whole tree onto its managed Jackson (2.21.4) via dependencyManagement, which resolves the
          NoClassDefFoundError (com.fasterxml.jackson.databind.cfg.DatatypeFeature) without any explicit Jackson pin. -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>${httpclient.version}</version>
-    </dependency>
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-core</artifactId>
