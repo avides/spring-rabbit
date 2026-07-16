@@ -58,7 +58,7 @@
     <jacoco.version>0.8.15</jacoco.version>
     <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
     <jakarta.el.version>4.0.2</jakarta.el.version>
-    <springtainer-rabbitmq.version>2.1.2</springtainer-rabbitmq.version>
+    <springtainer-rabbitmq.version>2.0.0-RC1</springtainer-rabbitmq.version>
   </properties>
 
   <dependencyManagement>
