@@ -1,6 +1,7 @@
 package com.avides.spring.rabbit.configuration.creator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QueueCreator implements Creator<Queue>
 {
+    public static final String X_QUEUE_TYPE = "x-queue-type";
+
+    public static final String DEFAULT_X_QUEUE_TYPE = "quorum";
+
     private final QueueProperties queueProperties;
 
     private final RabbitAdmin rabbitAdmin;
@@ -40,7 +45,8 @@ public class QueueCreator implements Creator<Queue>
 
     private Map<String, Object> createArguments()
     {
-        Map<String, Object> arguments = queueProperties.getArguments();
+        Map<String, Object> arguments = new HashMap<>(queueProperties.getArguments());
+        arguments.putIfAbsent(X_QUEUE_TYPE, DEFAULT_X_QUEUE_TYPE);
         arguments.put("x-dead-letter-exchange", "");
         arguments.put("x-dead-letter-routing-key", queueProperties.getName() + ".dlx");
         arguments.put("x-max-length", Long.valueOf(queueProperties.getLimit()));

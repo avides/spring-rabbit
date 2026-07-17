@@ -1,5 +1,6 @@
 package com.avides.spring.rabbit.configuration;
 
+import static com.avides.spring.rabbit.configuration.creator.QueueCreator.X_QUEUE_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -112,7 +113,8 @@ public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFac
         assertEquals("com.avides.spring.rabbit.queue.zero", queueZero.getName());
         assertEquals(1, queueZero.getDeclaringAdmins().size());
         assertEquals(rabbitAdmin, queueZero.getDeclaringAdmins().iterator().next());
-        assertEquals(3, queueZero.getArguments().size());
+        assertEquals(4, queueZero.getArguments().size());
+        assertEquals("quorum", queueZero.getArguments().get(X_QUEUE_TYPE));
         assertTrue(String.valueOf(queueZero.getArguments().get("x-dead-letter-exchange")).isEmpty());
         assertEquals("com.avides.spring.rabbit.queue.zero.dlx", queueZero.getArguments().get("x-dead-letter-routing-key"));
         assertEquals(Long.valueOf(50), queueZero.getArguments().get("x-max-length"));
@@ -123,9 +125,9 @@ public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFac
         assertEquals(1, queueZeroDlx.getDeclaringAdmins().size());
         assertEquals(rabbitAdmin, queueZeroDlx.getDeclaringAdmins().iterator().next());
         assertEquals(2, queueZeroDlx.getArguments().size());
+        assertEquals("quorum", queueZeroDlx.getArguments().get(X_QUEUE_TYPE));
         assertEquals(Long.valueOf(50), queueZeroDlx.getArguments().get("x-max-length"));
-        assertEquals("lazy", queueZeroDlx.getArguments().get("x-queue-mode"));
-        assertFalse(queueZero.isExclusive());
+        assertFalse(queueZeroDlx.isExclusive());
 
         // queueOne
         assertEquals("com.avides.spring.rabbit.queue.one", queueOne.getName());
@@ -133,10 +135,10 @@ public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFac
         // assertEquals(rabbitAdmin, queueOne.getDeclaringAdmins().iterator().next()); Currently the queue is declared by a different rabbitAdmin and the
         // application not saves it
         assertEquals(5, queueOne.getArguments().size());
+        assertEquals("classic", queueOne.getArguments().get(X_QUEUE_TYPE));
         assertTrue(String.valueOf(queueOne.getArguments().get("x-dead-letter-exchange")).isEmpty());
         assertEquals("com.avides.spring.rabbit.queue.one.dlx", queueOne.getArguments().get("x-dead-letter-routing-key"));
         assertEquals(Long.valueOf(1), queueOne.getArguments().get("x-max-length"));
-        assertEquals("lazy", queueOne.getArguments().get("x-queue-mode"));
         assertEquals("test", queueOne.getArguments().get("someAdditionalQueueArgumentsKey"));
         assertTrue(queueOne.isExclusive());
 
@@ -146,8 +148,8 @@ public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFac
         // assertEquals(rabbitAdmin, queueOneDlx.getDeclaringAdmins().iterator().next()); Currently the queue is declared by a different rabbitAdmin and the
         // application not saves it
         assertEquals(2, queueOneDlx.getArguments().size());
+        assertEquals("classic", queueOneDlx.getArguments().get(X_QUEUE_TYPE));
         assertEquals(Long.valueOf(1), queueOneDlx.getArguments().get("x-max-length"));
-        assertEquals("lazy", queueOneDlx.getArguments().get("x-queue-mode"));
-        assertTrue(queueOne.isExclusive());
+        assertTrue(queueOneDlx.isExclusive());
     }
 }

@@ -1,5 +1,6 @@
 package com.avides.spring.rabbit.configuration.creator;
 
+import static com.avides.spring.rabbit.configuration.creator.QueueCreator.X_QUEUE_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,7 +49,8 @@ public class QueueCreatorTest implements DomainTestSupport
             assertFalse(queue.isAutoDelete());
 
             Map<String, Object> arguments = queue.getArguments();
-            assertEquals(4, arguments.size());
+            assertEquals(5, arguments.size());
+            assertEquals("quorum", arguments.get(X_QUEUE_TYPE));
             assertEquals("", arguments.get("x-dead-letter-exchange"));
             assertEquals("testQueueName.dlx", arguments.get("x-dead-letter-routing-key"));
             assertEquals("100", arguments.get("x-max-length").toString());
@@ -85,6 +87,56 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
+    public void testCreateInstanceWithOverriddenQueueType()
+    {
+        when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
+        {
+            Queue queue = invocation.getArgument(0);
+            assertEquals("testQueueName", queue.getName());
+            assertTrue(queue.isDurable());
+            assertFalse(queue.isExclusive());
+            assertFalse(queue.isAutoDelete());
+
+            Map<String, Object> arguments = queue.getArguments();
+            assertEquals(5, arguments.size());
+            assertEquals("classic", arguments.get(X_QUEUE_TYPE));
+            assertEquals("", arguments.get("x-dead-letter-exchange"));
+            assertEquals("testQueueName.dlx", arguments.get("x-dead-letter-routing-key"));
+            assertEquals("100", arguments.get("x-max-length").toString());
+            assertEquals("additionalConfig", arguments.get("additionalArgument"));
+
+            return "testQueueName";
+        });
+
+        lenient().when(exchange.getName()).thenReturn("springExchange");
+
+        doAnswer(invocation ->
+        {
+            Binding binding = invocation.getArgument(0);
+            assertTrue(binding.getArguments().isEmpty());
+            assertEquals("product", binding.getRoutingKey());
+            assertEquals("springExchange", binding.getExchange());
+            return null;
+        }).when(rabbitAdmin).declareBinding(any(Binding.class));
+
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put(X_QUEUE_TYPE, "classic");
+        arguments.put("x-dead-letter-exchange", "toOverride");
+        arguments.put("x-dead-letter-routing-key", "toOverride");
+        arguments.put("x-max-length", Long.valueOf(10000));
+        arguments.put("additionalArgument", "additionalConfig");
+
+        QueueProperties completeQueueProperties = getCompleteQueueProperties();
+        completeQueueProperties.setArguments(arguments);
+        creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
+        creator.createInstance();
+
+        verify(rabbitAdmin).declareQueue(any(Queue.class));
+        verify(rabbitAdmin).declareExchange(exchange);
+        verify(rabbitAdmin).declareBinding(any(Binding.class));
+    }
+
+    @Test
     public void testCreateInstanceWithMultipleRoutingKeys()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
@@ -96,7 +148,8 @@ public class QueueCreatorTest implements DomainTestSupport
             assertFalse(queue.isAutoDelete());
 
             Map<String, Object> arguments = queue.getArguments();
-            assertEquals(4, arguments.size());
+            assertEquals(5, arguments.size());
+            assertEquals("quorum", arguments.get(X_QUEUE_TYPE));
             assertEquals("", arguments.get("x-dead-letter-exchange"));
             assertEquals("testQueueName.dlx", arguments.get("x-dead-letter-routing-key"));
             assertEquals("100", arguments.get("x-max-length").toString());
@@ -185,7 +238,8 @@ public class QueueCreatorTest implements DomainTestSupport
             assertFalse(queue.isAutoDelete());
 
             Map<String, Object> arguments = queue.getArguments();
-            assertEquals(4, arguments.size());
+            assertEquals(5, arguments.size());
+            assertEquals("quorum", arguments.get(X_QUEUE_TYPE));
             assertEquals("", arguments.get("x-dead-letter-exchange"));
             assertEquals("testQueueName.dlx", arguments.get("x-dead-letter-routing-key"));
             assertEquals("100", arguments.get("x-max-length").toString());
@@ -235,7 +289,8 @@ public class QueueCreatorTest implements DomainTestSupport
             assertFalse(queue.isAutoDelete());
 
             Map<String, Object> arguments = queue.getArguments();
-            assertEquals(4, arguments.size());
+            assertEquals(5, arguments.size());
+            assertEquals("quorum", arguments.get(X_QUEUE_TYPE));
             assertEquals("", arguments.get("x-dead-letter-exchange"));
             assertEquals("testQueueName.dlx", arguments.get("x-dead-letter-routing-key"));
             assertEquals("100", arguments.get("x-max-length").toString());
