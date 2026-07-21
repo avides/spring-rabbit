@@ -3,7 +3,7 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>4.0.0-RC3</version>
+  <version>4.0.0-RC4</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -62,9 +62,9 @@
     <jacoco.version>0.8.15</jacoco.version>
     <!-- Explicit so Sonar reads the combined UT+IT jacoco report instead of guessing via scanner-default path conventions. -->
     <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
+    <spring-xom-unmarshaller.version>2.0.0-RC2</spring-xom-unmarshaller.version>
     <jakarta.el.version>4.0.2</jakarta.el.version>
-    <springtainer-rabbitmq.version>2.0.0-RC1</springtainer-rabbitmq.version>
+    <springtainer-rabbitmq.version>2.0.0-RC3</springtainer-rabbitmq.version>
   </properties>
 
   <dependencyManagement>
