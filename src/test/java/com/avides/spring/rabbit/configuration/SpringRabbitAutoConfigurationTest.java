@@ -1,12 +1,12 @@
 package com.avides.spring.rabbit.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -19,7 +19,7 @@ public class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 {
     private ApplicationContextRunner contextRunner;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         contextRunner = new ApplicationContextRunner()

@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0-RC5</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -36,141 +36,135 @@
     <developerConnection>scm:git:https://github.com/avides/spring-rabbit.git</developerConnection>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>central</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <properties>
-    <!-- System -->
-    <timestamp>${maven.build.timestamp}</timestamp>
+    <!-- Build -->
     <maven.build.timestamp.format>dd.MM.yyyy HH:mm</maven.build.timestamp.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>11</java.version>
-    <!-- Build -->
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version> <!-- Cannot be upgraded to milestone version 3.0.0-M5 because of many JUNIT errors (missing dependencies) -->
-    <maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version> <!-- Cannot be upgraded to milestone version 3.0.0-M5 because of many JUNIT errors (missing dependencies) -->
-    <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
-    <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
-    <maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
-    <exists-maven-plugin.version>0.6.0</exists-maven-plugin.version>
+    <java.version>21</java.version>
+    <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+    <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+    <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>3.5.6</maven-failsafe-plugin.version>
+    <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+    <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+    <maven-scm-provider-gitexe.version>1.11.3</maven-scm-provider-gitexe.version>
+    <exists-maven-plugin.version>0.15.2</exists-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
-    <spring-framework.version>${spring.version}</spring-framework.version>
-    <spring.version>5.3.15</spring.version><!-- deprecated: use spring-framework.version instead -->
-    <spring-boot.version>2.6.3</spring-boot.version>
+    <spring-boot.version>3.5.16</spring-boot.version>
+    <!-- Not managed by the Spring Boot BOM -->
     <http-client.version>4.0.0</http-client.version>
-    <httpclient.version>4.5.13</httpclient.version>
-    <micrometer.version>${micrometer-core.version}</micrometer.version>
-    <micrometer-core.version>1.8.2</micrometer-core.version><!-- deprecated: use micrometer.version instead -->
-    <!-- Validation -->
-    <hibernate-validator.version>6.0.20.Final</hibernate-validator.version>
-    <!-- Other -->
-    <lombok.version>1.18.22</lombok.version>
-    <!-- Testing -->
-    <javax-jaxb.version>${jaxb-api.version}</javax-jaxb.version>
-    <jaxb-api.version>2.3.1</jaxb-api.version><!-- deprecated: use javax-jaxb.version instead -->
-    <jaxb-core.version>2.3.0.1</jaxb-core.version>
-    <jaxb-impl.version>2.3.3</jaxb-impl.version>
-    <junit.version>4.13.2</junit.version>
-    <assertj.version>3.21.0</assertj.version>
-    <jacoco.version>0.8.7</jacoco.version>
-    <powermock.version>2.0.9</powermock.version>
-    <easymock.version>4.3</easymock.version>
-    <spring-xom-unmarshaller.version>1.4.0</spring-xom-unmarshaller.version>
-    <javax.el.version>3.0.0</javax.el.version>
-    <springtainer-rabbitmq.version>1.4.0</springtainer-rabbitmq.version>
-    <logback.version>${logback-classic.version}</logback.version>
-    <logback-classic.version>1.2.10</logback-classic.version> <!-- deprecated: use logback.version instead -->
-    <awaitility.version>4.1.1</awaitility.version>
+    <!-- Testing (not managed by the Spring Boot BOM) -->
+    <jacoco.version>0.8.15</jacoco.version>
+    <!-- Explicit so Sonar reads the combined UT+IT jacoco report instead of guessing via scanner-default path conventions. -->
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <spring-xom-unmarshaller.version>2.0.0-RC2</spring-xom-unmarshaller.version>
+    <jakarta.el.version>4.0.2</jakarta.el.version>
+    <springtainer-rabbitmq.version>2.0.0-RC4</springtainer-rabbitmq.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Respect Spring Boot's dependency management: all BOM-managed versions
+           (spring-*, jackson, micrometer, hibernate-validator, junit, mockito, byte-buddy,
+           assertj, logback, awaitility, jakarta.xml.bind-api, ...) are inherited from here.
+           This also forces the whole tree onto the BOM's Jackson (2.21.4), overriding the old
+           2.13.1 that com.rabbitmq:http-client pulls transitively, and onto byte-buddy 1.17.8
+           (JDK-25 compatible), so no manual Jackson/byte-buddy pins are needed anymore. -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-amqp</artifactId>
-      <version>${spring-boot.version}</version>
     </dependency>
     <dependency>
       <groupId>com.rabbitmq</groupId>
       <artifactId>http-client</artifactId>
       <version>${http-client.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>${httpclient.version}</version>
-    </dependency>
+    <!-- com.rabbitmq:http-client:4.0.0 pulls an old Jackson 2.13.1 transitively; the imported Spring Boot BOM
+         forces the whole tree onto its managed Jackson (2.21.4) via dependencyManagement, which resolves the
+         NoClassDefFoundError (com.fasterxml.jackson.databind.cfg.DatatypeFeature) without any explicit Jackson pin. -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-core</artifactId>
-      <version>${micrometer.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
-      <version>${spring-boot.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${spring-framework.version}</version>
-    </dependency>
-
-    <!-- Validation -->
-    <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>${hibernate-validator.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- Other -->
     <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <!-- Testing -->
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <version>${javax-jaxb.version}</version>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
-      <version>${jaxb-core.version}</version>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>${jaxb-impl.version}</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- byte-buddy is managed by the Spring Boot BOM at 1.17.8 (JDK-25 compatible), overriding the older
+         version Mockito would otherwise pull transitively; declared explicitly so the agent jar is on the test path. -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -181,27 +175,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>${easymock.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <version>${powermock.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-easymock</artifactId>
-      <version>${powermock.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-oxm</artifactId>
-      <version>${spring-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -212,8 +187,8 @@
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
-      <artifactId>javax.el</artifactId>
-      <version>${javax.el.version}</version>
+      <artifactId>jakarta.el</artifactId>
+      <version>${jakarta.el.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -225,35 +200,24 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>${spring-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test</artifactId>
-      <version>${spring-boot.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>sonatype-oss</id>
-      <url>https://oss.sonatype.org/content/repositories/releases</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
@@ -262,8 +226,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <release>${java.version}</release>
+          <parameters>true</parameters>
         </configuration>
       </plugin>
       <plugin>
@@ -283,10 +247,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${maven-javadoc-plugin.version}</version>
-        <configuration>
-          <!-- Fix for https://bugs.openjdk.java.net/browse/JDK-8212233 -->
-          <failOnError>false</failOnError>
-        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -308,7 +268,7 @@
               <goal>sign</goal>
             </goals>
             <configuration>
-              <!-- Hopefully fixed in version 1.7 ? (https://issues.apache.org/jira/browse/MGPG-59) -->
+              <!-- Needed for non-interactive signing; gpg would otherwise try an interactive pinentry prompt and fail in headless build environments -->
               <gpgArguments>
                 <arg>--pinentry-mode</arg>
                 <arg>loopback</arg>
@@ -326,6 +286,7 @@
           <argLine>-Duser.timezone=Europe/Berlin</argLine>
           <systemPropertyVariables>
             <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+            <jacoco-agent.append>true</jacoco-agent.append>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -335,6 +296,10 @@
         <version>${maven-failsafe-plugin.version}</version>
         <configuration>
           <reportsDirectory>target/surefire-reports</reportsDirectory>
+          <systemPropertyVariables>
+            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+            <jacoco-agent.append>true</jacoco-agent.append>
+          </systemPropertyVariables>
         </configuration>
         <executions>
           <execution>
@@ -373,54 +338,28 @@
               <goal>restore-instrumented-classes</goal>
             </goals>
           </execution>
+          <!--
+            default-restore-instrumented-classes above runs at its default phase (prepare-package) to keep the
+            packaged jar free of instrumented bytecode. But that means classes are back to non-instrumented by the
+            time integration-test runs (pre-integration-test/integration-test come after prepare-package/package in
+            the lifecycle) - so without re-instrumenting here, Failsafe would silently record zero IT coverage.
+          -->
           <execution>
-            <id>default-report</id>
-            <phase>prepare-package</phase>
+            <id>pre-integration-test-instrument</id>
+            <phase>pre-integration-test</phase>
             <goals>
-              <goal>report</goal>
+              <goal>instrument</goal>
             </goals>
-            <configuration>
-              <dataFile>target/jacoco-ut.exec</dataFile>
-              <outputDirectory>target/jacoco-ut</outputDirectory>
-            </configuration>
           </execution>
           <execution>
-            <id>integration-test-report</id>
+            <id>post-integration-test-restore</id>
             <phase>post-integration-test</phase>
             <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>target/jacoco-it.exec</dataFile>
-              <outputDirectory>target/jacoco-it</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
+              <goal>restore-instrumented-classes</goal>
             </goals>
           </execution>
           <execution>
-            <id>merge-results</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
-            <configuration>
-              <fileSets>
-                <fileSet>
-                  <directory>target</directory>
-                  <includes>
-                    <include>*.exec</include>
-                  </includes>
-                </fileSet>
-              </fileSets>
-              <destFile>target/jacoco.exec</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-merge-report</id>
+            <id>report</id>
             <phase>verify</phase>
             <goals>
               <goal>report</goal>

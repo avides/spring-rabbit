@@ -1,18 +1,13 @@
 package com.avides.spring.rabbit.configuration.creator;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.getCurrentArguments;
-import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
@@ -20,8 +15,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import com.avides.spring.rabbit.configuration.provider.ConnectionFactoryProvider;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ConnectionFactoryProvider.class)
 public class CustomConnectionFactoryCreatorTest implements DomainTestSupport
 {
     private Creator<ConnectionFactory> creator = new CustomConnectionFactoryCreator(getCompleteCustomConnectionFactoryProperties());
@@ -29,28 +22,32 @@ public class CustomConnectionFactoryCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstance()
     {
-        mockStatic(ConnectionFactoryProvider.class);
-        ConnectionFactoryProvider.createConnectionFactory(anyObject(CachingConnectionFactory.class), anyObject(RabbitProperties.class), eq(17562));
-        expectLastCall().andAnswer(() ->
+        try (var connectionFactoryProvider = mockStatic(ConnectionFactoryProvider.class))
         {
-            CachingConnectionFactory cachingConnectionFactory = (CachingConnectionFactory) getCurrentArguments()[0];
-            RabbitProperties rabbitProperties = (RabbitProperties) getCurrentArguments()[1];
+            connectionFactoryProvider
+                    .when(() -> ConnectionFactoryProvider.createConnectionFactory(any(CachingConnectionFactory.class), any(RabbitProperties.class), eq(17562)))
+                    .thenAnswer(invocation ->
+                    {
+                        CachingConnectionFactory cachingConnectionFactory = invocation.getArgument(0);
+                        RabbitProperties rabbitProperties = invocation.getArgument(1);
 
-            assertEquals("localhost", rabbitProperties.getAddresses());
-            assertEquals("guest", rabbitProperties.getUsername());
-            assertEquals("guest", rabbitProperties.getPassword());
-            assertEquals("/IT", rabbitProperties.getVirtualHost());
+                        assertEquals(List.of("localhost"), rabbitProperties.getAddresses());
+                        assertEquals("guest", rabbitProperties.getUsername());
+                        assertEquals("guest", rabbitProperties.getPassword());
+                        assertEquals("/IT", rabbitProperties.getVirtualHost());
 
-            assertEquals("localhost", cachingConnectionFactory.getHost());
-            assertEquals(5672, cachingConnectionFactory.getPort());
-            assertEquals("guest", cachingConnectionFactory.getUsername());
-            assertEquals("/IT", cachingConnectionFactory.getVirtualHost());
+                        assertEquals("localhost", cachingConnectionFactory.getHost());
+                        assertEquals(5672, cachingConnectionFactory.getPort());
+                        assertEquals("guest", cachingConnectionFactory.getUsername());
+                        assertEquals("/IT", cachingConnectionFactory.getVirtualHost());
 
-            return cachingConnectionFactory;
-        });
+                        return cachingConnectionFactory;
+                    });
 
-        replayAll();
-        creator.createInstance();
-        verifyAll();
+            creator.createInstance();
+
+            connectionFactoryProvider
+                    .verify(() -> ConnectionFactoryProvider.createConnectionFactory(any(CachingConnectionFactory.class), any(RabbitProperties.class), eq(17562)));
+        }
     }
 }

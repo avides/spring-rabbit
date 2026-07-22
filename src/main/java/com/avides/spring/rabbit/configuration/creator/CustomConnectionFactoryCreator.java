@@ -1,8 +1,13 @@
 package com.avides.spring.rabbit.configuration.creator;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.util.StringUtils;
 
 import com.avides.spring.rabbit.configuration.domain.CustomConnectionFactoryProperties;
 import com.avides.spring.rabbit.configuration.provider.ConnectionFactoryProvider;
@@ -25,11 +30,19 @@ public class CustomConnectionFactoryCreator implements Creator<ConnectionFactory
     private RabbitProperties createRabbitProperties()
     {
         RabbitProperties rabbitProperties = new RabbitProperties();
-        rabbitProperties.setAddresses(customConnectionFactoryProperties.getAddresses());
+        rabbitProperties.setAddresses(splitAddresses(customConnectionFactoryProperties.getAddresses()));
         rabbitProperties.setUsername(customConnectionFactoryProperties.getUsername());
         rabbitProperties.setPassword(customConnectionFactoryProperties.getPassword());
         rabbitProperties.setVirtualHost(customConnectionFactoryProperties.getVirtualHost());
         return rabbitProperties;
+    }
+
+    private static List<String> splitAddresses(String addresses)
+    {
+        return Arrays.stream(StringUtils.commaDelimitedListToStringArray(addresses))
+                .map(String::strip)
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
     }
 
     private static CachingConnectionFactory createCachingConnectionFactory(RabbitProperties rabbitProperties)

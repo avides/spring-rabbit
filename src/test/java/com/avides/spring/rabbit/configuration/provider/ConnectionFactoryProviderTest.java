@@ -1,34 +1,27 @@
 package com.avides.spring.rabbit.configuration.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.easymock.EasyMock.createStrictMock;
-import static org.easymock.EasyMock.expect;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.assertj.core.api.ObjectAssert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.util.StringUtils;
 
 import com.avides.spring.rabbit.configuration.domain.QueueMasterLocatorConnectionFactory;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore("javax.management.*")
-@PrepareForTest({ ConnectionFactoryProvider.class, InetAddress.class })
 public class ConnectionFactoryProviderTest
 {
-    @MockStrict
-    private ConnectionFactory defaultConnectionFactory;
+    private final ConnectionFactory defaultConnectionFactory = mock(ConnectionFactory.class);
 
     private final RabbitProperties rabbitProperties = new RabbitProperties();
 
@@ -97,45 +90,49 @@ public class ConnectionFactoryProviderTest
                 .isSameAs(defaultConnectionFactory);
     }
 
-    private ObjectAssert<ConnectionFactory> assertCreatedConnectionFactoryFor(String addresses, INetAddressGetAllByNameExpectation expectation)
-            throws UnknownHostException
+    private ObjectAssert<ConnectionFactory> assertCreatedConnectionFactoryFor(String addresses, INetAddressGetAllByNameExpectation expectation) throws Exception
     {
-        mockStatic(InetAddress.class);
-
-        expectation.expect();
-
-        replayAll();
-
-        if (addresses != null)
+        try (MockedStatic<InetAddress> inetAddress = mockStatic(InetAddress.class))
         {
-            rabbitProperties.setAddresses(addresses);
+            expectation.expect(inetAddress);
+
+            if (addresses != null)
+            {
+                rabbitProperties.setAddresses(splitAddresses(addresses));
+            }
+            ConnectionFactory connectionFactory = ConnectionFactoryProvider.createConnectionFactory(defaultConnectionFactory, rabbitProperties, apiPort);
+
+            return assertThat(connectionFactory);
         }
-        ConnectionFactory connectionFactory = ConnectionFactoryProvider.createConnectionFactory(defaultConnectionFactory, rabbitProperties, apiPort);
+    }
 
-        verifyAll();
-
-        return assertThat(connectionFactory);
+    private static List<String> splitAddresses(String addresses)
+    {
+        return Arrays.stream(StringUtils.commaDelimitedListToStringArray(addresses))
+                .map(String::strip)
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
     }
 
     private static INetAddressGetAllByNameExpectation withSingleIpFor(String hostname)
     {
-        return () -> expect(InetAddress.getAllByName(hostname)).andReturn(new InetAddress[] { createStrictMock(InetAddress.class) });
+        return inetAddress -> inetAddress.when(() -> InetAddress.getAllByName(hostname)).thenReturn(new InetAddress[] { mock(InetAddress.class) });
     }
 
     private static INetAddressGetAllByNameExpectation withMultipleIpsFor(String hostname)
     {
-        return () -> expect(InetAddress.getAllByName(hostname))
-                .andReturn(new InetAddress[] { createStrictMock(InetAddress.class), createStrictMock(InetAddress.class) });
+        return inetAddress -> inetAddress.when(() -> InetAddress.getAllByName(hostname))
+                .thenReturn(new InetAddress[] { mock(InetAddress.class), mock(InetAddress.class) });
     }
 
     private static INetAddressGetAllByNameExpectation withUnknownHostFor(String hostname)
     {
-        return () -> expect(InetAddress.getAllByName(hostname)).andThrow(new UnknownHostException());
+        return inetAddress -> inetAddress.when(() -> InetAddress.getAllByName(hostname)).thenThrow(new UnknownHostException());
     }
 
     private static INetAddressGetAllByNameExpectation withoutHostnameResolution()
     {
-        return () ->
+        return inetAddress ->
         {
             // expect nothing
         };
@@ -144,6 +141,6 @@ public class ConnectionFactoryProviderTest
     @FunctionalInterface
     private interface INetAddressGetAllByNameExpectation
     {
-        void expect() throws UnknownHostException;
+        void expect(MockedStatic<InetAddress> inetAddress) throws UnknownHostException;
     }
 }

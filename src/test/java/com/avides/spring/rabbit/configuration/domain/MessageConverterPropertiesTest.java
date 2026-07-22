@@ -1,8 +1,8 @@
 package com.avides.spring.rabbit.configuration.domain;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;

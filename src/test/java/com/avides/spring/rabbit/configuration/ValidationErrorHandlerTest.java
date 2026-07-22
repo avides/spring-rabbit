@@ -1,16 +1,17 @@
 package com.avides.spring.rabbit.configuration;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -37,10 +38,11 @@ public class ValidationErrorHandlerTest
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testHandleErrorWithConstraintViolationExceptionAndWithViolations()
     {
         Set<ConstraintViolation<Object>> violations = new HashSet<>();
-        violations.add(ConstraintViolationImpl.forBeanValidation(null, null, null, null, null, null, null, null, null, null, null, null));
+        violations.add(mock(ConstraintViolation.class));
         errorHandler.handleError(new ConstraintViolationException("invalid pattern", violations));
     }
 

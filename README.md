@@ -1,18 +1,17 @@
 # Spring-Rabbit
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.avides.spring/spring-rabbit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.avides.spring/spring-rabbit)
-[![Build](https://github.com/avides/spring-rabbit/workflows/release/badge.svg)](https://github.com/avides/spring-rabbit/actions)
-[![Nightly build](https://github.com/avides/spring-rabbit/workflows/nightly/badge.svg)](https://github.com/avides/spring-rabbit/actions)
-[![Coverage report](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=coverage)](https://sonarcloud.io/dashboard?id=avides_spring-rabbit)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=alert_status)](https://sonarcloud.io/dashboard?id=avides_spring-rabbit)
-[![Technical dept](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=sqale_index)](https://sonarcloud.io/dashboard?id=avides_spring-rabbit)
+[![Maven Central](https://img.shields.io/maven-central/v/com.avides.spring/spring-rabbit.svg?label=maven-central)](https://search.maven.org/artifact/com.avides.spring/spring-rabbit)
+[![Release](https://github.com/avides/spring-rabbit/actions/workflows/release.yml/badge.svg)](https://github.com/avides/spring-rabbit/actions/workflows/release.yml)
+[![Nightly build](https://github.com/avides/spring-rabbit/actions/workflows/nightly.yml/badge.svg)](https://github.com/avides/spring-rabbit/actions/workflows/nightly.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=avides_spring-rabbit)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=avides_spring-rabbit&metric=coverage)](https://sonarcloud.io/summary/new_code?id=avides_spring-rabbit)
 
 ### Dependency
 ``` xml
 <dependency>
 	<groupId>com.avides.spring</groupId>
 	<artifactId>spring-rabbit</artifactId>
-	<version>3.0.0</version>
+	<version>4.0.0-RC5</version>
 </dependency>
 ```
 

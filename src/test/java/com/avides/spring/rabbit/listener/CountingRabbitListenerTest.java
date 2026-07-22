@@ -1,57 +1,57 @@
 package com.avides.spring.rabbit.listener;
 
-import static org.easymock.EasyMock.mock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.easymock.TestSubject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CountingRabbitListenerTest
 {
-    @TestSubject
+    @InjectMocks
     private RabbitListener<Object> rabbitListener = new ImplementedCountingListener();
 
-    @MockStrict
+    @Mock
     private MeterRegistry meterRegistry;
 
     @Test
     public void testHandle()
     {
-        meterRegistry.counter("rabbit.listener.event", "listener", "ImplementedCountingListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", "listener", "ImplementedCountingListener")).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "ImplementedCountingListener")).thenReturn(durationCounter);
 
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "ImplementedCountingListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        replayAll();
         rabbitListener.handle("hello");
-        verifyAll();
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
     public void testHandleWithSupplier()
     {
-        meterRegistry.counter("rabbit.listener.event", "listener", "ImplementedCountingListener");
-        expectLastCall().andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", "listener", "ImplementedCountingListener")).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "ImplementedCountingListener")).thenReturn(durationCounter);
 
-        meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", "listener", "ImplementedCountingListener");
-        expectLastCall().andReturn(mock(Counter.class));
-
-        replayAll();
         rabbitListener.handle(() ->
         {
             return "hello";
         });
-        verifyAll();
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     private static class ImplementedCountingListener extends CountingRabbitListener<Object>

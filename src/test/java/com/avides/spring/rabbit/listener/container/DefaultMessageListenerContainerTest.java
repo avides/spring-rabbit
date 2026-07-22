@@ -3,11 +3,10 @@ package com.avides.spring.rabbit.listener.container;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.Mock;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -17,8 +16,7 @@ import com.avides.spring.rabbit.listener.ContextAwareRabbitListener;
 import com.avides.spring.rabbit.listener.RabbitListener;
 import com.avides.spring.rabbit.listener.SpringRabbitListener;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore("javax.management.*")
+@ExtendWith(MockitoExtension.class)
 public class DefaultMessageListenerContainerTest
 {
     @Mock
@@ -47,6 +45,7 @@ public class DefaultMessageListenerContainerTest
         assertThat(ReflectionTestUtils.getField(listenerContainer, "defaultRequeueRejected")).isEqualTo(Boolean.FALSE);
         assertThat(ReflectionTestUtils.getField(listenerContainer, "prefetchCount")).isEqualTo(Integer.valueOf(500));
         assertThat(ReflectionTestUtils.getField(listenerContainer, "missingQueuesFatal")).isEqualTo(Boolean.FALSE);
+        assertThat(ReflectionTestUtils.getField(listenerContainer, "declarationRetries")).isEqualTo(Integer.valueOf(1000000));
     }
 
     @Test
@@ -92,20 +91,20 @@ public class DefaultMessageListenerContainerTest
         assertThat(listenerContainer.getMessageListener()).isNotNull();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     @Deprecated(forRemoval = true)
     public void testSetListenerWithoutListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
-        listenerContainer.setListener(null, messageConverter);
+        assertThatThrownBy(() -> listenerContainer.setListener(null, messageConverter)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     @Deprecated(forRemoval = true)
     public void testSetListenerWithoutMessageConverter()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
-        listenerContainer.setListener(rabbitListener, null);
+        assertThatThrownBy(() -> listenerContainer.setListener(rabbitListener, null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -117,19 +116,19 @@ public class DefaultMessageListenerContainerTest
         assertThat(listenerContainer.getMessageListener()).isNotNull();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     @Deprecated(forRemoval = true)
     public void testSetContextAwareListenerWithoutListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
-        listenerContainer.setContextAwareListener(null, messageConverter);
+        assertThatThrownBy(() -> listenerContainer.setContextAwareListener(null, messageConverter)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     @Deprecated(forRemoval = true)
     public void testSetContextAwareListenerWithoutMessageConverter()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
-        listenerContainer.setContextAwareListener(contextAwareRabbitListener, null);
+        assertThatThrownBy(() -> listenerContainer.setContextAwareListener(contextAwareRabbitListener, null)).isInstanceOf(IllegalArgumentException.class);
     }
 }

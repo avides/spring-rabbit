@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.rabbitmq.http.client.Client;
+import com.rabbitmq.http.client.ClientParameters;
 import com.rabbitmq.http.client.domain.QueueInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +91,10 @@ public class QueueMasterLocatorConnectionFactory implements ConnectionFactory, R
     {
         try
         {
-            Client client = new Client("http://" + getHost() + ":" + apiPort + "/api/", getUsername(), rabbitProperties.getPassword());
+            Client client = new Client(new ClientParameters()
+                    .url("http://" + getHost() + ":" + apiPort + "/api/")
+                    .username(getUsername())
+                    .password(rabbitProperties.getPassword()));
             return client.getQueue(getVirtualHost(), queueName);
 
         }

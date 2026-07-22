@@ -3,12 +3,12 @@ package com.avides.spring.rabbit.utils;
 import java.util.Collections;
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +28,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable("value1", null);
             BeanValidationTestSupport.expectNoError(validatable);
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("Unexpected error occurred (Properties: value2)", e.getMessage());
+            Assertions.assertEquals("Unexpected error occurred (Properties: value2)", e.getMessage());
         }
     }
 
@@ -57,11 +57,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable(null, "value2");
             BeanValidationTestSupport.expectNoErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value1)", e.getMessage());
+            Assertions.assertEquals("Unexpected errors occurred (Properties: value1)", e.getMessage());
         }
     }
 
@@ -72,11 +72,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable("value1", "value2");
             BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("No error occurred", e.getMessage());
+            Assertions.assertEquals("No error occurred", e.getMessage());
         }
     }
 
@@ -94,11 +94,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable("value1", null);
             BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
+            Assertions.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
         }
     }
 
@@ -109,11 +109,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable(null, null);
             BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("More than one error occurred (Properties: value1, value2)", e.getMessage());
+            Assertions.assertEquals("More than one error occurred (Properties: value1, value2)", e.getMessage());
         }
     }
 
@@ -131,11 +131,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable("value1", "value2");
             BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("No error occurred", e.getMessage());
+            Assertions.assertEquals("No error occurred", e.getMessage());
         }
     }
 
@@ -153,11 +153,11 @@ public class BeanValidationTestSupportTest
         {
             Validatable validatable = new Validatable("value1", null);
             BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         }
         catch (Throwable e)
         {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
+            Assertions.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
         }
     }
 

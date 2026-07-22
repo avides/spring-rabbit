@@ -1,52 +1,50 @@
 package com.avides.spring.rabbit.listener;
 
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.mock;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore("javax.management.*")
+@ExtendWith(MockitoExtension.class)
 public class RequestResponseSpringRabbitListenerTest
 {
     private RequestResponseSpringRabbitListener<Object> successRabbitListener;
 
     private RequestResponseSpringRabbitListener<Object> failureRabbitListener;
 
-    @MockStrict
+    @Mock
     private RabbitTemplate responseRabbitTemplate;
 
-    @MockStrict
+    @Mock
     private MeterRegistry meterRegistry;
 
-    @Before
+    @BeforeEach
     public void setup()
     {
         successRabbitListener = new SuccessRequestResponseSpringRabbitListener();
-        Whitebox.setInternalState(successRabbitListener, meterRegistry);
+        ReflectionTestUtils.setField(successRabbitListener, "meterRegistry", meterRegistry);
 
         failureRabbitListener = new FailureRequestResponseSpringRabbitListener();
-        Whitebox.setInternalState(failureRabbitListener, meterRegistry);
+        ReflectionTestUtils.setField(failureRabbitListener, "meterRegistry", meterRegistry);
     }
 
     @Test
@@ -54,32 +52,29 @@ public class RequestResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
-        replayAll();
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
-        verifyAll();
+
+        verify(responseRabbitTemplate).convertAndSend(eq(""), eq("response-queue"), eq("response"), any(MessagePostProcessor.class));
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
     public void testHandleEventWithoutReplyTo()
     {
-        try
-        {
-            var messageProperties = new MessageProperties();
-            messageProperties.setCorrelationId("request1");
-            successRabbitListener.handleEvent("", messageProperties);
-            fail("Exception expected");
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("reply_to must not be null", e.getMessage());
-        }
+        var messageProperties = new MessageProperties();
+        messageProperties.setCorrelationId("request1");
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> successRabbitListener.handleEvent("", messageProperties));
+        assertEquals("reply_to must not be null", e.getMessage());
     }
 
     @Test
@@ -87,16 +82,19 @@ public class RequestResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
-        replayAll();
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         failureRabbitListener.handle("", messageProperties);
-        verifyAll();
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -104,15 +102,18 @@ public class RequestResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
-        replayAll();
         var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         failureRabbitListener.handle("", messageProperties);
-        verifyAll();
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -120,17 +121,20 @@ public class RequestResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
-        replayAll();
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
-        verifyAll();
+
+        verify(responseRabbitTemplate).convertAndSend(eq(""), eq("response-queue"), eq("response"), any(MessagePostProcessor.class));
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -138,16 +142,19 @@ public class RequestResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
-        responseRabbitTemplate.convertAndSend(eq(""), eq("response-queue"), eq("response"), EasyMock.anyObject(MessagePostProcessor.class));
-        expect(meterRegistry.counter("rabbit.listener.event", tags)).andReturn(mock(Counter.class));
-        expect(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).andReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
-        replayAll();
         var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         successRabbitListener.handle("", messageProperties);
-        verifyAll();
+
+        verify(responseRabbitTemplate).convertAndSend(eq(""), eq("response-queue"), eq("response"), any(MessagePostProcessor.class));
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     private class SuccessRequestResponseSpringRabbitListener extends RequestResponseSpringRabbitListener<Object>

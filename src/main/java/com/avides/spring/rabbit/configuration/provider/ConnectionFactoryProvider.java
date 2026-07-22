@@ -34,7 +34,7 @@ public class ConnectionFactoryProvider
         String host = rabbitProperties.determineHost();
 
         // avoid multiple IP's for IPv6 enabled OS
-        if (!"localhost".equals(host) && !rabbitProperties.determineAddresses().contains(","))
+        if (!"localhost".equals(host) && rabbitProperties.determineAddresses().size() <= 1)
         {
             try
             {
