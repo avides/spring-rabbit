@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
@@ -107,7 +108,10 @@ public class ConnectionFactoryProviderTest
 
     private static List<String> splitAddresses(String addresses)
     {
-        return Arrays.asList(StringUtils.commaDelimitedListToStringArray(addresses));
+        return Arrays.stream(StringUtils.commaDelimitedListToStringArray(addresses))
+                .map(String::strip)
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
     }
 
     private static INetAddressGetAllByNameExpectation withSingleIpFor(String hostname)

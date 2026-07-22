@@ -3,10 +3,12 @@ package com.avides.spring.rabbit.configuration.creator;
 import static com.avides.spring.rabbit.configuration.creator.QueueCreator.X_QUEUE_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -191,39 +193,30 @@ public class QueueCreatorTest implements DomainTestSupport
 
         verify(rabbitAdmin).declareQueue(any(Queue.class));
         verify(rabbitAdmin).declareExchange(exchange);
+        verify(rabbitAdmin, times(2)).declareBinding(any(Binding.class));
     }
 
     @Test
     public void testCreateInstanceWithInvalidRoutingKey()
     {
-        try
-        {
-            QueueProperties completeQueueProperties = getCompleteQueueProperties();
-            completeQueueProperties.setRoutingkey("");
-            creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
-            creator.createInstance();
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Either declare routing-keys or routing-key", e.getMessage());
-        }
+        QueueProperties completeQueueProperties = getCompleteQueueProperties();
+        completeQueueProperties.setRoutingkey("");
+        creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> creator.createInstance());
+        assertEquals("Either declare routing-keys or routing-key", e.getMessage());
     }
 
     @Test
     public void testCreateInstanceWithInvalidRoutingKeys()
     {
-        try
-        {
-            QueueProperties completeQueueProperties = getCompleteQueueProperties();
-            completeQueueProperties.setRoutingkey(null);
-            completeQueueProperties.setRoutingkeys(Arrays.asList(""));
-            creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
-            creator.createInstance();
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Invalid routing-key", e.getMessage());
-        }
+        QueueProperties completeQueueProperties = getCompleteQueueProperties();
+        completeQueueProperties.setRoutingkey(null);
+        completeQueueProperties.setRoutingkeys(Arrays.asList(""));
+        creator = new QueueCreator(completeQueueProperties, rabbitAdmin, exchange);
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> creator.createInstance());
+        assertEquals("Invalid routing-key", e.getMessage());
     }
 
     @Test

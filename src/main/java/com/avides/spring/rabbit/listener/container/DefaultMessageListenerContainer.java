@@ -38,7 +38,7 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
         setDefaultRequeueRejected(false);
         setPrefetchCount(500);
         setMissingQueuesFatal(false);
-        setDeclarationRetries(1000000); // infinity
+        setDeclarationRetries(1000000); // practically unlimited
     }
 
     /**

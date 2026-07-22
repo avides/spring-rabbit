@@ -1,6 +1,7 @@
 package com.avides.spring.rabbit.configuration.creator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -57,14 +58,9 @@ public class ListenerCreatorTest implements DomainTestSupport
     @Test
     public void testCreateInstanceWithFaliedListenerConfiguration()
     {
-        try
-        {
-            creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
-            creator.createInstance();
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Listener configuration failed (found listener class:class java.lang.Integer)", e.getMessage());
-        }
+        creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> creator.createInstance());
+        assertEquals("Listener configuration failed (found listener class:class java.lang.Integer)", e.getMessage());
     }
 }

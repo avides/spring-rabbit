@@ -1,6 +1,7 @@
 package com.avides.spring.rabbit.listener;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -49,13 +50,18 @@ public class OptionalResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(mock(Counter.class));
-        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         successRabbitListener.handle("", messageProperties);
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -63,14 +69,19 @@ public class OptionalResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(mock(Counter.class));
-        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         failureRabbitListener.handle("", messageProperties);
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -78,13 +89,18 @@ public class OptionalResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
-        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(mock(Counter.class));
-        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
         var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
         messageProperties.setReplyTo("response-queue");
         failureRabbitListener.handle("", messageProperties);
+
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -92,8 +108,10 @@ public class OptionalResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
-        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(mock(Counter.class));
-        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
         var messageProperties = new MessageProperties();
         messageProperties.setAppId("sender-app");
@@ -102,6 +120,8 @@ public class OptionalResponseSpringRabbitListenerTest
         successRabbitListener.handle("", messageProperties);
 
         verify(responseRabbitTemplate).convertAndSend(eq(""), eq("response-queue"), eq("response"), any(MessagePostProcessor.class));
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     @Test
@@ -109,8 +129,10 @@ public class OptionalResponseSpringRabbitListenerTest
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
-        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(mock(Counter.class));
-        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(mock(Counter.class));
+        Counter eventCounter = mock(Counter.class);
+        Counter durationCounter = mock(Counter.class);
+        when(meterRegistry.counter("rabbit.listener.event", tags)).thenReturn(eventCounter);
+        when(meterRegistry.counter("rabbit.listener.event.total.duration.milliseconds", tags)).thenReturn(durationCounter);
 
         var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
@@ -118,6 +140,8 @@ public class OptionalResponseSpringRabbitListenerTest
         successRabbitListener.handle("", messageProperties);
 
         verify(responseRabbitTemplate).convertAndSend(eq(""), eq("response-queue"), eq("response"), any(MessagePostProcessor.class));
+        verify(eventCounter).increment();
+        verify(durationCounter).increment(anyDouble());
     }
 
     private class SuccessOptionalSpringRabbitListener extends OptionalResponseSpringRabbitListener<Object>

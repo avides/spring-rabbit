@@ -2,6 +2,7 @@ package com.avides.spring.rabbit.configuration.creator;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -38,7 +39,10 @@ public class CustomConnectionFactoryCreator implements Creator<ConnectionFactory
 
     private static List<String> splitAddresses(String addresses)
     {
-        return Arrays.asList(StringUtils.commaDelimitedListToStringArray(addresses));
+        return Arrays.stream(StringUtils.commaDelimitedListToStringArray(addresses))
+                .map(String::strip)
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
     }
 
     private static CachingConnectionFactory createCachingConnectionFactory(RabbitProperties rabbitProperties)

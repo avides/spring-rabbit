@@ -48,7 +48,7 @@ public class MessagePostProcessorUtilsTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveAdditionalMessagePostProcessorsWithCountingOutboundisDisabled()
+    public void testResolveAdditionalMessagePostProcessorsWithCountingOutboundIsDisabled()
     {
         when(environment.getProperty("spring.rabbitmq.outbound.global.before-publish-post-processor.counting-outbound.enabled", Boolean.class, TRUE))
                 .thenReturn(Boolean.FALSE);

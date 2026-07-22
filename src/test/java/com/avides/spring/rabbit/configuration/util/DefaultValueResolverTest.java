@@ -8,6 +8,7 @@ import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.r
 import static com.avides.spring.rabbit.configuration.util.DefaultValueResolver.resolveValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -60,14 +61,8 @@ public class DefaultValueResolverTest implements DomainTestSupport
     @Test
     public void testResolveExchangeWithIllegalArgumentException()
     {
-        try
-        {
-            DefaultValueResolver.resolveExchange(null, null);
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Could not resolve exchange", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> DefaultValueResolver.resolveExchange(null, null));
+        assertEquals("Could not resolve exchange", e.getMessage());
     }
 
     @Test
@@ -85,15 +80,9 @@ public class DefaultValueResolverTest implements DomainTestSupport
     {
         when(applicationContext.getBean("customConnectionFactoryBeanName", ConnectionFactory.class)).thenReturn(null);
 
-        try
-        {
-            resolveConnectionFactory(getCompleteBeanReferenceConnectionFactoryProperties(), null, applicationContext);
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("QueueMasterLocatorConnectionFactory not found (BeanReferenceConnectionFactoryProperties(beanName=customConnectionFactoryBeanName))", e
-                    .getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> resolveConnectionFactory(getCompleteBeanReferenceConnectionFactoryProperties(), null, applicationContext));
+        assertEquals("QueueMasterLocatorConnectionFactory not found (BeanReferenceConnectionFactoryProperties(beanName=customConnectionFactoryBeanName))", e.getMessage());
     }
 
     @Test
@@ -121,27 +110,16 @@ public class DefaultValueResolverTest implements DomainTestSupport
     {
         when(applicationContext.getBean("springRabbitConnectionFactory", ConnectionFactory.class)).thenReturn(null);
 
-        try
-        {
-            resolveConnectionFactory(null, "springRabbitConnectionFactory", applicationContext);
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("DefaultConnectionFactory not found (beanName:springRabbitConnectionFactory)", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> resolveConnectionFactory(null, "springRabbitConnectionFactory", applicationContext));
+        assertEquals("DefaultConnectionFactory not found (beanName:springRabbitConnectionFactory)", e.getMessage());
     }
 
     @Test
     public void testResolveConnectionFactoryWithIllegalArgumentException()
     {
-        try
-        {
-            resolveConnectionFactory(null, null, applicationContext);
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Could not resolve the connectionFactory", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> resolveConnectionFactory(null, null, applicationContext));
+        assertEquals("Could not resolve the connectionFactory", e.getMessage());
     }
 
     @Test
@@ -216,15 +194,9 @@ public class DefaultValueResolverTest implements DomainTestSupport
     {
         when(applicationContext.getBean("unknownBeanName", MessageConverter.class)).thenReturn(null);
 
-        try
-        {
-            resolveMessageConverter(getCompleteMessageConverterProperties("unknownBeanName"), null, applicationContext, Arrays
-                    .asList(jsonMessageConverter, xmlMessageConverter));
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("CustomMessageConverter not found (MessageConverterProperties(beanName=unknownBeanName))", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> resolveMessageConverter(getCompleteMessageConverterProperties("unknownBeanName"), null, applicationContext, Arrays
+                .asList(jsonMessageConverter, xmlMessageConverter)));
+        assertEquals("CustomMessageConverter not found (MessageConverterProperties(beanName=unknownBeanName))", e.getMessage());
     }
 
     @Test
@@ -254,15 +226,9 @@ public class DefaultValueResolverTest implements DomainTestSupport
     {
         when(applicationContext.getBean("unknownBeanName", MessageConverter.class)).thenReturn(null);
 
-        try
-        {
-            resolveMessageConverter(null, getCompleteMessageConverterProperties("unknownBeanName"), applicationContext, Arrays
-                    .asList(jsonMessageConverter, xmlMessageConverter));
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("DefaultMessageConverter not found (MessageConverterProperties(beanName=unknownBeanName))", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> resolveMessageConverter(null, getCompleteMessageConverterProperties("unknownBeanName"), applicationContext, Arrays
+                .asList(jsonMessageConverter, xmlMessageConverter)));
+        assertEquals("DefaultMessageConverter not found (MessageConverterProperties(beanName=unknownBeanName))", e.getMessage());
     }
 
     @Test
@@ -276,13 +242,8 @@ public class DefaultValueResolverTest implements DomainTestSupport
     @Test
     public void testResolveWithNotResolved()
     {
-        try
-        {
-            resolveMessageConverter(null, null, applicationContext, Arrays.asList(xmlMessageConverter, jsonMessageConverter));
-        }
-        catch (IllegalArgumentException e)
-        {
-            assertEquals("Could not resolve messageConverter (existingMessageConverter size 2))", e.getMessage());
-        }
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> resolveMessageConverter(null, null, applicationContext, Arrays.asList(xmlMessageConverter, jsonMessageConverter)));
+        assertEquals("Could not resolve messageConverter (existingMessageConverter size 2))", e.getMessage());
     }
 }
