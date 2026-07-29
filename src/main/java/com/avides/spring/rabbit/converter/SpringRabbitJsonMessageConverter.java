@@ -21,7 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SpringRabbitJsonMessageConverter extends Jackson2JsonMessageConverter implements SpringRabbitMessageConverter
 {
     /**
-     * Construct with an internal {@link ObjectMapper} instance and trusted packed to all ({@code *}).
+     * Construct with an internal {@link ObjectMapper} instance.
+     * <p>
+     * Trusted packages stay at the Spring AMQP default ({@code java.util}, {@code java.lang}). They only apply to the inherited
+     * {@link #fromMessage(Message)}; the listener-driven {@link #fromMessage(Message, Class)} bypasses the type mapper.
      *
      * @since 1.6.11
      */
@@ -31,7 +34,10 @@ public class SpringRabbitJsonMessageConverter extends Jackson2JsonMessageConvert
     }
 
     /**
-     * Construct with the provided {@link ObjectMapper} instance and trusted packed to all ({@code *}).
+     * Construct with the provided {@link ObjectMapper} instance.
+     * <p>
+     * Trusted packages stay at the Spring AMQP default ({@code java.util}, {@code java.lang}). They only apply to the inherited
+     * {@link #fromMessage(Message)}; the listener-driven {@link #fromMessage(Message, Class)} bypasses the type mapper.
      *
      * @param objectMapper the {@link ObjectMapper} to use.
      */
