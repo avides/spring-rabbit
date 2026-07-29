@@ -19,7 +19,7 @@ import com.avides.spring.rabbit.configuration.domain.QueueProperties;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 @ExtendWith(MockitoExtension.class)
-public class DlxQueueCreatorTest implements DomainTestSupport
+class DlxQueueCreatorTest implements DomainTestSupport
 {
     private Creator<Queue> creator;
 
@@ -27,7 +27,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     private RabbitAdmin rabbitAdmin;
 
     @Test
-    public void testCreateInstanceWithDurable()
+    void testCreateInstanceWithDurable()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -59,7 +59,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithNotDurable()
+    void testCreateInstanceWithNotDurable()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -91,7 +91,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithExclusive()
+    void testCreateInstanceWithExclusive()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -123,7 +123,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithNotExclusive()
+    void testCreateInstanceWithNotExclusive()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -155,7 +155,7 @@ public class DlxQueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithOverriddenQueueType()
+    void testCreateInstanceWithOverriddenQueueType()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {

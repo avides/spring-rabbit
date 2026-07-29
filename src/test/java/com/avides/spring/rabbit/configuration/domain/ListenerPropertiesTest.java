@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class ListenerPropertiesTest implements DomainTestSupport
+class ListenerPropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         expectNoError(getCompleteListenerProperties());
         expectErrorOnlyOnProperty(getCompleteListenerProperties(p -> p.setBeanName(null)), "beanName");
@@ -30,7 +30,7 @@ public class ListenerPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testDefaultValues()
+    void testDefaultValues()
     {
         assertTrue(new ListenerProperties().isCreationEnabled());
         assertNull(new ListenerProperties().getBeanName());

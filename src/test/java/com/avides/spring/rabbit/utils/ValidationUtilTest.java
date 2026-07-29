@@ -15,45 +15,45 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-public class ValidationUtilTest
+class ValidationUtilTest
 {
     @Test
-    public void testIsValidWithValid()
+    void testIsValidWithValid()
     {
         TestObject testObject = new TestObject("test");
         assertTrue(ValidationUtil.isValid(testObject));
     }
 
     @Test
-    public void testIsValidWithInvalid()
+    void testIsValidWithInvalid()
     {
         TestObject testObject = new TestObject("");
         assertFalse(ValidationUtil.isValid(testObject));
     }
 
     @Test
-    public void testValidateWithValid()
+    void testValidateWithValid()
     {
         TestObject testObject = new TestObject("test");
         ValidationUtil.validate(testObject);
     }
 
     @Test
-    public void testValidateWithInvalid()
+    void testValidateWithInvalid()
     {
         TestObject testObject = new TestObject("");
         assertThrows(ConstraintViolationException.class, () -> ValidationUtil.validate(testObject));
     }
 
     @Test
-    public void testValidateAndReturnWithValid()
+    void testValidateAndReturnWithValid()
     {
         TestObject testObject = new TestObject("test");
         assertTrue(ValidationUtil.validateAndReturn(testObject).isEmpty());
     }
 
     @Test
-    public void testValidateAndReturnWithInvalid()
+    void testValidateAndReturnWithInvalid()
     {
         TestObject testObject = new TestObject("");
         assertEquals(1, ValidationUtil.validateAndReturn(testObject).size());

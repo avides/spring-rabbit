@@ -9,12 +9,12 @@ import com.avides.spring.rabbit.configuration.domain.ExchangeProperties;
 import com.avides.spring.rabbit.configuration.domain.ExchangeProperties.ExchangeType;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class ExchangeCreatorTest implements DomainTestSupport
+class ExchangeCreatorTest implements DomainTestSupport
 {
     private Creator<Exchange> creator;
 
     @Test
-    public void testCreateInstanceWithTypeDirect()
+    void testCreateInstanceWithTypeDirect()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setType(ExchangeType.DIRECT);
@@ -27,7 +27,7 @@ public class ExchangeCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithTypeTopic()
+    void testCreateInstanceWithTypeTopic()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setType(ExchangeType.TOPIC);

@@ -9,17 +9,17 @@ import com.avides.spring.rabbit.configuration.domain.ExchangeProperties.Exchange
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class ExchangePropertiesTest implements DomainTestSupport
+class ExchangePropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteExchangeProperties());
     }
 
     // name
     @Test
-    public void testBeanValidationOnNameWithNull()
+    void testBeanValidationOnNameWithNull()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setName(null);
@@ -27,7 +27,7 @@ public class ExchangePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnNameWithEmpty()
+    void testBeanValidationOnNameWithEmpty()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setName("");
@@ -35,7 +35,7 @@ public class ExchangePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnNameWithBlank()
+    void testBeanValidationOnNameWithBlank()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setName(" ");
@@ -44,7 +44,7 @@ public class ExchangePropertiesTest implements DomainTestSupport
 
     // type
     @Test
-    public void testBeanValidationOnTypeWithNull()
+    void testBeanValidationOnTypeWithNull()
     {
         ExchangeProperties exchangeProperties = getCompleteExchangeProperties();
         exchangeProperties.setType(null);
@@ -55,13 +55,13 @@ public class ExchangePropertiesTest implements DomainTestSupport
      * test default values
      */
     @Test
-    public void testDefaultValueOnName()
+    void testDefaultValueOnName()
     {
         assertNull(new ExchangeProperties().getName());
     }
 
     @Test
-    public void testDefaultValueOnType()
+    void testDefaultValueOnType()
     {
         assertEquals(ExchangeType.TOPIC, new ExchangeProperties().getType());
     }

@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import org.springframework.util.StringUtils;
 
 import com.avides.spring.rabbit.configuration.domain.QueueMasterLocatorConnectionFactory;
 
-public class ConnectionFactoryProviderTest
+class ConnectionFactoryProviderTest
 {
     private final ConnectionFactory defaultConnectionFactory = mock(ConnectionFactory.class);
 
@@ -28,63 +27,63 @@ public class ConnectionFactoryProviderTest
     private final int apiPort = 15762;
 
     @Test
-    public void testCreateConnectionFactoryWithDomainWithMultipleIps() throws Exception
+    void testCreateConnectionFactoryWithDomainWithMultipleIps() throws Exception
     {
         assertCreatedConnectionFactoryFor("cluster.example.com", withMultipleIpsFor("cluster.example.com"))
                 .isInstanceOf(QueueMasterLocatorConnectionFactory.class);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithDomainAndPortWithMultipleIps() throws Exception
+    void testCreateConnectionFactoryWithDomainAndPortWithMultipleIps() throws Exception
     {
         assertCreatedConnectionFactoryFor("cluster.example.com:5672", withMultipleIpsFor("cluster.example.com"))
                 .isInstanceOf(QueueMasterLocatorConnectionFactory.class);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithDomainWithSingleIp() throws Exception
+    void testCreateConnectionFactoryWithDomainWithSingleIp() throws Exception
     {
         assertCreatedConnectionFactoryFor("node.example.com", withSingleIpFor("node.example.com"))
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithDomainAndPortWithSingleIp() throws Exception
+    void testCreateConnectionFactoryWithDomainAndPortWithSingleIp() throws Exception
     {
         assertCreatedConnectionFactoryFor("node.example.com:5672", withSingleIpFor("node.example.com"))
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithLocalhost() throws Exception
+    void testCreateConnectionFactoryWithLocalhost() throws Exception
     {
         assertCreatedConnectionFactoryFor("localhost", withoutHostnameResolution())
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithDomainWithIp() throws Exception
+    void testCreateConnectionFactoryWithDomainWithIp() throws Exception
     {
         assertCreatedConnectionFactoryFor("127.0.0.1", withSingleIpFor("127.0.0.1"))
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithMultipleAddresses() throws Exception
+    void testCreateConnectionFactoryWithMultipleAddresses() throws Exception
     {
         assertCreatedConnectionFactoryFor("cluster.example.com,node.example.com:5672", withoutHostnameResolution())
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithDomainWithoutAnyHost() throws Exception
+    void testCreateConnectionFactoryWithDomainWithoutAnyHost() throws Exception
     {
         assertCreatedConnectionFactoryFor(null, withoutHostnameResolution())
                 .isSameAs(defaultConnectionFactory);
     }
 
     @Test
-    public void testCreateConnectionFactoryWithUnknownHost() throws Exception
+    void testCreateConnectionFactoryWithUnknownHost() throws Exception
     {
         assertCreatedConnectionFactoryFor("unknown.example.com", withUnknownHostFor("unknown.example.com"))
                 .isSameAs(defaultConnectionFactory);
@@ -111,7 +110,7 @@ public class ConnectionFactoryProviderTest
         return Arrays.stream(StringUtils.commaDelimitedListToStringArray(addresses))
                 .map(String::strip)
                 .filter(StringUtils::hasText)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static INetAddressGetAllByNameExpectation withSingleIpFor(String hostname)

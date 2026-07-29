@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.avides.spring.rabbit.test.support.AbstractIT;
 
 @ActiveProfiles({ "it", "rabbitTemplateManagementWithOneConnectionFactory" })
-public class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConnectionFactoryIT extends AbstractIT
+class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConnectionFactoryIT extends AbstractIT
 {
     @Autowired
     private RabbitTemplate defaultRabbitTemplate;
@@ -26,7 +26,7 @@ public class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConn
     private List<ConnectionFactory> connectionFactories;
 
     @Test
-    public void test()
+    void test()
     {
         assertEquals(2, connectionFactories.size());
         connectionFactories.forEach(cf -> assertThat(cf).isInstanceOf(ConnectionFactory.class));

@@ -18,7 +18,7 @@ import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
 @ExtendWith(MockitoExtension.class)
-public class AbstractSpringRabbitListenerTest
+class AbstractSpringRabbitListenerTest
 {
     @InjectMocks
     private SpringRabbitListener<Object> rabbitListener = new ImplementedSpringRabbitListener();
@@ -27,7 +27,7 @@ public class AbstractSpringRabbitListenerTest
     private MeterRegistry meterRegistry;
 
     @Test
-    public void testHandle()
+    void testHandle()
     {
         Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"), Tag.of("from", "sender-app"));
         Counter eventCounter = mock(Counter.class);
@@ -44,7 +44,7 @@ public class AbstractSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleWithAppIdIsNull()
+    void testHandleWithAppIdIsNull()
     {
         Tags tags = Tags.of(Tag.of("listener", "ImplementedSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
         Counter eventCounter = mock(Counter.class);

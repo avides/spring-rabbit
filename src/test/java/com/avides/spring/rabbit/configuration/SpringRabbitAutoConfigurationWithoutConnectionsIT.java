@@ -17,13 +17,13 @@ import com.avides.spring.rabbit.test.support.DummyListenerOne;
 import com.avides.spring.rabbit.test.support.DummyListenerZero;
 
 @SpringBootTest(classes = { SpringRabbitAutoConfigurationWithoutConnectionsIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class })
-public class SpringRabbitAutoConfigurationWithoutConnectionsIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithoutConnectionsIT extends AbstractIT
 {
     @Autowired
     private ApplicationContext context;
 
     @Test
-    public void testNoRabbitTemplateBeanAvailable()
+    void testNoRabbitTemplateBeanAvailable()
     {
         assertThatThrownBy(() -> context.getBean(RabbitTemplate.class)).isInstanceOf(NoSuchBeanDefinitionException.class);
     }

@@ -23,7 +23,7 @@ import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
 @ExtendWith(MockitoExtension.class)
-public class OptionalResponseSpringRabbitListenerTest
+class OptionalResponseSpringRabbitListenerTest
 {
     private OptionalResponseSpringRabbitListener<Object> successRabbitListener;
 
@@ -36,7 +36,7 @@ public class OptionalResponseSpringRabbitListenerTest
     private MeterRegistry meterRegistry;
 
     @BeforeEach
-    public void setup()
+    void setup()
     {
         successRabbitListener = new SuccessOptionalSpringRabbitListener();
         ReflectionTestUtils.setField(successRabbitListener, "meterRegistry", meterRegistry);
@@ -46,7 +46,7 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutReplyTo()
+    void testHandleEventWithoutReplyTo()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -65,7 +65,7 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutResponse()
+    void testHandleEventWithoutResponse()
     {
         var tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -85,7 +85,7 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutResponseAndAppId()
+    void testHandleEventWithoutResponseAndAppId()
     {
         var tags = Tags.of(Tag.of("listener", "FailureOptionalSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
@@ -104,7 +104,7 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEvent()
+    void testHandleEvent()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -125,7 +125,7 @@ public class OptionalResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutAppId()
+    void testHandleEventWithoutAppId()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessOptionalSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 

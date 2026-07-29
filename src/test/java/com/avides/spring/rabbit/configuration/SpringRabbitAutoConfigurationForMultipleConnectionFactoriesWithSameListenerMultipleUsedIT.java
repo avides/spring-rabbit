@@ -27,7 +27,7 @@ import com.avides.spring.rabbit.test.support.DummyListenerZero;
 
 @ActiveProfiles({ "multipleConnectionFactoriesWithSameListenerMultipleUsed" })
 @SpringBootTest(classes = { SpringRabbitAutoConfigurationForMultipleConnectionFactoriesWithSameListenerMultipleUsedIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class })
-public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesWithSameListenerMultipleUsedIT extends AbstractIT
+class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesWithSameListenerMultipleUsedIT extends AbstractIT
 {
     @Autowired
     private RabbitAdmin firstRabbitAdmin;
@@ -61,7 +61,7 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesWithSame
     private Queue queueOneDlx;
 
     @Test
-    public void testAutoRabbitConfigurationForMultipleConnectionFactoriesWithSameListenerMultipleUsed()
+    void testAutoRabbitConfigurationForMultipleConnectionFactoriesWithSameListenerMultipleUsed()
     {
         initializeQueueVariables();
 

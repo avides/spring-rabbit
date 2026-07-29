@@ -15,7 +15,7 @@ import com.avides.spring.rabbit.test.support.TestClass;
 import com.avides.spring.rabbit.test.support.TestClassContextAwareListener;
 
 @ActiveProfiles({ "it", "beforePublishPostProcessor" })
-public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnricherWithoutConfiguredAppIdIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnricherWithoutConfiguredAppIdIT extends AbstractIT
 {
     @Autowired
     private TestClassContextAwareListener testListener;
@@ -25,13 +25,13 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnr
 
     @BeforeEach
     @AfterEach
-    public void clearInbounds()
+    void clearInbounds()
     {
         testListener.getInbounds().clear();
     }
 
     @Test
-    public void testAppIdEnricher()
+    void testAppIdEnricher()
     {
         testSendRabbitTemplate.convertAndSend(TestClass.buildBase());
 

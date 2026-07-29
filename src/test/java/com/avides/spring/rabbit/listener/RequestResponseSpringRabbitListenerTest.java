@@ -25,7 +25,7 @@ import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
 @ExtendWith(MockitoExtension.class)
-public class RequestResponseSpringRabbitListenerTest
+class RequestResponseSpringRabbitListenerTest
 {
     private RequestResponseSpringRabbitListener<Object> successRabbitListener;
 
@@ -38,7 +38,7 @@ public class RequestResponseSpringRabbitListenerTest
     private MeterRegistry meterRegistry;
 
     @BeforeEach
-    public void setup()
+    void setup()
     {
         successRabbitListener = new SuccessRequestResponseSpringRabbitListener();
         ReflectionTestUtils.setField(successRabbitListener, "meterRegistry", meterRegistry);
@@ -48,7 +48,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutCorrelationId()
+    void testHandleEventWithoutCorrelationId()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -68,7 +68,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutReplyTo()
+    void testHandleEventWithoutReplyTo()
     {
         var messageProperties = new MessageProperties();
         messageProperties.setCorrelationId("request1");
@@ -78,7 +78,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutResponse()
+    void testHandleEventWithoutResponse()
     {
         var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -98,7 +98,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutResponseAndAppId()
+    void testHandleEventWithoutResponseAndAppId()
     {
         var tags = Tags.of(Tag.of("listener", "FailureRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 
@@ -117,7 +117,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEvent()
+    void testHandleEvent()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "sender-app"));
 
@@ -138,7 +138,7 @@ public class RequestResponseSpringRabbitListenerTest
     }
 
     @Test
-    public void testHandleEventWithoutAppId()
+    void testHandleEventWithoutAppId()
     {
         var tags = Tags.of(Tag.of("listener", "SuccessRequestResponseSpringRabbitListener"), Tag.of("from", "UNKNOWN"));
 

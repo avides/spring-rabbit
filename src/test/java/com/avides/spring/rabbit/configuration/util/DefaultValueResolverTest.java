@@ -25,7 +25,7 @@ import org.springframework.context.support.GenericApplicationContext;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultValueResolverTest implements DomainTestSupport
+class DefaultValueResolverTest implements DomainTestSupport
 {
     @Mock
     private GenericApplicationContext applicationContext;
@@ -40,33 +40,33 @@ public class DefaultValueResolverTest implements DomainTestSupport
     private ConnectionFactory connectionFactory;
 
     @Test
-    public void testResolveExchangeWithCustomProperties()
+    void testResolveExchangeWithCustomProperties()
     {
         assertNotNull(DefaultValueResolver.resolveExchange(getCompleteExchangeProperties(), null));
     }
 
     @Test
-    public void testResolveExchangeWithDefaultPropertiesAndWithCustomProperties()
+    void testResolveExchangeWithDefaultPropertiesAndWithCustomProperties()
     {
         Exchange resolved = resolveExchange(getCompleteExchangeProperties("com.avides.custom"), getCompleteExchangeProperties("com.avides.default"));
         assertEquals("com.avides.custom", resolved.getName());
     }
 
     @Test
-    public void testResolveExchangeWithDefaultPropertiesAndWithoutCustomProperties()
+    void testResolveExchangeWithDefaultPropertiesAndWithoutCustomProperties()
     {
         assertNotNull(DefaultValueResolver.resolveExchange(null, getCompleteExchangeProperties()));
     }
 
     @Test
-    public void testResolveExchangeWithIllegalArgumentException()
+    void testResolveExchangeWithIllegalArgumentException()
     {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> DefaultValueResolver.resolveExchange(null, null));
         assertEquals("Could not resolve exchange", e.getMessage());
     }
 
     @Test
-    public void testResolveConnectionFactoryWithCustomProperties()
+    void testResolveConnectionFactoryWithCustomProperties()
     {
         when(applicationContext.getBean("customConnectionFactoryBeanName", ConnectionFactory.class)).thenReturn(connectionFactory);
 
@@ -76,7 +76,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveConnectionFactoryWithCustomPropertiesAndNotFound()
+    void testResolveConnectionFactoryWithCustomPropertiesAndNotFound()
     {
         when(applicationContext.getBean("customConnectionFactoryBeanName", ConnectionFactory.class)).thenReturn(null);
 
@@ -86,7 +86,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveConnectionFactoryWithCustomPropertiesAndDefaultBeanName()
+    void testResolveConnectionFactoryWithCustomPropertiesAndDefaultBeanName()
     {
         when(applicationContext.getBean("customConnectionFactoryBeanName", ConnectionFactory.class)).thenReturn(connectionFactory);
 
@@ -96,7 +96,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveConnectionFactoryWithDefaultBeanName()
+    void testResolveConnectionFactoryWithDefaultBeanName()
     {
         when(applicationContext.getBean("springRabbitConnectionFactory", ConnectionFactory.class)).thenReturn(connectionFactory);
 
@@ -106,7 +106,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveConnectionFactoryWithDefaultBeanNameAndNotFound()
+    void testResolveConnectionFactoryWithDefaultBeanNameAndNotFound()
     {
         when(applicationContext.getBean("springRabbitConnectionFactory", ConnectionFactory.class)).thenReturn(null);
 
@@ -116,70 +116,70 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveConnectionFactoryWithIllegalArgumentException()
+    void testResolveConnectionFactoryWithIllegalArgumentException()
     {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> resolveConnectionFactory(null, null, applicationContext));
         assertEquals("Could not resolve the connectionFactory", e.getMessage());
     }
 
     @Test
-    public void testResolveConnectionFactoryBeanNameWithCustomPropertiesAndDefaultBeanName()
+    void testResolveConnectionFactoryBeanNameWithCustomPropertiesAndDefaultBeanName()
     {
         String beanName = resolveConnectionFactoryBeanName(getCompleteBeanReferenceConnectionFactoryProperties(), "springRabbitConnectionFactory");
         assertEquals("customConnectionFactoryBeanName", beanName);
     }
 
     @Test
-    public void testResolveConnectionFactoryBeanNameWithDefaultBeanName()
+    void testResolveConnectionFactoryBeanNameWithDefaultBeanName()
     {
         String beanName = resolveConnectionFactoryBeanName(null, "springRabbitConnectionFactory");
         assertEquals("springRabbitConnectionFactory", beanName);
     }
 
     @Test
-    public void testResolveMaxConcurrentConsumersWithCustomMax()
+    void testResolveMaxConcurrentConsumersWithCustomMax()
     {
         int resolved = resolveMaxConcurrentConsumers(Integer.valueOf(2), null);
         assertEquals(2, resolved);
     }
 
     @Test
-    public void testResolveMaxConcurrentConsumersWithCustomMaxAndDefaultMax()
+    void testResolveMaxConcurrentConsumersWithCustomMaxAndDefaultMax()
     {
         int resolved = resolveMaxConcurrentConsumers(Integer.valueOf(2), Integer.valueOf(1));
         assertEquals(2, resolved);
     }
 
     @Test
-    public void testResolveMaxConcurrentConsumersWithDefaultMax()
+    void testResolveMaxConcurrentConsumersWithDefaultMax()
     {
         int resolved = resolveMaxConcurrentConsumers(null, Integer.valueOf(1));
         assertEquals(1, resolved);
     }
 
     @Test
-    public void testResolveValueWithCustomMax()
+    void testResolveValueWithCustomMax()
     {
         int resolved = resolveValue(Integer.valueOf(2), null);
         assertEquals(2, resolved);
     }
 
     @Test
-    public void testResolveValueWithCustomMaxAndDefaultMax()
+    void testResolveValueWithCustomMaxAndDefaultMax()
     {
         int resolved = resolveValue(Integer.valueOf(2), Integer.valueOf(1));
         assertEquals(2, resolved);
     }
 
     @Test
-    public void testResolveValueWithDefaultMax()
+    void testResolveValueWithDefaultMax()
     {
         int resolved = resolveValue(null, Integer.valueOf(1));
         assertEquals(1, resolved);
     }
 
     @Test
-    public void testResolveMessageConverterWithCustomProperties()
+    void testResolveMessageConverterWithCustomProperties()
     {
         when(applicationContext.getBean("xmlMarshallerBeanName", MessageConverter.class)).thenReturn(xmlMessageConverter);
 
@@ -190,7 +190,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveMessageConverterWithCustomPropertiesAndNotFound()
+    void testResolveMessageConverterWithCustomPropertiesAndNotFound()
     {
         when(applicationContext.getBean("unknownBeanName", MessageConverter.class)).thenReturn(null);
 
@@ -200,7 +200,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveMessageConverterWithCustomPropertiesAndDefaultProperties()
+    void testResolveMessageConverterWithCustomPropertiesAndDefaultProperties()
     {
         when(applicationContext.getBean("xmlMarshallerBeanName", MessageConverter.class)).thenReturn(xmlMessageConverter);
 
@@ -211,7 +211,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveMessageConverterWithDefaultProperties()
+    void testResolveMessageConverterWithDefaultProperties()
     {
         when(applicationContext.getBean("jsonMarshallerBeanName", MessageConverter.class)).thenReturn(jsonMessageConverter);
 
@@ -222,7 +222,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveMessageConverterWithDefaultPropertiesAndNotFound()
+    void testResolveMessageConverterWithDefaultPropertiesAndNotFound()
     {
         when(applicationContext.getBean("unknownBeanName", MessageConverter.class)).thenReturn(null);
 
@@ -232,7 +232,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveWithOneExistingMessageConverter()
+    void testResolveWithOneExistingMessageConverter()
     {
         MessageConverter messageConverter = resolveMessageConverter(null, null, applicationContext, Arrays.asList(xmlMessageConverter));
 
@@ -240,7 +240,7 @@ public class DefaultValueResolverTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveWithNotResolved()
+    void testResolveWithNotResolved()
     {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> resolveMessageConverter(null, null, applicationContext, Arrays.asList(xmlMessageConverter, jsonMessageConverter)));

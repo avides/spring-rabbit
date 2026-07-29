@@ -17,7 +17,7 @@ import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContain
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 @ExtendWith(MockitoExtension.class)
-public class ListenerCreatorTest implements DomainTestSupport
+class ListenerCreatorTest implements DomainTestSupport
 {
     private Creator<DefaultMessageListenerContainer<Object>> creator;
 
@@ -34,7 +34,7 @@ public class ListenerCreatorTest implements DomainTestSupport
     private SpringRabbitListener<Object> rabbitListener;
 
     @Test
-    public void testCreateInstanceWithContextAwareRabbitListener()
+    void testCreateInstanceWithContextAwareRabbitListener()
     {
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, contextAwareRabbitListener);
         var container = creator.createInstance();
@@ -45,7 +45,7 @@ public class ListenerCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithRabbitListener()
+    void testCreateInstanceWithRabbitListener()
     {
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, rabbitListener);
         var container = creator.createInstance();
@@ -56,7 +56,7 @@ public class ListenerCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithFaliedListenerConfiguration()
+    void testCreateInstanceWithFaliedListenerConfiguration()
     {
         creator = new ListenerCreator(connectionFactory, "testQueueName", 50, 2, messageConverter, Integer.valueOf(12));
 

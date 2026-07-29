@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class MessageConverterPropertiesTest implements DomainTestSupport
+class MessageConverterPropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteMessageConverterProperties());
     }
 
     // beanName
     @Test
-    public void testBeanValidationOnBeanNameWithNull()
+    void testBeanValidationOnBeanNameWithNull()
     {
         MessageConverterProperties messageConverterProperties = getCompleteMessageConverterProperties();
         messageConverterProperties.setBeanName(null);
@@ -25,7 +25,7 @@ public class MessageConverterPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithEmpty()
+    void testBeanValidationOnBeanNameWithEmpty()
     {
         MessageConverterProperties messageConverterProperties = getCompleteMessageConverterProperties();
         messageConverterProperties.setBeanName("");
@@ -33,7 +33,7 @@ public class MessageConverterPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithBlank()
+    void testBeanValidationOnBeanNameWithBlank()
     {
         MessageConverterProperties messageConverterProperties = getCompleteMessageConverterProperties();
         messageConverterProperties.setBeanName(" ");
@@ -44,7 +44,7 @@ public class MessageConverterPropertiesTest implements DomainTestSupport
      * test default values
      */
     @Test
-    public void testDefaultValueOnBeanName()
+    void testDefaultValueOnBeanName()
     {
         assertNull(new MessageConverterProperties().getBeanName());
     }

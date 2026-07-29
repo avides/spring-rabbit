@@ -18,7 +18,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.search.Search;
 
 @ActiveProfiles(profiles = { "it", "beforePublishPostProcessor" })
-public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIT extends AbstractIT
 {
     @Autowired
     private RabbitTemplate testSendRabbitTemplate;
@@ -31,13 +31,13 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCounting
 
     @BeforeEach
     @AfterEach
-    public void clearInbounds()
+    void clearInbounds()
     {
         meterRegistry.getMeters().forEach(m -> meterRegistry.remove(m));
     }
 
     @Test
-    public void testCountingOutbound()
+    void testCountingOutbound()
     {
         testSendOtherRabbitTemplate.convertAndSend(TestClass.buildBase());
         testSendOtherRabbitTemplate.convertAndSend(TestClass.buildBase());

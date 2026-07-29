@@ -29,7 +29,7 @@ import com.avides.spring.rabbit.configuration.domain.QueueProperties;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 @ExtendWith(MockitoExtension.class)
-public class QueueCreatorTest implements DomainTestSupport
+class QueueCreatorTest implements DomainTestSupport
 {
     private Creator<Queue> creator;
 
@@ -40,7 +40,7 @@ public class QueueCreatorTest implements DomainTestSupport
     private Exchange exchange;
 
     @Test
-    public void testCreateInstance()
+    void testCreateInstance()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -89,7 +89,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithOverriddenQueueType()
+    void testCreateInstanceWithOverriddenQueueType()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -139,7 +139,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithMultipleRoutingKeys()
+    void testCreateInstanceWithMultipleRoutingKeys()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -197,7 +197,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithInvalidRoutingKey()
+    void testCreateInstanceWithInvalidRoutingKey()
     {
         QueueProperties completeQueueProperties = getCompleteQueueProperties();
         completeQueueProperties.setRoutingkey("");
@@ -208,7 +208,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithInvalidRoutingKeys()
+    void testCreateInstanceWithInvalidRoutingKeys()
     {
         QueueProperties completeQueueProperties = getCompleteQueueProperties();
         completeQueueProperties.setRoutingkey(null);
@@ -220,7 +220,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithExclusive()
+    void testCreateInstanceWithExclusive()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {
@@ -271,7 +271,7 @@ public class QueueCreatorTest implements DomainTestSupport
     }
 
     @Test
-    public void testCreateInstanceWithNotExclusive()
+    void testCreateInstanceWithNotExclusive()
     {
         when(rabbitAdmin.declareQueue(any(Queue.class))).thenAnswer(invocation ->
         {

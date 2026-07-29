@@ -16,7 +16,7 @@ import com.avides.spring.rabbit.test.support.TestClass;
 import io.micrometer.core.instrument.MeterRegistry;
 
 @ActiveProfiles(profiles = { "it", "beforePublishPostProcessor", "beforePublishPostProcessorCountingOutboundIsDisabled" })
-public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIsDisabledIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIsDisabledIT extends AbstractIT
 {
     @Autowired
     private RabbitTemplate testSendRabbitTemplate;
@@ -26,13 +26,13 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCounting
 
     @BeforeEach
     @AfterEach
-    public void clearInbounds()
+    void clearInbounds()
     {
         meterRegistry.getMeters().forEach(m -> assertNotNull(meterRegistry.remove(m)));
     }
 
     @Test
-    public void testCountingOutbound()
+    void testCountingOutbound()
     {
         testSendRabbitTemplate.convertAndSend(TestClass.buildBase());
 

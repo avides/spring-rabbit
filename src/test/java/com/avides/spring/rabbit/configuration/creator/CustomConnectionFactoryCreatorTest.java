@@ -15,12 +15,12 @@ import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import com.avides.spring.rabbit.configuration.provider.ConnectionFactoryProvider;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class CustomConnectionFactoryCreatorTest implements DomainTestSupport
+class CustomConnectionFactoryCreatorTest implements DomainTestSupport
 {
     private Creator<ConnectionFactory> creator = new CustomConnectionFactoryCreator(getCompleteCustomConnectionFactoryProperties());
 
     @Test
-    public void testCreateInstance()
+    void testCreateInstance()
     {
         try (var connectionFactoryProvider = mockStatic(ConnectionFactoryProvider.class))
         {

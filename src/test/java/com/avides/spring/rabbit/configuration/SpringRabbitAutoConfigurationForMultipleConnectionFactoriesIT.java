@@ -28,7 +28,7 @@ import com.avides.spring.rabbit.test.support.DummyListenerZero;
 
 @ActiveProfiles({ "multipleConnectionFactories" })
 @SpringBootTest(classes = { SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class })
-public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT extends AbstractIT
+class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT extends AbstractIT
 {
     @Autowired
     private RabbitAdmin firstRabbitAdmin;
@@ -59,7 +59,7 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT exten
     private Queue queueOneDlx;
 
     @Test
-    public void test()
+    void test()
     {
         initializeQueueVariables();
 

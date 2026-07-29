@@ -17,7 +17,7 @@ import com.avides.spring.rabbit.listener.RabbitListener;
 import com.avides.spring.rabbit.listener.SpringRabbitListener;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultMessageListenerContainerTest
+class DefaultMessageListenerContainerTest
 {
     @Mock
     private ConnectionFactory connectionFactory;
@@ -37,7 +37,7 @@ public class DefaultMessageListenerContainerTest
     private MessageConverter messageConverter;
 
     @Test
-    public void testConstructor()
+    void testConstructor()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThat(listenerContainer.getConnectionFactory()).isSameAs(connectionFactory);
@@ -49,7 +49,7 @@ public class DefaultMessageListenerContainerTest
     }
 
     @Test
-    public void testConstructorWithNull()
+    void testConstructorWithNull()
     {
         assertThatThrownBy(() -> new DefaultMessageListenerContainer<>(null))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -57,7 +57,7 @@ public class DefaultMessageListenerContainerTest
     }
 
     @Test
-    public void testSetSpringRabbitListener()
+    void testSetSpringRabbitListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         listenerContainer.setSpringRabbitListener(springRabbitListener, messageConverter);
@@ -65,7 +65,7 @@ public class DefaultMessageListenerContainerTest
     }
 
     @Test
-    public void testSetSpringRabbitListenerWithoutListener()
+    void testSetSpringRabbitListenerWithoutListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setSpringRabbitListener(null, messageConverter))
@@ -74,7 +74,7 @@ public class DefaultMessageListenerContainerTest
     }
 
     @Test
-    public void testSetSpringRabbitListenerWithoutMessageConverter()
+    void testSetSpringRabbitListenerWithoutMessageConverter()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setSpringRabbitListener(springRabbitListener, null))
@@ -84,7 +84,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetListener()
+    void testSetListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         listenerContainer.setListener(rabbitListener, messageConverter);
@@ -93,7 +93,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetListenerWithoutListener()
+    void testSetListenerWithoutListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setListener(null, messageConverter)).isInstanceOf(IllegalArgumentException.class);
@@ -101,7 +101,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetListenerWithoutMessageConverter()
+    void testSetListenerWithoutMessageConverter()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setListener(rabbitListener, null)).isInstanceOf(IllegalArgumentException.class);
@@ -109,7 +109,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetContextAwareListener()
+    void testSetContextAwareListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         listenerContainer.setContextAwareListener(contextAwareRabbitListener, messageConverter);
@@ -118,7 +118,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetContextAwareListenerWithoutListener()
+    void testSetContextAwareListenerWithoutListener()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setContextAwareListener(null, messageConverter)).isInstanceOf(IllegalArgumentException.class);
@@ -126,7 +126,7 @@ public class DefaultMessageListenerContainerTest
 
     @Test
     @Deprecated(forRemoval = true)
-    public void testSetContextAwareListenerWithoutMessageConverter()
+    void testSetContextAwareListenerWithoutMessageConverter()
     {
         var listenerContainer = new DefaultMessageListenerContainer<>(connectionFactory);
         assertThatThrownBy(() -> listenerContainer.setContextAwareListener(contextAwareRabbitListener, null)).isInstanceOf(IllegalArgumentException.class);

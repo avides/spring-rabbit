@@ -20,7 +20,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
 @ExtendWith(MockitoExtension.class)
-public class MessagePostProcessorUtilsTest implements DomainTestSupport
+class MessagePostProcessorUtilsTest implements DomainTestSupport
 {
     @Mock
     private ConfigurableEnvironment environment;
@@ -32,7 +32,7 @@ public class MessagePostProcessorUtilsTest implements DomainTestSupport
     private Counter counter;
 
     @Test
-    public void testResolveAdditionalMessagePostProcessorsWithCountingOutbound()
+    void testResolveAdditionalMessagePostProcessorsWithCountingOutbound()
     {
         when(environment.getProperty("spring.rabbitmq.outbound.global.before-publish-post-processor.counting-outbound.enabled", Boolean.class, TRUE))
                 .thenReturn(Boolean.TRUE);
@@ -48,7 +48,7 @@ public class MessagePostProcessorUtilsTest implements DomainTestSupport
     }
 
     @Test
-    public void testResolveAdditionalMessagePostProcessorsWithCountingOutboundIsDisabled()
+    void testResolveAdditionalMessagePostProcessorsWithCountingOutboundIsDisabled()
     {
         when(environment.getProperty("spring.rabbitmq.outbound.global.before-publish-post-processor.counting-outbound.enabled", Boolean.class, TRUE))
                 .thenReturn(Boolean.FALSE);

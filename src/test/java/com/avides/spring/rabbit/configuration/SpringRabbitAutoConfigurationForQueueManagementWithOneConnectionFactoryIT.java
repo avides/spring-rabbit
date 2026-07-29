@@ -22,7 +22,7 @@ import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContain
 import com.avides.spring.rabbit.test.support.AbstractIT;
 
 @ActiveProfiles({ "it", "queueManagementWithOneConnectionFactory" })
-public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFactoryIT extends AbstractIT
+class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFactoryIT extends AbstractIT
 {
     @Autowired
     private RabbitAdmin rabbitAdmin;
@@ -53,7 +53,7 @@ public class SpringRabbitAutoConfigurationForQueueManagementWithOneConnectionFac
     private Queue queueOneDlx;
 
     @Test
-    public void test()
+    void test()
     {
         initializeQueueVariables();
 

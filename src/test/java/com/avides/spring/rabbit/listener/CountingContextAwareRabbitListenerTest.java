@@ -17,7 +17,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
 @ExtendWith(MockitoExtension.class)
-public class CountingContextAwareRabbitListenerTest
+class CountingContextAwareRabbitListenerTest
 {
     @InjectMocks
     private ContextAwareRabbitListener<Object> rabbitListener = new ImplementedCountingListener();
@@ -26,7 +26,7 @@ public class CountingContextAwareRabbitListenerTest
     private MeterRegistry meterRegistry;
 
     @Test
-    public void testHandle()
+    void testHandle()
     {
         Counter eventCounter = mock(Counter.class);
         Counter durationCounter = mock(Counter.class);
@@ -40,7 +40,7 @@ public class CountingContextAwareRabbitListenerTest
     }
 
     @Test
-    public void testHandleWithObjectSupplierAndMessageProperties()
+    void testHandleWithObjectSupplierAndMessageProperties()
     {
         Counter eventCounter = mock(Counter.class);
         Counter durationCounter = mock(Counter.class);
@@ -57,7 +57,7 @@ public class CountingContextAwareRabbitListenerTest
     }
 
     @Test
-    public void testHandleWithObjectSupplierAndMessagePropertiesSupplier()
+    void testHandleWithObjectSupplierAndMessagePropertiesSupplier()
     {
         Counter eventCounter = mock(Counter.class);
         Counter durationCounter = mock(Counter.class);

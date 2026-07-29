@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Test;
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
+class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteCustomConnectionFactoryProperties());
     }
 
     // addresses
     @Test
-    public void testBeanValidationOnAddressesWithNull()
+    void testBeanValidationOnAddressesWithNull()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setAddresses(null);
@@ -26,7 +26,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnAddressesWithEmpty()
+    void testBeanValidationOnAddressesWithEmpty()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setAddresses("");
@@ -34,7 +34,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnAddressesWithBlank()
+    void testBeanValidationOnAddressesWithBlank()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setAddresses(" ");
@@ -43,7 +43,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 
     // username
     @Test
-    public void testBeanValidationOnUsernameWithNull()
+    void testBeanValidationOnUsernameWithNull()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setUsername(null);
@@ -51,7 +51,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnUsernameWithEmpty()
+    void testBeanValidationOnUsernameWithEmpty()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setUsername("");
@@ -59,7 +59,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnUsernameWithBlank()
+    void testBeanValidationOnUsernameWithBlank()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setUsername(" ");
@@ -68,7 +68,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 
     // password
     @Test
-    public void testBeanValidationOnPasswordWithNull()
+    void testBeanValidationOnPasswordWithNull()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setPassword(null);
@@ -76,7 +76,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnPasswordWithEmpty()
+    void testBeanValidationOnPasswordWithEmpty()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setPassword("");
@@ -84,7 +84,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnPasswordWithBlank()
+    void testBeanValidationOnPasswordWithBlank()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setPassword(" ");
@@ -93,7 +93,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 
     // virtualHost
     @Test
-    public void testBeanValidationOnVirtualHostWithNull()
+    void testBeanValidationOnVirtualHostWithNull()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setVirtualHost(null);
@@ -101,7 +101,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnVirtualHostWithEmpty()
+    void testBeanValidationOnVirtualHostWithEmpty()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setVirtualHost("");
@@ -109,7 +109,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnVirtualHostWithBlank()
+    void testBeanValidationOnVirtualHostWithBlank()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setVirtualHost(" ");
@@ -118,7 +118,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 
     // beanName
     @Test
-    public void testBeanValidationOnBeanNameWithNull()
+    void testBeanValidationOnBeanNameWithNull()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setBeanName(null);
@@ -126,7 +126,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithEmpty()
+    void testBeanValidationOnBeanNameWithEmpty()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setBeanName("");
@@ -134,7 +134,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithBlank()
+    void testBeanValidationOnBeanNameWithBlank()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setBeanName(" ");
@@ -143,7 +143,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
 
     // apiPort
     @Test
-    public void testBeanValidationOnApiPortWithLessThanOne()
+    void testBeanValidationOnApiPortWithLessThanOne()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setApiPort(0);
@@ -151,7 +151,7 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnApiPortWithMoreThan65535()
+    void testBeanValidationOnApiPortWithMoreThan65535()
     {
         CustomConnectionFactoryProperties customConnectionFactoryProperties = getCompleteCustomConnectionFactoryProperties();
         customConnectionFactoryProperties.setApiPort(65536);
@@ -162,37 +162,37 @@ public class CustomConnectionFactoryPropertiesTest implements DomainTestSupport
      * test default values
      */
     @Test
-    public void testDefaultValueOnAddresses()
+    void testDefaultValueOnAddresses()
     {
         assertNull(new CustomConnectionFactoryProperties().getAddresses());
     }
 
     @Test
-    public void testDefaultValueOnUsername()
+    void testDefaultValueOnUsername()
     {
         assertNull(new CustomConnectionFactoryProperties().getUsername());
     }
 
     @Test
-    public void testDefaultValueOnPassword()
+    void testDefaultValueOnPassword()
     {
         assertNull(new CustomConnectionFactoryProperties().getPassword());
     }
 
     @Test
-    public void testDefaultValueOnVirtualHost()
+    void testDefaultValueOnVirtualHost()
     {
         assertEquals("/", new CustomConnectionFactoryProperties().getVirtualHost());
     }
 
     @Test
-    public void testDefaultValueOnBeanName()
+    void testDefaultValueOnBeanName()
     {
         assertNull(new CustomConnectionFactoryProperties().getBeanName());
     }
 
     @Test
-    public void testDefaultValueOnApiPort()
+    void testDefaultValueOnApiPort()
     {
         assertEquals(15672, new CustomConnectionFactoryProperties().getApiPort());
     }

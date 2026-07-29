@@ -13,7 +13,7 @@ import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContain
 import com.avides.spring.rabbit.test.support.AbstractIT;
 
 @ActiveProfiles({ "it", "listenerCreationDisabled" })
-public class SpringRabbitAutoConfigurationForListenerCreationDisabledIT extends AbstractIT
+class SpringRabbitAutoConfigurationForListenerCreationDisabledIT extends AbstractIT
 {
     @Qualifier("dummyListenerZero@com.avides.spring.rabbit.queue.zero@springRabbitConnectionFactory")
     @Autowired
@@ -25,7 +25,7 @@ public class SpringRabbitAutoConfigurationForListenerCreationDisabledIT extends 
     private DefaultMessageListenerContainer<Object> dummyListenerOneContainer;
 
     @Test
-    public void testAutoRabbitConfigurationForListenerCreationDisabled()
+    void testAutoRabbitConfigurationForListenerCreationDisabled()
     {
         // check queues
         assertNotNull(applicationContext.getBean("com.avides.spring.rabbit.queue.zero_" + host, Queue.class));

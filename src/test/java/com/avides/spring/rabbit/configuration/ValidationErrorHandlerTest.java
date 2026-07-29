@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-public class ValidationErrorHandlerTest
+class ValidationErrorHandlerTest
 {
     private ValidationErrorHandler errorHandler = new ValidationErrorHandler();
 
@@ -26,20 +26,20 @@ public class ValidationErrorHandlerTest
     }
 
     @Test
-    public void testHandleErrorWithRuntimeException()
+    void testHandleErrorWithRuntimeException()
     {
         errorHandler.handleError(new RuntimeException("unknown error"));
     }
 
     @Test
-    public void testHandleErrorWithConstraintViolationExceptionAndWithoutViolations()
+    void testHandleErrorWithConstraintViolationExceptionAndWithoutViolations()
     {
         errorHandler.handleError(new ConstraintViolationException("invalid pattern", Collections.emptySet()));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testHandleErrorWithConstraintViolationExceptionAndWithViolations()
+    void testHandleErrorWithConstraintViolationExceptionAndWithViolations()
     {
         Set<ConstraintViolation<Object>> violations = new HashSet<>();
         violations.add(mock(ConstraintViolation.class));
@@ -47,7 +47,7 @@ public class ValidationErrorHandlerTest
     }
 
     @Test
-    public void testHandleErrorWithConstraintViolationAsCause()
+    void testHandleErrorWithConstraintViolationAsCause()
     {
         errorHandler.handleError(new RuntimeException(new ConstraintViolationException("invalid pattern", Collections.emptySet())));
     }
