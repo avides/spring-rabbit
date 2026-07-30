@@ -1,11 +1,11 @@
 package com.avides.spring.rabbit.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.avides.spring.rabbit.test.support.AbstractIT;
 
 @ActiveProfiles({ "it", "rabbitTemplateManagementWithOneConnectionFactory" })
-public class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConnectionFactoryIT extends AbstractIT
+class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConnectionFactoryIT extends AbstractIT
 {
     @Autowired
     private RabbitTemplate defaultRabbitTemplate;
@@ -26,7 +26,7 @@ public class SpringRabbitAutoConfigurationForRabbitTemplateManagementWithOneConn
     private List<ConnectionFactory> connectionFactories;
 
     @Test
-    public void test()
+    void test()
     {
         assertEquals(2, connectionFactories.size());
         connectionFactories.forEach(cf -> assertThat(cf).isInstanceOf(ConnectionFactory.class));

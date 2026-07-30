@@ -4,7 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.validation.annotation.Validated;

@@ -1,27 +1,27 @@
 package com.avides.spring.rabbit.configuration.domain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class QueuePropertiesTest implements DomainTestSupport
+class QueuePropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteQueueProperties());
     }
 
     // name
     @Test
-    public void testBeanValidationOnNameWithNull()
+    void testBeanValidationOnNameWithNull()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setName(null);
@@ -29,7 +29,7 @@ public class QueuePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnNameWithEmpty()
+    void testBeanValidationOnNameWithEmpty()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setName("");
@@ -37,7 +37,7 @@ public class QueuePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnNameWithBlank()
+    void testBeanValidationOnNameWithBlank()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setName(" ");
@@ -46,7 +46,7 @@ public class QueuePropertiesTest implements DomainTestSupport
 
     // limit
     @Test
-    public void testBeanValidationOnLimitWithLessThanOne()
+    void testBeanValidationOnLimitWithLessThanOne()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setLimit(0);
@@ -55,7 +55,7 @@ public class QueuePropertiesTest implements DomainTestSupport
 
     // exchange
     @Test
-    public void testBeanValidationOnExchangeWithNull()
+    void testBeanValidationOnExchangeWithNull()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setExchange(null);
@@ -63,7 +63,7 @@ public class QueuePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnExchangeWithInvalid()
+    void testBeanValidationOnExchangeWithInvalid()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.getExchange().setName(null);
@@ -72,7 +72,7 @@ public class QueuePropertiesTest implements DomainTestSupport
 
     // rabbitAdmin
     @Test
-    public void testBeanValidationOnRabbitAdminWithNull()
+    void testBeanValidationOnRabbitAdminWithNull()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setRabbitAdmin(null);
@@ -81,7 +81,7 @@ public class QueuePropertiesTest implements DomainTestSupport
 
     // listener
     @Test
-    public void testBeanValidationOnListenerWithNull()
+    void testBeanValidationOnListenerWithNull()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.setListener(null);
@@ -89,7 +89,7 @@ public class QueuePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnListenerWithInvalid()
+    void testBeanValidationOnListenerWithInvalid()
     {
         QueueProperties queueProperties = getCompleteQueueProperties();
         queueProperties.getListener().setBeanName(null);
@@ -100,68 +100,68 @@ public class QueuePropertiesTest implements DomainTestSupport
      * test default values
      */
     @Test
-    public void testDefaultValueOnCreationEnabled()
+    void testDefaultValueOnCreationEnabled()
     {
         assertTrue(new QueueProperties().isCreationEnabled());
     }
 
     @Test
-    public void testDefaultValueOnRoutingkey()
+    void testDefaultValueOnRoutingkey()
     {
         assertNull(new QueueProperties().getRoutingkey());
     }
 
     @Test
-    public void testDefaultValueOnRoutingkeys()
+    void testDefaultValueOnRoutingkeys()
     {
         assertNull(new QueueProperties().getRoutingkeys());
     }
 
     @Test
-    public void testDefaultValueOnName()
+    void testDefaultValueOnName()
     {
         assertNull(new QueueProperties().getName());
     }
 
     @Test
-    public void testDefaultValueOnLimit()
+    void testDefaultValueOnLimit()
     {
         // throught bean-validation this will cause a beanValidationException so default value is ok because value should be configured
         assertEquals(0, new QueueProperties().getLimit());
     }
 
     @Test
-    public void testDefaultValueOnDurable()
+    void testDefaultValueOnDurable()
     {
         assertTrue(new QueueProperties().isDurable());
     }
 
     @Test
-    public void testDefaultValueOnExclusive()
+    void testDefaultValueOnExclusive()
     {
         assertFalse(new QueueProperties().isExclusive());
     }
 
     @Test
-    public void testDefaultValueOnArguments()
+    void testDefaultValueOnArguments()
     {
         assertEquals(0, new QueueProperties().getArguments().size());
     }
 
     @Test
-    public void testDefaultValueOnExchange()
+    void testDefaultValueOnExchange()
     {
         assertNull(new QueueProperties().getExchange());
     }
 
     @Test
-    public void testDefaultValueOnRabbitAdmin()
+    void testDefaultValueOnRabbitAdmin()
     {
         assertNotNull(new QueueProperties().getRabbitAdmin());
     }
 
     @Test
-    public void testDefaultValueOnListener()
+    void testDefaultValueOnListener()
     {
         assertNull(new QueueProperties().getListener());
     }

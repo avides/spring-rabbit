@@ -1,21 +1,23 @@
 package com.avides.spring.rabbit.configuration;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.mock;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-public class ValidationErrorHandlerTest
+class ValidationErrorHandlerTest
 {
     private ValidationErrorHandler errorHandler = new ValidationErrorHandler();
 
@@ -25,29 +27,32 @@ public class ValidationErrorHandlerTest
     }
 
     @Test
-    public void testHandleErrorWithRuntimeException()
+    void testHandleErrorWithRuntimeException()
     {
-        errorHandler.handleError(new RuntimeException("unknown error"));
+        assertDoesNotThrow(() -> errorHandler.handleError(new RuntimeException("unknown error")));
     }
 
     @Test
-    public void testHandleErrorWithConstraintViolationExceptionAndWithoutViolations()
+    void testHandleErrorWithConstraintViolationExceptionAndWithoutViolations()
     {
-        errorHandler.handleError(new ConstraintViolationException("invalid pattern", Collections.emptySet()));
+        assertDoesNotThrow(() -> errorHandler.handleError(new ConstraintViolationException("invalid pattern", Collections.emptySet())));
     }
 
     @Test
-    public void testHandleErrorWithConstraintViolationExceptionAndWithViolations()
+    @SuppressWarnings("unchecked")
+    void testHandleErrorWithConstraintViolationExceptionAndWithViolations()
     {
         Set<ConstraintViolation<Object>> violations = new HashSet<>();
-        violations.add(ConstraintViolationImpl.forBeanValidation(null, null, null, null, null, null, null, null, null, null, null, null));
-        errorHandler.handleError(new ConstraintViolationException("invalid pattern", violations));
+        violations.add(mock(ConstraintViolation.class));
+
+        assertDoesNotThrow(() -> errorHandler.handleError(new ConstraintViolationException("invalid pattern", violations)));
     }
 
     @Test
-    public void testHandleErrorWithConstraintViolationAsCause()
+    void testHandleErrorWithConstraintViolationAsCause()
     {
-        errorHandler.handleError(new RuntimeException(new ConstraintViolationException("invalid pattern", Collections.emptySet())));
+        assertDoesNotThrow(() -> errorHandler
+                .handleError(new RuntimeException(new ConstraintViolationException("invalid pattern", Collections.emptySet()))));
     }
 
     @RequiredArgsConstructor

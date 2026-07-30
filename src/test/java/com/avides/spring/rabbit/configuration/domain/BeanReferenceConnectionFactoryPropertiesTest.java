@@ -1,23 +1,23 @@
 package com.avides.spring.rabbit.configuration.domain;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class BeanReferenceConnectionFactoryPropertiesTest implements DomainTestSupport
+class BeanReferenceConnectionFactoryPropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteBeanReferenceConnectionFactoryProperties());
     }
 
     // beanName
     @Test
-    public void testBeanValidationOnBeanNameWithNull()
+    void testBeanValidationOnBeanNameWithNull()
     {
         BeanReferenceConnectionFactoryProperties beanReferenceConnectionFactoryProperties = getCompleteBeanReferenceConnectionFactoryProperties();
         beanReferenceConnectionFactoryProperties.setBeanName(null);
@@ -25,7 +25,7 @@ public class BeanReferenceConnectionFactoryPropertiesTest implements DomainTestS
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithEmpty()
+    void testBeanValidationOnBeanNameWithEmpty()
     {
         BeanReferenceConnectionFactoryProperties beanReferenceConnectionFactoryProperties = getCompleteBeanReferenceConnectionFactoryProperties();
         beanReferenceConnectionFactoryProperties.setBeanName("");
@@ -33,7 +33,7 @@ public class BeanReferenceConnectionFactoryPropertiesTest implements DomainTestS
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithBlank()
+    void testBeanValidationOnBeanNameWithBlank()
     {
         BeanReferenceConnectionFactoryProperties beanReferenceConnectionFactoryProperties = getCompleteBeanReferenceConnectionFactoryProperties();
         beanReferenceConnectionFactoryProperties.setBeanName(" ");
@@ -44,7 +44,7 @@ public class BeanReferenceConnectionFactoryPropertiesTest implements DomainTestS
      * test default values
      */
     @Test
-    public void testDefaultValueOnBeanName()
+    void testDefaultValueOnBeanName()
     {
         assertNull(new BeanReferenceConnectionFactoryProperties().getBeanName());
     }

@@ -3,9 +3,9 @@ package com.avides.spring.rabbit.configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,7 +15,7 @@ import com.avides.spring.rabbit.test.support.TestClass;
 import com.avides.spring.rabbit.test.support.TestClassContextAwareListener;
 
 @ActiveProfiles({ "it", "beforePublishPostProcessor", "beforePublishPostProcessorAppIdEnricherWithConfiguredAppIdByArtifactId" })
-public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnricherWithConfiguredAppIdByArtifactIdIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnricherWithConfiguredAppIdByArtifactIdIT extends AbstractIT
 {
     @Autowired
     private TestClassContextAwareListener testListener;
@@ -23,15 +23,15 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorAppIdEnr
     @Autowired
     private RabbitTemplate testSendRabbitTemplate;
 
-    @Before
-    @After
-    public void clearInbounds()
+    @BeforeEach
+    @AfterEach
+    void clearInbounds()
     {
         testListener.getInbounds().clear();
     }
 
     @Test
-    public void testAppIdEnricher()
+    void testAppIdEnricher()
     {
         testSendRabbitTemplate.convertAndSend(TestClass.buildBase());
 

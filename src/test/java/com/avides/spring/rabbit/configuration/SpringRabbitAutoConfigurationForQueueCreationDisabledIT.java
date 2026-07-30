@@ -1,10 +1,10 @@
 package com.avides.spring.rabbit.configuration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import com.avides.spring.rabbit.listener.container.DefaultMessageListenerContain
 import com.avides.spring.rabbit.test.support.AbstractIT;
 
 @ActiveProfiles({ "it", "queueCreationDisabled" })
-public class SpringRabbitAutoConfigurationForQueueCreationDisabledIT extends AbstractIT
+class SpringRabbitAutoConfigurationForQueueCreationDisabledIT extends AbstractIT
 {
     @Qualifier("dummyListenerZero@com.avides.spring.rabbit.queue.zero@springRabbitConnectionFactory")
     @Autowired
@@ -27,7 +27,7 @@ public class SpringRabbitAutoConfigurationForQueueCreationDisabledIT extends Abs
     private DefaultMessageListenerContainer<Object> dummyListenerOneContainer;
 
     @Test
-    public void testAutoRabbitConfigurationForQueueCreationDisabled()
+    void testAutoRabbitConfigurationForQueueCreationDisabled()
     {
         // check queues
         applicationContext.getBean("com.avides.spring.rabbit.queue.zero_" + host, Queue.class);

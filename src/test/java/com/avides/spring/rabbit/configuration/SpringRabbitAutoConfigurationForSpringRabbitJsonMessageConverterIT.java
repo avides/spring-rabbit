@@ -5,8 +5,8 @@ import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +19,7 @@ import com.avides.spring.rabbit.test.support.TestClass;
 import com.avides.spring.rabbit.test.support.TestClassListener;
 
 @ActiveProfiles({ "it", "springRabbitJsonMessageConverter" })
-public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT extends AbstractIT
+class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT extends AbstractIT
 {
     @Autowired
     private TestClassListener testClassListener;
@@ -36,22 +36,22 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     @Autowired
     private RabbitTemplate receiveRabbitTemplate;
 
-    @After
-    public void clearInbounds()
+    @AfterEach
+    void clearInbounds()
     {
         testClassListener.getInbounds().clear();
         otherTestClassListener.getInbounds().clear();
     }
 
     @Test
-    public void testGetGenericTypeClass()
+    void testGetGenericTypeClass()
     {
         assertThat(testClassListener.getGenericTypeClass()).isEqualTo(TestClass.class);
         assertThat(otherTestClassListener.getGenericTypeClass()).isEqualTo(OtherTestClass.class);
     }
 
     @Test
-    public void testHandleWithOnlyOneListenerGetMessages()
+    void testHandleWithOnlyOneListenerGetMessages()
     {
         testClassRabbitTemplate.convertAndSend(TestClass.buildBase());
         testClassRabbitTemplate.convertAndSend(TestClass.buildComplete());
@@ -70,7 +70,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     }
 
     @Test
-    public void testHandleWithMultipleListenerGetMessages()
+    void testHandleWithMultipleListenerGetMessages()
     {
         testClassRabbitTemplate.convertAndSend(TestClass.buildBase());
         testClassRabbitTemplate.convertAndSend(TestClass.buildComplete());
@@ -96,7 +96,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
      * Verifies that only the objectMapper tries to map the properties by the JSON-Properties
      */
     @Test
-    public void testHandleWithDifferentClassAsExpectedInbound()
+    void testHandleWithDifferentClassAsExpectedInbound()
     {
         testClassRabbitTemplate.convertAndSend(OtherTestClass.buildBase());
 
@@ -112,7 +112,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     }
 
     @Test
-    public void testHandleWithException()
+    void testHandleWithException()
     {
         testClassRabbitTemplate.convertAndSend("<test>");
 
@@ -129,7 +129,7 @@ public class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT 
     }
 
     @Test
-    public void testHandleWithUnknownTypeId()
+    void testHandleWithUnknownTypeId()
     {
         testClassRabbitTemplate.convertAndSend(TestClass.buildBase(), message ->
         {

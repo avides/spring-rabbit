@@ -1,7 +1,7 @@
 package com.avides.spring.rabbit.configuration;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ErrorHandler;
@@ -14,15 +14,15 @@ public class ValidationErrorHandler implements ErrorHandler
     @Override
     public void handleError(final Throwable throwable)
     {
-        if (throwable instanceof ConstraintViolationException)
+        if (throwable instanceof ConstraintViolationException constraintViolationException)
         {
-            handleConstraintViolationException((ConstraintViolationException) throwable);
+            handleConstraintViolationException(constraintViolationException);
             return;
         }
 
-        if (throwable.getCause() instanceof ConstraintViolationException)
+        if (throwable.getCause() instanceof ConstraintViolationException constraintViolationException)
         {
-            handleConstraintViolationException((ConstraintViolationException) throwable.getCause());
+            handleConstraintViolationException(constraintViolationException);
             return;
         }
 

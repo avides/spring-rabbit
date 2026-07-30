@@ -2,13 +2,13 @@ package com.avides.spring.rabbit.configuration;
 
 import static com.avides.spring.rabbit.configuration.creator.QueueCreator.X_QUEUE_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -28,7 +28,7 @@ import com.avides.spring.rabbit.test.support.DummyListenerZero;
 
 @ActiveProfiles({ "multipleConnectionFactories" })
 @SpringBootTest(classes = { SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class })
-public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT extends AbstractIT
+class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT extends AbstractIT
 {
     @Autowired
     private RabbitAdmin firstRabbitAdmin;
@@ -59,7 +59,7 @@ public class SpringRabbitAutoConfigurationForMultipleConnectionFactoriesIT exten
     private Queue queueOneDlx;
 
     @Test
-    public void test()
+    void test()
     {
         initializeQueueVariables();
 

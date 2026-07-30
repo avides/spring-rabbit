@@ -1,23 +1,23 @@
 package com.avides.spring.rabbit.configuration.domain;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.avides.spring.rabbit.utils.BeanValidationTestSupport;
 import com.avides.spring.rabbit.utils.DomainTestSupport;
 
-public class RabbitTemplatePropertiesTest implements DomainTestSupport
+class RabbitTemplatePropertiesTest implements DomainTestSupport
 {
     @Test
-    public void testBeanValidation()
+    void testBeanValidation()
     {
         BeanValidationTestSupport.expectNoError(getCompleteRabbitTemplateProperties());
     }
 
     // exchange
     @Test
-    public void testBeanValidationOnExchangeWithNull()
+    void testBeanValidationOnExchangeWithNull()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setExchange(null);
@@ -25,7 +25,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnExchangeWithInvalid()
+    void testBeanValidationOnExchangeWithInvalid()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.getExchange().setName(null);
@@ -34,7 +34,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
 
     // routingKey
     @Test
-    public void testBeanValidationOnRoutingKeyWithNull()
+    void testBeanValidationOnRoutingKeyWithNull()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setRoutingkey(null);
@@ -42,7 +42,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnRoutingKeyWithBlank()
+    void testBeanValidationOnRoutingKeyWithBlank()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setRoutingkey(" ");
@@ -50,7 +50,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnRoutingKeyWithEmpty()
+    void testBeanValidationOnRoutingKeyWithEmpty()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setRoutingkey("");
@@ -59,7 +59,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
 
     // beanName
     @Test
-    public void testBeanValidationOnBeanNameWithNull()
+    void testBeanValidationOnBeanNameWithNull()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setBeanName(null);
@@ -67,7 +67,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithBlank()
+    void testBeanValidationOnBeanNameWithBlank()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setBeanName(" ");
@@ -75,7 +75,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnBeanNameWithEmpty()
+    void testBeanValidationOnBeanNameWithEmpty()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setBeanName("");
@@ -84,7 +84,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
 
     // messageConverter
     @Test
-    public void testBeanValidationOnMessageConverterWithNull()
+    void testBeanValidationOnMessageConverterWithNull()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setMessageConverter(null);
@@ -92,7 +92,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnMessageConverterWithInvalid()
+    void testBeanValidationOnMessageConverterWithInvalid()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.getMessageConverter().setBeanName(null);
@@ -101,7 +101,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
 
     // connectionFactory
     @Test
-    public void testBeanValidationOnConnectionFactoryWithNull()
+    void testBeanValidationOnConnectionFactoryWithNull()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.setConnectionFactory(null);
@@ -109,7 +109,7 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
     }
 
     @Test
-    public void testBeanValidationOnConnectionFactoryWithInvalid()
+    void testBeanValidationOnConnectionFactoryWithInvalid()
     {
         RabbitTemplateProperties rabbitTemplateProperties = getCompleteRabbitTemplateProperties();
         rabbitTemplateProperties.getConnectionFactory().setBeanName(null);
@@ -120,31 +120,31 @@ public class RabbitTemplatePropertiesTest implements DomainTestSupport
      * test default values
      */
     @Test
-    public void testDefaultValueOnExchange()
+    void testDefaultValueOnExchange()
     {
         assertNull(new RabbitTemplateProperties().getExchange());
     }
 
     @Test
-    public void testDefaultValueOnRoutingKey()
+    void testDefaultValueOnRoutingKey()
     {
         assertNull(new RabbitTemplateProperties().getRoutingkey());
     }
 
     @Test
-    public void testDefaultValueOnBeanName()
+    void testDefaultValueOnBeanName()
     {
         assertNull(new RabbitTemplateProperties().getBeanName());
     }
 
     @Test
-    public void testDefaultValueOnMessageConverter()
+    void testDefaultValueOnMessageConverter()
     {
         assertNull(new RabbitTemplateProperties().getMessageConverter());
     }
 
     @Test
-    public void testDefaultValueOnConnectionFactory()
+    void testDefaultValueOnConnectionFactory()
     {
         assertNull(new RabbitTemplateProperties().getConnectionFactory());
     }

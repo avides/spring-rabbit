@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,7 +18,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.search.Search;
 
 @ActiveProfiles(profiles = { "it", "beforePublishPostProcessor" })
-public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIT extends AbstractIT
+class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCountingOutboundIT extends AbstractIT
 {
     @Autowired
     private RabbitTemplate testSendRabbitTemplate;
@@ -29,15 +29,15 @@ public class SpringRabbitAutoConfigurationWithBeforePublishPostProcessorCounting
     @Autowired
     private MeterRegistry meterRegistry;
 
-    @Before
-    @After
-    public void clearInbounds()
+    @BeforeEach
+    @AfterEach
+    void clearInbounds()
     {
         meterRegistry.getMeters().forEach(m -> meterRegistry.remove(m));
     }
 
     @Test
-    public void testCountingOutbound()
+    void testCountingOutbound()
     {
         testSendOtherRabbitTemplate.convertAndSend(TestClass.buildBase());
         testSendOtherRabbitTemplate.convertAndSend(TestClass.buildBase());

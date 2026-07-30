@@ -3,9 +3,9 @@ package com.avides.spring.rabbit.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.amqp.core.Exchange;
@@ -19,6 +19,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -271,9 +273,14 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
 
                         var beanName = createListenerContainerBeanName(listenerProperties, queueName, customConnectionFactoryProperties);
 
-                        applicationContext
-                                .registerBean(beanName, DefaultMessageListenerContainer.class, listenerCreator::createInstance, beanDefinition -> beanDefinition
-                                        .setScope(BeanDefinition.SCOPE_SINGLETON));
+                        applicationContext.registerBean(beanName, DefaultMessageListenerContainer.class, listenerCreator::createInstance, beanDefinition ->
+                        {
+                            beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
+                            if (beanDefinition instanceof RootBeanDefinition rootBeanDefinition)
+                            {
+                                rootBeanDefinition.setTargetType(ResolvableType.forClassWithGenerics(DefaultMessageListenerContainer.class, Object.class));
+                            }
+                        });
                         log.info("MessageListenerContainer build with bean-name '{}'", beanName);
                     }
                     else

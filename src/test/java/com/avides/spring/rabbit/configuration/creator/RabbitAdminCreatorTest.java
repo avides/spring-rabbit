@@ -1,37 +1,28 @@
 package com.avides.spring.rabbit.configuration.creator;
 
-import static org.junit.Assert.assertNotNull;
-import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.MockStrict;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 
-@RunWith(PowerMockRunner.class)
-public class RabbitAdminCreatorTest
+@ExtendWith(MockitoExtension.class)
+class RabbitAdminCreatorTest
 {
-    private Creator<RabbitAdmin> creator;
-
-    @MockStrict
+    @Mock
     private ConnectionFactory connectionFactory;
 
-    @Before
-    public void before()
-    {
-        creator = new RabbitAdminCreator(connectionFactory);
-    }
+    @InjectMocks
+    private RabbitAdminCreator creator;
 
     @Test
-    public void testCreateInstance()
+    void testCreateInstance()
     {
-        replayAll();
         RabbitAdmin rabbitAdmin = creator.createInstance();
-        verifyAll();
 
         assertNotNull(rabbitAdmin);
     }

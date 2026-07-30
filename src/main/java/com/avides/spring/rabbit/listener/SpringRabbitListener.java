@@ -3,7 +3,7 @@ package com.avides.spring.rabbit.listener;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConverter;

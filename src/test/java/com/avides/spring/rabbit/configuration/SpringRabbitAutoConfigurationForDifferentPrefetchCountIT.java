@@ -1,10 +1,10 @@
 package com.avides.spring.rabbit.configuration;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,7 +20,7 @@ import com.avides.spring.rabbit.test.support.DummyListenerZero;
 
 @ActiveProfiles({ "prefetchCount" })
 @SpringBootTest(classes = { SpringRabbitAutoConfigurationForDifferentPrefetchCountIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class })
-public class SpringRabbitAutoConfigurationForDifferentPrefetchCountIT extends AbstractIT
+class SpringRabbitAutoConfigurationForDifferentPrefetchCountIT extends AbstractIT
 {
     @Autowired
     private List<DefaultMessageListenerContainer<Object>> listenerContainer;
@@ -34,7 +34,7 @@ public class SpringRabbitAutoConfigurationForDifferentPrefetchCountIT extends Ab
     private DefaultMessageListenerContainer<Object> dummyListenerOneContainer;
 
     @Test
-    public void testPrefetchCount()
+    void testPrefetchCount()
     {
         assertEquals(2, listenerContainer.size());
         assertEquals(20, getPrefetchCount(dummyListenerZeroContainer));

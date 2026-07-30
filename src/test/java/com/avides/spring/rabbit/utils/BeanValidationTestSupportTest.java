@@ -3,187 +3,152 @@ package com.avides.spring.rabbit.utils;
 import java.util.Collections;
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import lombok.RequiredArgsConstructor;
 
-public class BeanValidationTestSupportTest
+class BeanValidationTestSupportTest
 {
     @Test
-    public void testExpectNoErrorWithoutError()
+    void testExpectNoErrorWithoutError()
     {
         Validatable validatable = new Validatable("value1", "value2");
         BeanValidationTestSupport.expectNoError(validatable);
     }
 
     @Test
-    public void testExpectNoErrorWithError()
+    void testExpectNoErrorWithError()
     {
-        try
-        {
-            Validatable validatable = new Validatable("value1", null);
-            BeanValidationTestSupport.expectNoError(validatable);
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("Unexpected error occurred (Properties: value2)", e.getMessage());
-        }
+        Validatable validatable = new Validatable("value1", null);
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectNoError(validatable));
+
+        Assertions.assertEquals("Unexpected error occurred (Properties: value2)", e.getMessage());
     }
 
     @Test
-    public void testExpectNoErrorOnPropertyWithoutAnyError()
+    void testExpectNoErrorOnPropertyWithoutAnyError()
     {
         Validatable validatable = new Validatable("value1", "value2");
         BeanValidationTestSupport.expectNoErrorOnProperty(validatable, "value1");
     }
 
     @Test
-    public void testExpectNoErrorOnPropertyWithErrorOnOtherProperty()
+    void testExpectNoErrorOnPropertyWithErrorOnOtherProperty()
     {
         Validatable validatable = new Validatable("value1", null);
         BeanValidationTestSupport.expectNoErrorOnProperty(validatable, "value1");
     }
 
     @Test
-    public void testExpectNoErrorOnPropertyWithErrorOnExpectedProperty()
+    void testExpectNoErrorOnPropertyWithErrorOnExpectedProperty()
     {
-        try
-        {
-            Validatable validatable = new Validatable(null, "value2");
-            BeanValidationTestSupport.expectNoErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value1)", e.getMessage());
-        }
+        Validatable validatable = new Validatable(null, "value2");
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectNoErrorOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("Unexpected errors occurred (Properties: value1)", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnlyOnPropertyWithoutError()
+    void testExpectErrorOnlyOnPropertyWithoutError()
     {
-        try
-        {
-            Validatable validatable = new Validatable("value1", "value2");
-            BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("No error occurred", e.getMessage());
-        }
+        Validatable validatable = new Validatable("value1", "value2");
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("No error occurred", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnlyOnPropertyWithError()
+    void testExpectErrorOnlyOnPropertyWithError()
     {
         Validatable validatable = new Validatable(null, "value2");
         BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
     }
 
     @Test
-    public void testExpectErrorOnlyOnPropertyWithErrorOnWrongProperty()
+    void testExpectErrorOnlyOnPropertyWithErrorOnWrongProperty()
     {
-        try
-        {
-            Validatable validatable = new Validatable("value1", null);
-            BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
-        }
+        Validatable validatable = new Validatable("value1", null);
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnlyOnPropertyWithMultipleErrors()
+    void testExpectErrorOnlyOnPropertyWithMultipleErrors()
     {
-        try
-        {
-            Validatable validatable = new Validatable(null, null);
-            BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("More than one error occurred (Properties: value1, value2)", e.getMessage());
-        }
+        Validatable validatable = new Validatable(null, null);
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("More than one error occurred (Properties: value1, value2)", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnlyOnPropertyWithOneErrorWithMultipleErroneousChildren()
+    void testExpectErrorOnlyOnPropertyWithOneErrorWithMultipleErroneousChildren()
     {
         Validatable2 validatable2 = new Validatable2("ruleId", new SubValidated(null, null));
         BeanValidationTestSupport.expectErrorOnlyOnProperty(validatable2, "rule");
     }
 
     @Test
-    public void testExpectErrorOnPropertyWithoutError()
+    void testExpectErrorOnPropertyWithoutError()
     {
-        try
-        {
-            Validatable validatable = new Validatable("value1", "value2");
-            BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("No error occurred", e.getMessage());
-        }
+        Validatable validatable = new Validatable("value1", "value2");
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("No error occurred", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnPropertyWithError()
+    void testExpectErrorOnPropertyWithError()
     {
         Validatable validatable = new Validatable(null, "value2");
         BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
     }
 
     @Test
-    public void testExpectErrorOnPropertyWithErrorOnWrongProperty()
+    void testExpectErrorOnPropertyWithErrorOnWrongProperty()
     {
-        try
-        {
-            Validatable validatable = new Validatable("value1", null);
-            BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
-            Assert.fail("Exception expected");
-        }
-        catch (Throwable e)
-        {
-            Assert.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
-        }
+        Validatable validatable = new Validatable("value1", null);
+
+        AssertionError e = Assertions.assertThrows(AssertionError.class, () -> BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1"));
+
+        Assertions.assertEquals("Unexpected errors occurred (Properties: value2)", e.getMessage());
     }
 
     @Test
-    public void testExpectErrorOnPropertyWithMultipleErrors()
+    void testExpectErrorOnPropertyWithMultipleErrors()
     {
         Validatable validatable = new Validatable(null, null);
         BeanValidationTestSupport.expectErrorOnProperty(validatable, "value1");
     }
 
     @Test
-    public void testValidationPrecisionOnEqualPrefixedPropertiesWithDirectMatch()
+    void testValidationPrecisionOnEqualPrefixedPropertiesWithDirectMatch()
     {
         Validatable2 validatable2 = new Validatable2(null, new SubValidated("12345", "name"));
         BeanValidationTestSupport.expectErrorOnProperty(validatable2, "ruleId");
     }
 
     @Test
-    public void testValidationPrecisionOnEqualPrefixedPropertiesWithChildProperties()
+    void testValidationPrecisionOnEqualPrefixedPropertiesWithChildProperties()
     {
         Validatable2 validatable2 = new Validatable2(null, new SubValidated("12345", null));
         BeanValidationTestSupport.expectErrorOnProperty(validatable2, "rule");
     }
 
     @Test
-    public void testValidationPrecisionOnEqualPrefixedPropertiesWithArrayProperties()
+    void testValidationPrecisionOnEqualPrefixedPropertiesWithArrayProperties()
     {
         Validatable3 validatable3 = new Validatable3(Collections.singletonList(new SubValidated("12345", null)));
         BeanValidationTestSupport.expectErrorOnProperty(validatable3, "rules");

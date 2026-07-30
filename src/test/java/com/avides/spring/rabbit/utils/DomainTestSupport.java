@@ -2,6 +2,7 @@ package com.avides.spring.rabbit.utils;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -188,7 +189,7 @@ public interface DomainTestSupport
     default RabbitProperties getCompleteRabbitProperties()
     {
         RabbitProperties rabbitProperties = new RabbitProperties();
-        rabbitProperties.setAddresses("localhost");
+        rabbitProperties.setAddresses(List.of("localhost"));
         rabbitProperties.setUsername("guest");
         rabbitProperties.setPassword("guest");
         rabbitProperties.setVirtualHost("/IT");
