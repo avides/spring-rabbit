@@ -13,7 +13,7 @@ import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.util.StringUtils;
 
 import com.avides.spring.rabbit.configuration.domain.QueueMasterLocatorConnectionFactory;

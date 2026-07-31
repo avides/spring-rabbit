@@ -10,7 +10,8 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.MessagePropertiesBuilder;
 
 import com.avides.spring.rabbit.test.support.TestClass;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import tools.jackson.databind.json.JsonMapper;
 
 class SpringRabbitJsonMessageConverterTest
 {
@@ -23,7 +24,7 @@ class SpringRabbitJsonMessageConverterTest
 
     private static final SpringRabbitMessageConverter MESSAGE_CONVERTER_DEFAULT_MESSAGE_CONVERTER = new SpringRabbitJsonMessageConverter();
 
-    private static final Message MESSAGE = new Message("{\"floatProperty\":2.0,\"stringProperty\":null,\"integerProperty\":null,\"subTestClass\":null}"
+    private static final Message MESSAGE = new Message("{\"floatProperty\":2.0,\"integerProperty\":null,\"stringProperty\":null,\"subTestClass\":null}"
             .getBytes(), MessagePropertiesBuilder.newInstance()
                     .setHeader("__TypeId__", TestClass.class.getName())
                     .setContentType("application/json")
@@ -31,12 +32,14 @@ class SpringRabbitJsonMessageConverterTest
                     .setContentLength(86)
                     .build());
 
-    private static final ObjectMapper CUSTOM_OBJECT_MAPPER = new ObjectMapper().setSerializationInclusion(NON_NULL);
+    private static final JsonMapper CUSTOM_JSON_MAPPER = JsonMapper.builder()
+            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(NON_NULL))
+            .build();
 
-    private static final SpringRabbitMessageConverter MESSAGE_CONVERTER_CUSTOM_OBJECT_MAPPER = new SpringRabbitJsonMessageConverter(CUSTOM_OBJECT_MAPPER);
+    private static final SpringRabbitMessageConverter MESSAGE_CONVERTER_CUSTOM_JSON_MAPPER = new SpringRabbitJsonMessageConverter(CUSTOM_JSON_MAPPER);
 
     @Test
-    void testToMessageWithDefaultObjectMapper()
+    void testToMessageWithDefaultJsonMapper()
     {
         Message message = MESSAGE_CONVERTER_DEFAULT_MESSAGE_CONVERTER.toMessage(TestClass.buildBase(), new MessageProperties());
 
@@ -46,13 +49,13 @@ class SpringRabbitJsonMessageConverterTest
     @Test
     void testToMessageWithCustomMessageConverter()
     {
-        Message message = MESSAGE_CONVERTER_CUSTOM_OBJECT_MAPPER.toMessage(TestClass.buildBase(), new MessageProperties());
+        Message message = MESSAGE_CONVERTER_CUSTOM_JSON_MAPPER.toMessage(TestClass.buildBase(), new MessageProperties());
 
         assertThat(message).isEqualTo(MESSAGE_WITH_CUSTOM);
     }
 
     @Test
-    void testFromMessageWithDefaultObjectMapper()
+    void testFromMessageWithDefaultJsonMapper()
     {
         TestClass testClass = MESSAGE_CONVERTER_DEFAULT_MESSAGE_CONVERTER.fromMessage(MESSAGE, TestClass.class);
 
@@ -60,9 +63,9 @@ class SpringRabbitJsonMessageConverterTest
     }
 
     @Test
-    void testFromMessageWithCustomObjectMapper()
+    void testFromMessageWithCustomJsonMapper()
     {
-        TestClass testClass = MESSAGE_CONVERTER_CUSTOM_OBJECT_MAPPER.fromMessage(MESSAGE_WITH_CUSTOM, TestClass.class);
+        TestClass testClass = MESSAGE_CONVERTER_CUSTOM_JSON_MAPPER.fromMessage(MESSAGE_WITH_CUSTOM, TestClass.class);
 
         assertThat(testClass).isEqualTo(TestClass.buildBase());
     }

@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
 import org.springframework.amqp.rabbit.connection.RoutingConnectionFactory;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -100,7 +100,7 @@ public class QueueMasterLocatorConnectionFactory implements ConnectionFactory, R
         }
         catch (HttpClientErrorException e)
         {
-            if (e.getRawStatusCode() == 401)
+            if (e.getStatusCode().value() == 401)
             {
                 log.warn("Rabbit-user needs 'monitoring'-role to fetch information for " + queueName, e);
             }

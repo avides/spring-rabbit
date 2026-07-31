@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 
 import com.avides.spring.rabbit.configuration.provider.ConnectionFactoryProvider;
 import com.avides.spring.rabbit.utils.DomainTestSupport;

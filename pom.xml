@@ -3,7 +3,7 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>4.0.0</version>
+  <version>5.0.0-RC1</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -40,7 +40,7 @@
     <!-- Build -->
     <maven.build.timestamp.format>dd.MM.yyyy HH:mm</maven.build.timestamp.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>21</java.version>
+    <java.version>25</java.version>
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
@@ -53,15 +53,15 @@
     <exists-maven-plugin.version>0.15.2</exists-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
-    <spring-boot.version>3.5.16</spring-boot.version>
+    <spring-boot.version>4.1.0</spring-boot.version>
     <http-client.version>4.0.0</http-client.version>
     <!-- Testing -->
     <jacoco.version>0.8.15</jacoco.version>
     <!-- Explicit so Sonar reads the combined UT+IT jacoco report instead of guessing via scanner-default path conventions. -->
     <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <spring-xom-unmarshaller.version>2.0.0</spring-xom-unmarshaller.version>
+    <spring-xom-unmarshaller.version>3.0.0-RC1</spring-xom-unmarshaller.version>
     <jakarta.el.version>4.0.2</jakarta.el.version>
-    <springtainer-rabbitmq.version>2.0.0</springtainer-rabbitmq.version>
+    <springtainer-rabbitmq.version>3.0.0-RC1</springtainer-rabbitmq.version>
   </properties>
 
   <dependencyManagement>
@@ -87,6 +87,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
     </dependency>
     <dependency>
       <groupId>com.rabbitmq</groupId>
@@ -227,6 +231,7 @@
         <configuration>
           <release>${java.version}</release>
           <parameters>true</parameters>
+          <proc>full</proc>
         </configuration>
       </plugin>
       <plugin>
