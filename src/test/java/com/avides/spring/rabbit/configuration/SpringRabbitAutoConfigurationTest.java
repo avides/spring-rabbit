@@ -36,6 +36,11 @@ import com.avides.spring.rabbit.utils.DomainTestSupport;
 
 class SpringRabbitAutoConfigurationTest implements DomainTestSupport
 {
+    private static SpringRabbitAutoConfiguration newAutoConfiguration()
+    {
+        return new SpringRabbitAutoConfiguration(null, null, null, null, List.of(), List.of());
+    }
+
     private ApplicationContextRunner contextRunner;
 
     @BeforeEach
@@ -269,43 +274,43 @@ class SpringRabbitAutoConfigurationTest implements DomainTestSupport
     @Test
     void testDefaultValueOnQueues()
     {
-        assertTrue(new SpringRabbitAutoConfiguration().getQueues().isEmpty());
+        assertTrue(newAutoConfiguration().getQueues().isEmpty());
     }
 
     @Test
     void testDefaultValueOnOutbounds()
     {
-        assertTrue(new SpringRabbitAutoConfiguration().getOutbounds().isEmpty());
+        assertTrue(newAutoConfiguration().getOutbounds().isEmpty());
     }
 
     @Test
     void testDefaultValueOnConnections()
     {
-        assertNull(new SpringRabbitAutoConfiguration().getConnections());
+        assertNull(newAutoConfiguration().getConnections());
     }
 
     @Test
     void testDefaultValueOnExchange()
     {
-        assertNull(new SpringRabbitAutoConfiguration().getExchange());
+        assertNull(newAutoConfiguration().getExchange());
     }
 
     @Test
     void testDefaultValueOnMessageConverter()
     {
-        assertNull(new SpringRabbitAutoConfiguration().getMessageConverter());
+        assertNull(newAutoConfiguration().getMessageConverter());
     }
 
     @Test
     void testDefaultValueOnMaxConcurrentConsumers()
     {
-        assertEquals(Integer.valueOf(1), new SpringRabbitAutoConfiguration().getMaxConcurrentConsumers());
+        assertEquals(Integer.valueOf(1), newAutoConfiguration().getMaxConcurrentConsumers());
     }
 
     @Test
     void testDefaultValueOnApiPort()
     {
-        assertEquals(15672, new SpringRabbitAutoConfiguration().getApiPort());
+        assertEquals(15672, newAutoConfiguration().getApiPort());
     }
 
     /*
@@ -350,11 +355,8 @@ class SpringRabbitAutoConfigurationTest implements DomainTestSupport
         queueProperties.setLimit(100);
         queueProperties.setListener(listenerProperties);
 
-        SpringRabbitAutoConfiguration autoConfiguration = new SpringRabbitAutoConfiguration();
-        autoConfiguration.setApplicationContext(applicationContext);
-        autoConfiguration.setConnectionFactory(connectionFactory);
-        autoConfiguration.setRabbitProperties(getCompleteRabbitProperties());
-        autoConfiguration.setExistingMessageConverterList(List.of(new SimpleMessageConverter()));
+        SpringRabbitAutoConfiguration autoConfiguration = new SpringRabbitAutoConfiguration(connectionFactory, getCompleteRabbitProperties(), null,
+                applicationContext, List.of(new SimpleMessageConverter()), List.of());
         autoConfiguration.setExchange(getCompleteExchangeProperties());
         autoConfiguration.setQueues(List.of(queueProperties));
         return autoConfiguration;

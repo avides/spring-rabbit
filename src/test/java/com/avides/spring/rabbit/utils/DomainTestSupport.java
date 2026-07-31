@@ -50,7 +50,7 @@ public interface DomainTestSupport
 
     default SpringRabbitAutoConfiguration getCompleteSpringRabbitAutoConfiguration()
     {
-        SpringRabbitAutoConfiguration springRabbitAutoConfiguration = new SpringRabbitAutoConfiguration();
+        SpringRabbitAutoConfiguration springRabbitAutoConfiguration = new SpringRabbitAutoConfiguration(null, null, null, null, List.of(), List.of());
         springRabbitAutoConfiguration.setQueues(Collections.singletonList(getCompleteQueueProperties()));
         springRabbitAutoConfiguration.setOutbounds(Collections.singletonList(getCompleteRabbitTemplateProperties()));
         springRabbitAutoConfiguration.setConnections(Collections.singletonList(getCompleteCustomConnectionFactoryProperties()));
