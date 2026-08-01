@@ -12,10 +12,10 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.HttpClientErrorException;
 
 import com.rabbitmq.http.client.Client;
 import com.rabbitmq.http.client.ClientParameters;
+import com.rabbitmq.http.client.HttpClientException;
 import com.rabbitmq.http.client.domain.QueueInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -98,9 +98,9 @@ public class QueueMasterLocatorConnectionFactory implements ConnectionFactory, R
             return client.getQueue(getVirtualHost(), queueName);
 
         }
-        catch (HttpClientErrorException e)
+        catch (HttpClientException e)
         {
-            if (e.getStatusCode().value() == 401)
+            if (e.status() == 401)
             {
                 log.warn("Rabbit-user needs 'monitoring'-role to fetch information for " + queueName, e);
             }

@@ -49,12 +49,12 @@
     <maven-failsafe-plugin.version>3.5.6</maven-failsafe-plugin.version>
     <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
     <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
-    <maven-scm-provider-gitexe.version>1.11.3</maven-scm-provider-gitexe.version>
+    <maven-scm-provider-gitexe.version>2.2.1</maven-scm-provider-gitexe.version>
     <exists-maven-plugin.version>0.15.2</exists-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     <!-- Spring -->
     <spring-boot.version>4.1.0</spring-boot.version>
-    <http-client.version>4.0.0</http-client.version>
+    <http-client.version>5.6.0</http-client.version>
     <!-- Testing -->
     <jacoco.version>0.8.15</jacoco.version>
     <!-- Explicit so Sonar reads the combined UT+IT jacoco report instead of guessing via scanner-default path conventions. -->
