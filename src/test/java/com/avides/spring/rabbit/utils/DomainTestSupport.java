@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.util.ReflectionUtils;
 
 import com.avides.spring.rabbit.configuration.SpringRabbitAutoConfiguration;
@@ -50,7 +50,7 @@ public interface DomainTestSupport
 
     default SpringRabbitAutoConfiguration getCompleteSpringRabbitAutoConfiguration()
     {
-        SpringRabbitAutoConfiguration springRabbitAutoConfiguration = new SpringRabbitAutoConfiguration();
+        SpringRabbitAutoConfiguration springRabbitAutoConfiguration = new SpringRabbitAutoConfiguration(null, null, null, null, List.of(), List.of());
         springRabbitAutoConfiguration.setQueues(Collections.singletonList(getCompleteQueueProperties()));
         springRabbitAutoConfiguration.setOutbounds(Collections.singletonList(getCompleteRabbitTemplateProperties()));
         springRabbitAutoConfiguration.setConnections(Collections.singletonList(getCompleteCustomConnectionFactoryProperties()));

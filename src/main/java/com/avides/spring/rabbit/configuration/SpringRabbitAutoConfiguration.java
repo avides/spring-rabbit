@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
+import org.jspecify.annotations.Nullable;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
@@ -17,10 +18,9 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -80,37 +80,40 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
 {
     private static final String CONNECTION_FACTORY_BEAN_NAME = "springRabbitConnectionFactory";
 
-    @Autowired(required = false)
-    private ConnectionFactory connectionFactory;
+    private final @Nullable ConnectionFactory connectionFactory;
 
-    @Autowired(required = false)
-    private RabbitProperties rabbitProperties;
+    private final @Nullable RabbitProperties rabbitProperties;
 
-    @Autowired
-    private MeterRegistry meterRegistry;
+    private final MeterRegistry meterRegistry;
 
-    @Autowired
-    private GenericApplicationContext applicationContext;
+    private final GenericApplicationContext applicationContext;
 
-    @Autowired
-    private List<MessageConverter> existingMessageConverterList;
+    private final List<MessageConverter> existingMessageConverterList;
 
-    @Autowired
-    private List<MessagePostProcessor> messagePostProcessors;
+    private final List<MessagePostProcessor> messagePostProcessors;
+
+    public SpringRabbitAutoConfiguration(@Nullable ConnectionFactory connectionFactory, @Nullable RabbitProperties rabbitProperties,
+            MeterRegistry meterRegistry, GenericApplicationContext applicationContext, List<MessageConverter> existingMessageConverterList,
+            List<MessagePostProcessor> messagePostProcessors)
+    {
+        this.connectionFactory = connectionFactory;
+        this.rabbitProperties = rabbitProperties;
+        this.meterRegistry = meterRegistry;
+        this.applicationContext = applicationContext;
+        this.existingMessageConverterList = existingMessageConverterList;
+        this.messagePostProcessors = messagePostProcessors;
+    }
 
     @NotNull
-    @Valid
     @NestedConfigurationProperty
-    private List<QueueProperties> queues = new ArrayList<>();
+    private List<@Valid QueueProperties> queues = new ArrayList<>();
 
     @NotNull
-    @Valid
     @NestedConfigurationProperty
-    private List<RabbitTemplateProperties> outbounds = new ArrayList<>();
+    private List<@Valid RabbitTemplateProperties> outbounds = new ArrayList<>();
 
-    @Valid
     @NestedConfigurationProperty
-    private List<CustomConnectionFactoryProperties> connections;
+    private List<@Valid CustomConnectionFactoryProperties> connections;
 
     @Valid
     @NestedConfigurationProperty

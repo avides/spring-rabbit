@@ -1,11 +1,15 @@
 package com.avides.spring.rabbit.listener.container;
 
+import java.util.function.Supplier;
+
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.util.Assert;
 
@@ -88,14 +92,14 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
             Class<T> listenerClassType = rabbitListener.getGenericTypeClass();
             return new MessageListenerAdapter((MessageListener) message ->
             {
-                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType);
+                T object = convert(() -> ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType));
                 rabbitListener.handle(object);
             });
         }
         return new MessageListenerAdapter((MessageListener) message ->
         {
             @SuppressWarnings("unchecked")
-            T object = (T) messageConverter.fromMessage(message);
+            T object = convert(() -> (T) messageConverter.fromMessage(message));
             rabbitListener.handle(object);
         });
     }
@@ -110,15 +114,39 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
             Class<T> listenerClassType = springRabbitListener.getGenericTypeClass();
             return new MessageListenerAdapter((MessageListener) message ->
             {
-                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType);
+                T object = convert(() -> ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType));
                 springRabbitListener.handle(object, message.getMessageProperties());
             });
         }
         return new MessageListenerAdapter((MessageListener) message ->
         {
             @SuppressWarnings("unchecked")
-            T object = (T) messageConverter.fromMessage(message);
+            T object = convert(() -> (T) messageConverter.fromMessage(message));
             springRabbitListener.handle(object, message.getMessageProperties());
         });
+    }
+
+    /**
+     * Runs a conversion and reports an unconvertible payload as a rejection instead of letting the
+     * {@link MessageConversionException} escape.
+     * <p>
+     * The container classifies that exception as fatal and shuts the consumer down, which would take the whole
+     * listener offline because of a single bad message. {@link AmqpRejectAndDontRequeueException} is not classified
+     * as fatal, so the consumer stays up and the message is routed to the dead-letter exchange - which is what
+     * {@code defaultRequeueRejected=false} above is for.
+     *
+     * @param conversion the conversion to run
+     * @return the converted object
+     */
+    private static <R> R convert(Supplier<R> conversion)
+    {
+        try
+        {
+            return conversion.get();
+        }
+        catch (MessageConversionException e)
+        {
+            throw new AmqpRejectAndDontRequeueException("Rejecting message that could not be converted", e);
+        }
     }
 }
