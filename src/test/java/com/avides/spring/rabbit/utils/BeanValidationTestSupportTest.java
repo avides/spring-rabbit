@@ -179,8 +179,7 @@ class BeanValidationTestSupportTest
     private static class Validatable3
     {
         @NotNull
-        @Valid
-        private final List<SubValidated> rules;
+        private final List<@Valid SubValidated> rules;
     }
 
     @RequiredArgsConstructor

@@ -105,18 +105,15 @@ public class SpringRabbitAutoConfiguration implements InitializingBean
     }
 
     @NotNull
-    @Valid
     @NestedConfigurationProperty
-    private List<QueueProperties> queues = new ArrayList<>();
+    private List<@Valid QueueProperties> queues = new ArrayList<>();
 
     @NotNull
-    @Valid
     @NestedConfigurationProperty
-    private List<RabbitTemplateProperties> outbounds = new ArrayList<>();
+    private List<@Valid RabbitTemplateProperties> outbounds = new ArrayList<>();
 
-    @Valid
     @NestedConfigurationProperty
-    private List<CustomConnectionFactoryProperties> connections;
+    private List<@Valid CustomConnectionFactoryProperties> connections;
 
     @Valid
     @NestedConfigurationProperty
