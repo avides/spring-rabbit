@@ -30,7 +30,7 @@ public interface SpringRabbitListener<T>
     /**
      * Helper method to resolve the generic type, type-arguments and all.
      * <p>
-     * Shall not be used by developer directly! Currently used for the {@link SpringRabbitMessageConverter}, which needs the full type to read a message whose
+     * Shall not be used by developers directly! Currently used for the {@link SpringRabbitMessageConverter}, which needs the full type to read a message whose
      * type is itself generic - a listener declared as {@code AbstractSpringRabbitListener<Box<Integer>>} has to be handed {@code Box<Integer>}, not a bare
      * {@code Box} whose content-type is gone.
      *
@@ -45,7 +45,7 @@ public interface SpringRabbitListener<T>
     /**
      * Helper method to resolve the class of the generic type.
      * <p>
-     * Shall not be used by developer directly! Currently used for the {@link SpringRabbitMessageConverter}. Where the generic type is itself generic, this
+     * Shall not be used by developers directly! Currently used for the {@link SpringRabbitMessageConverter}. Where the generic type is itself generic, this
      * only hands back its raw class - see {@link #getGenericType()} for the full type.
      *
      * @return the class of the generic type

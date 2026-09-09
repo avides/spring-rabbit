@@ -82,7 +82,7 @@ class ListenerTypeResolverTest
         {
             assertThatThrownBy(new RawListener()::getGenericType)
                     .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining("could not resolve the message-type");
+                    .hasMessageContaining("Could not resolve the message-type");
         }
     }
 

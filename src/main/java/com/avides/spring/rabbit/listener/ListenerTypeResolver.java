@@ -30,7 +30,7 @@ final class ListenerTypeResolver
     static Type resolveMessageType(Class<?> listenerClass, Class<?> listenerInterface)
     {
         var messageType = toType(ResolvableType.forClass(listenerClass).as(listenerInterface).getGeneric(0));
-        Assert.state(messageType != null, () -> "could not resolve the message-type of " + listenerClass.getName() + " - it has to state one, e.g. by "
+        Assert.state(messageType != null, () -> "Could not resolve the message-type of " + listenerClass.getName() + " - it has to state one, e.g. by "
                 + "extending AbstractSpringRabbitListener<MyMessage>");
         return messageType;
     }
