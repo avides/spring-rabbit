@@ -11,12 +11,13 @@
 <dependency>
 	<groupId>com.avides.spring</groupId>
 	<artifactId>spring-rabbit</artifactId>
-	<version>4.0.0</version>
+	<version>4.1.0</version>
 </dependency>
 ```
 
 ## Table of Contents
 *  [Rabbit-Configuration](#rabbit-configuration)
+*  [Listeners](#listeners)
 *  [Known issues](#known-issues)
 *  [Dependencies](#dependencies)
 *  [Metrics](#metrics)
@@ -51,6 +52,65 @@ rabbitmq:VERSION
 The `RABBITMQ_NODENAME` environment variable is necessary!
 
 The rabbit user needs at least `MONITORING` as tag!
+
+## Listeners
+
+A listener states the type of the messages it receives as the type-argument of `AbstractSpringRabbitListener`, and `SpringRabbitJsonMessageConverter` reads
+every incoming message as that type:
+
+``` java
+@Component
+public class OrderListener extends AbstractSpringRabbitListener<Order>
+{
+    @Override
+    protected void handleEvent(Order order, MessageProperties messageProperties)
+    {
+        // ...
+    }
+}
+```
+
+The message-type is resolved through the whole class-hierarchy, so a listener-base of its own - with type-parameters of its own, and any number of classes
+between it and `AbstractSpringRabbitListener` - works just as well:
+
+``` java
+public abstract class AbstractDomainListener<M, S> extends AbstractSpringRabbitListener<M>
+{
+    // ...
+}
+
+@Component
+public class OrderListener extends AbstractDomainListener<Order, OrderService>
+{
+    // ...
+}
+```
+
+### Generic message-types
+
+Since `4.1.0` the message-type may itself be generic, and its type-arguments are kept. That is what lets a library offer a listener-base which binds the
+message-type and leaves only the domain-type to the application:
+
+``` java
+public abstract class AbstractInsertRequestListener<F extends Enum<F>> extends AbstractSpringRabbitListener<InsertRequest<F>>
+{
+    // ...
+}
+
+@Component
+public class OrderInsertRequestListener extends AbstractInsertRequestListener<OrderField>
+{
+    @Override
+    protected void handleEvent(InsertRequest<OrderField> request, MessageProperties messageProperties)
+    {
+        // ...
+    }
+}
+```
+
+The listener receives an `InsertRequest<OrderField>` whose content is deserialized as `OrderField` - before `4.1.0` the type-argument was cast to `Class`,
+which threw for a parameterized message-type, and a raw one would have left the content as `LinkedHashMap`s. A converter of your own can take part in this by
+overriding `SpringRabbitMessageConverter.fromMessage(Message, Type)`; the default reads the raw class, exactly as before.
 
 ## Known issues
 

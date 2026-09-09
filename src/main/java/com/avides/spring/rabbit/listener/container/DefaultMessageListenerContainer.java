@@ -1,5 +1,7 @@
 package com.avides.spring.rabbit.listener.container;
 
+import java.lang.reflect.Type;
+
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -85,10 +87,10 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
 
         if (messageConverter instanceof SpringRabbitMessageConverter)
         {
-            Class<T> listenerClassType = rabbitListener.getGenericTypeClass();
+            Type listenerType = rabbitListener.getGenericType();
             return new MessageListenerAdapter((MessageListener) message ->
             {
-                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType);
+                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerType);
                 rabbitListener.handle(object);
             });
         }
@@ -107,10 +109,10 @@ public class DefaultMessageListenerContainer<T> extends SimpleMessageListenerCon
 
         if (messageConverter instanceof SpringRabbitMessageConverter)
         {
-            Class<T> listenerClassType = springRabbitListener.getGenericTypeClass();
+            Type listenerType = springRabbitListener.getGenericType();
             return new MessageListenerAdapter((MessageListener) message ->
             {
-                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerClassType);
+                T object = ((SpringRabbitMessageConverter) messageConverter).fromMessage(message, listenerType);
                 springRabbitListener.handle(object, message.getMessageProperties());
             });
         }

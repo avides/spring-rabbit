@@ -15,7 +15,9 @@ import com.avides.spring.rabbit.configuration.domain.ExchangeProperties;
 import com.avides.spring.rabbit.test.support.AbstractIT;
 import com.avides.spring.rabbit.test.support.OtherTestClass;
 import com.avides.spring.rabbit.test.support.OtherTestClassListener;
+import com.avides.spring.rabbit.test.support.TestBox;
 import com.avides.spring.rabbit.test.support.TestClass;
+import com.avides.spring.rabbit.test.support.TestClassBoxListener;
 import com.avides.spring.rabbit.test.support.TestClassListener;
 
 @ActiveProfiles({ "it", "springRabbitJsonMessageConverter" })
@@ -36,11 +38,18 @@ class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT extends
     @Autowired
     private RabbitTemplate receiveRabbitTemplate;
 
+    @Autowired
+    private TestClassBoxListener testClassBoxListener;
+
+    @Autowired
+    private RabbitTemplate testClassBoxRabbitTemplate;
+
     @AfterEach
     void clearInbounds()
     {
         testClassListener.getInbounds().clear();
         otherTestClassListener.getInbounds().clear();
+        testClassBoxListener.getInbounds().clear();
     }
 
     @Test
@@ -48,6 +57,36 @@ class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT extends
     {
         assertThat(testClassListener.getGenericTypeClass()).isEqualTo(TestClass.class);
         assertThat(otherTestClassListener.getGenericTypeClass()).isEqualTo(OtherTestClass.class);
+    }
+
+    /**
+     * A listener whose message-type is itself generic - and which sits behind a listener-base of its own that binds only the content-type. Both used to be
+     * impossible: the message-type was read off the direct superclass and cast to {@link Class}, so a parameterized one threw and its content-type was lost
+     * either way.
+     */
+    @Test
+    void testHandleWithAGenericMessageType()
+    {
+        assertThat(testClassBoxListener.getGenericType().getTypeName())
+                .isEqualTo(TestBox.class.getTypeName() + "<" + TestClass.class.getTypeName() + ">");
+        assertThat(testClassBoxListener.getGenericTypeClass()).isEqualTo(TestBox.class);
+
+        testClassBoxRabbitTemplate.convertAndSend(new TestBox<>("the-label", TestClass.buildComplete()));
+
+        await().until(() ->
+        {
+            if (!testClassBoxListener.getInbounds().isEmpty())
+            {
+                assertThat(testClassBoxListener.getInbounds()).singleElement().satisfies(box ->
+                {
+                    assertThat(box.getLabel()).isEqualTo("the-label");
+                    // a TestClass, not the LinkedHashMap a raw TestBox would have left here
+                    assertThat(box.getContent()).isEqualTo(TestClass.buildComplete());
+                });
+                return TRUE;
+            }
+            return FALSE;
+        });
     }
 
     @Test
