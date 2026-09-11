@@ -3,7 +3,7 @@
 
   <groupId>com.avides.spring</groupId>
   <artifactId>spring-rabbit</artifactId>
-  <version>4.1.0</version>
+  <version>4.1.1</version>
 
   <name>spring-rabbit</name>
   <description>Makes configuring RabbitMQ for Spring Boot applications more comfortable</description>
@@ -295,6 +295,7 @@
         <version>${maven-failsafe-plugin.version}</version>
         <configuration>
           <reportsDirectory>target/surefire-reports</reportsDirectory>
+          <argLine>@{jacocoItArgLine}</argLine>
           <systemPropertyVariables>
             <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
             <jacoco-agent.append>true</jacoco-agent.append>
@@ -338,24 +339,30 @@
             </goals>
           </execution>
           <!--
-            default-restore-instrumented-classes above runs at its default phase (prepare-package) to keep the
-            packaged jar free of instrumented bytecode. But that means classes are back to non-instrumented by the
-            time integration-test runs (pre-integration-test/integration-test come after prepare-package/package in
-            the lifecycle) - so without re-instrumenting here, Failsafe would silently record zero IT coverage.
+            Unit tests are recorded through offline instrumentation: the review workflow runs them as a bare
+            `mvn surefire:test` without a lifecycle, so no agent could be prepared for them.
+
+            Integration tests cannot use that route at all. Failsafe puts the packaged jar - not target/classes -
+            on the test classpath (it only falls back to defaultClassesDirectory when the project artifact is not
+            a file), and default-restore-instrumented-classes above deliberately keeps that jar free of
+            instrumented bytecode by running in prepare-package. Instrumenting target/classes before
+            integration-test therefore has no effect whatsoever - the ITs would silently record zero coverage.
+
+            So the ITs are measured with the JaCoCo java agent instead, which instruments on class load and is
+            independent of where the classes come from. It appends into the very same target/jacoco.exec the unit
+            tests already wrote, so the report execution below sees both.
           -->
           <execution>
-            <id>pre-integration-test-instrument</id>
+            <id>pre-integration-test-agent</id>
             <phase>pre-integration-test</phase>
             <goals>
-              <goal>instrument</goal>
+              <goal>prepare-agent</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>post-integration-test-restore</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>restore-instrumented-classes</goal>
-            </goals>
+            <configuration>
+              <propertyName>jacocoItArgLine</propertyName>
+              <destFile>${project.build.directory}/jacoco.exec</destFile>
+              <append>true</append>
+            </configuration>
           </execution>
           <execution>
             <id>report</id>
