@@ -38,6 +38,12 @@
 
   <properties>
     <!-- Build -->
+    <!-- The shared review workflow runs the unit tests on their own (`mvn surefire:test`) and then passes
+         -DskipUTs to the verify run so they are not executed a second time. That only works if the property is
+         actually bound to Surefire below - otherwise the flag is silently ignored. -->
+    <skipTests>false</skipTests>
+    <skipITs>${skipTests}</skipITs>
+    <skipUTs>${skipTests}</skipUTs>
     <maven.build.timestamp.format>dd.MM.yyyy HH:mm</maven.build.timestamp.format>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>21</java.version>
@@ -282,6 +288,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
+          <skipTests>${skipUTs}</skipTests>
           <argLine>-Duser.timezone=Europe/Berlin</argLine>
           <systemPropertyVariables>
             <jacoco-agent.destfile>${project.build.directory}/jacoco.exec</jacoco-agent.destfile>
@@ -294,6 +301,8 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>${maven-failsafe-plugin.version}</version>
         <configuration>
+          <skipTests>${skipTests}</skipTests>
+          <skipITs>${skipITs}</skipITs>
           <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
           <argLine>@{jacocoItArgLine}</argLine>
           <systemPropertyVariables>
