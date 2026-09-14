@@ -73,20 +73,12 @@ class SpringRabbitAutoConfigurationForSpringRabbitJsonMessageConverterIT extends
 
         testClassBoxRabbitTemplate.convertAndSend(new TestBox<>("the-label", TestClass.buildComplete()));
 
-        await().until(() ->
+        await().untilAsserted(() -> assertThat(testClassBoxListener.getInbounds()).singleElement().satisfies(box ->
         {
-            if (!testClassBoxListener.getInbounds().isEmpty())
-            {
-                assertThat(testClassBoxListener.getInbounds()).singleElement().satisfies(box ->
-                {
-                    assertThat(box.getLabel()).isEqualTo("the-label");
-                    // a TestClass, not the LinkedHashMap a raw TestBox would have left here
-                    assertThat(box.getContent()).isEqualTo(TestClass.buildComplete());
-                });
-                return TRUE;
-            }
-            return FALSE;
-        });
+            assertThat(box.getLabel()).isEqualTo("the-label");
+            // a TestClass, not the LinkedHashMap a raw TestBox would have left here
+            assertThat(box.getContent()).isEqualTo(TestClass.buildComplete());
+        }));
     }
 
     @Test

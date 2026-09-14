@@ -59,11 +59,13 @@ public interface RabbitListener<T>
     /**
      * Helper method to resolve the class of the generic type
      * <p>
-     * Currently used for the {@link SpringRabbitMessageConverter}. Where the generic type is itself generic, this only hands back its raw class - see
-     * {@link #getGenericType()} for the full type.
+     * Where the generic type is itself generic, this only hands back its raw class and the content-type is gone, which is why nothing reads a message through
+     * it any more.
      *
      * @return the class of the generic type
+     * @deprecated superseded by {@link #getGenericType()}, which keeps the type-arguments
      */
+    @Deprecated(since = "4.1.0")
     @SuppressWarnings("unchecked")
     default Class<T> getGenericTypeClass()
     {
