@@ -1,6 +1,7 @@
 package com.avides.spring.rabbit.converter;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -56,6 +57,26 @@ public class SpringRabbitJsonMessageConverter extends Jackson2JsonMessageConvert
         catch (IOException e)
         {
             throw new MessageConversionException("Could not convert incoming message with class [" + clazz + "] and body [" + new String(message
+                    .getBody()) + "]", e);
+        }
+    }
+
+    /**
+     * Reads the message as the given type including its type-arguments, so a listener whose message-type is itself generic (e.g. one declared as
+     * {@code AbstractSpringRabbitListener<Box<Integer>>}) gets the content read as the type it stated instead of as a raw {@code LinkedHashMap}.
+     *
+     * @since 4.1.0
+     */
+    @Override
+    public <T> T fromMessage(Message message, Type type)
+    {
+        try
+        {
+            return objectMapper.readValue(message.getBody(), objectMapper.getTypeFactory().constructType(type));
+        }
+        catch (IOException e)
+        {
+            throw new MessageConversionException("Could not convert incoming message with type [" + type + "] and body [" + new String(message
                     .getBody()) + "]", e);
         }
     }

@@ -31,7 +31,7 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import nu.xom.Element;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = { AbstractIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class, TestClassListener.class, OtherTestClassListener.class, TestClassContextAwareListener.class })
+@SpringBootTest(classes = { AbstractIT.TestConfiguration.class, DummyListenerZero.class, DummyListenerOne.class, TestClassListener.class, OtherTestClassListener.class, TestClassContextAwareListener.class, TestClassBoxListener.class })
 public abstract class AbstractIT implements DomainTestSupport
 {
     @Autowired
