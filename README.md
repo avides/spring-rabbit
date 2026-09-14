@@ -88,7 +88,7 @@ public class OrderListener extends AbstractDomainListener<Order, OrderService>
 
 ### Generic message-types
 
-Since `4.1.0` the message-type may itself be generic, and its type-arguments are kept. That is what lets a library offer a listener-base which binds the
+Since `4.1` the message-type may itself be generic, and its type-arguments are kept. That is what lets a library offer a listener-base which binds the
 message-type and leaves only the domain-type to the application:
 
 ``` java
@@ -108,7 +108,7 @@ public class OrderInsertRequestListener extends AbstractInsertRequestListener<Or
 }
 ```
 
-The listener receives an `InsertRequest<OrderField>` whose content is deserialized as `OrderField` - before `4.1.0` the type-argument was cast to `Class`,
+The listener receives an `InsertRequest<OrderField>` whose content is deserialized as `OrderField` - before `4.1` the type-argument was cast to `Class`,
 which threw for a parameterized message-type, and a raw one would have left the content as `LinkedHashMap`s. A converter of your own can take part in this by
 overriding `SpringRabbitMessageConverter.fromMessage(Message, Type)`; the default reads the raw class, exactly as before.
 
